@@ -1,0 +1,19 @@
+{
+  "id": "gridEnergyNight",
+  "type": "number",
+  "label": {
+    "en": "Night",
+    "no": "Natt"
+  },
+  "hint": {
+    "en": "Grid energy price 22:00 - 06:00 per kWh.",
+    "no": "Energiledd 22:00 - 06:00 pr. kWh."
+  },
+  "value": 0.2489,
+  "min": 0,
+  "max": 5,
+  "units": {
+    "en": "kr/kWh",
+    "no": "kr/kWh"
+  }
+}

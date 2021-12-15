@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Price excl. taxes",
+    "no": "Pris eksl. mva"
+  },
+  "desc": {
+    "en": "Price current hour excl. taxes",
+    "no": "Viser gjeldende spot strømpris eksl. mva"
+  },
+  "decimals": 5,
+  "units": {
+    "en": "NOK/kWh",
+    "no": "kr/kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/nok.svg"
+}

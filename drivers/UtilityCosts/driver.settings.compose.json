@@ -1,0 +1,69 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Utility price",
+      "no": "Strømpris"
+    },
+    "children": [
+      {
+        "id": "priceNordpool",
+        "$extends": "priceNordpool"
+      },
+      {
+        "id": "priceArea",
+        "$extends": "priceArea"
+      },
+      {
+        "id": "costFormula",
+        "$extends": "costFormula"
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Grid Energy",
+      "no": "Nettleie kapasitetsledd"
+    },
+    "children": [
+      {
+        "id": "gridCapacity0_5",
+        "$extends": "gridCapacity0_5"
+      },
+      {
+        "id": "gridCapacity5_10",
+        "$extends": "gridCapacity5_10"
+      },
+      {
+        "id": "gridCapacity10_15",
+        "$extends": "gridCapacity10_15"
+      },
+      {
+        "id": "gridCapacity15_20",
+        "$extends": "gridCapacity15_20"
+      },
+      {
+        "id": "gridCapacity20_25",
+        "$extends": "gridCapacity20_25"
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Grid Capacity",
+      "no": "Nettleie energiledd"
+    },
+    "children": [
+      {
+        "id": "gridEnergyDay",
+        "$extends": "gridEnergyDay"
+      },
+      {
+        "id": "gridEnergyNight",
+        "$extends": "gridEnergyNight"
+      }
+    ]
+  }
+]

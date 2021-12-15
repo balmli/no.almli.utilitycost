@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Grid yesterday",
+    "no": "Nettleie i går"
+  },
+  "desc": {
+    "en": "Shows grid cost yesterday",
+    "no": "Viser nettleie i går"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/nok.svg"
+}

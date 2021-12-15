@@ -1,0 +1,35 @@
+{
+  "id": "update_price",
+  "title": {
+    "en": "Update price",
+    "no": "Oppdatér pris"
+  },
+  "titleFormatted": {
+    "en": "Update price with [[price]]",
+    "no": "Oppdatér pris med [[price]]"
+  },
+  "hint": {
+    "en": "Update with the price from a price source.",
+    "no": "Oppdatér endring i pris fra en priskilde."
+  },
+  "highlight": true,
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    },
+    {
+      "name": "price",
+      "type": "number",
+      "title": {
+        "en": "Price incl. taxes and surcharges (kr/kWh)",
+        "no": "Pris inkl. mva og påslag (kr/kWh)"
+      },
+      "placeholder": {
+        "en": "kr/kWh",
+        "no": "kr/kWh"
+      }
+    }
+  ]
+}

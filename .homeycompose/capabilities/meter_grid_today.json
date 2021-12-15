@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Grid today",
+    "no": "Nettleie i dag"
+  },
+  "desc": {
+    "en": "Shows grid cost so far this hour",
+    "no": "Viser nettleie så langt denne timen"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/nok.svg"
+}

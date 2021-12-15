@@ -1,0 +1,13 @@
+{
+  "id": "priceNordpool",
+  "type": "checkbox",
+  "label": {
+    "en": "Price from Nordpool",
+    "no": "Pris fra Nordpool"
+  },
+  "value": true,
+  "hint": {
+    "en": "Price from Nordpool",
+    "no": "Pris fra Nordpool."
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "update_consumption",
+  "title": {
+    "en": "Update consumption",
+    "no": "Oppdatér forbruk"
+  },
+  "titleFormatted": {
+    "en": "Update consumption with [[consumption]]",
+    "no": "Oppdatér forbruk med [[consumption]]"
+  },
+  "hint": {
+    "en": "Update with the consumption from a power meter.",
+    "no": "Oppdatér endring i forbruk fra en forbruksmåler."
+  },
+  "highlight": true,
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    },
+    {
+      "name": "consumption",
+      "type": "number",
+      "title": {
+        "en": "Consumption (W)",
+        "no": "Forbruk (W)"
+      },
+      "placeholder": {
+        "en": "Watt",
+        "no": "Watt"
+      }
+    }
+  ]
+}

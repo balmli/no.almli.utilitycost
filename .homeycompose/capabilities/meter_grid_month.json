@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Grid this month",
+    "no": "Nettleie denne måned"
+  },
+  "desc": {
+    "en": "Shows grid cost so far this month",
+    "no": "Viser nettleie så langt denne måned"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/nok.svg"
+}

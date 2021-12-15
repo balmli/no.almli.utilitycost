@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Price incl. taxes",
+    "no": "Pris inkl. mva"
+  },
+  "desc": {
+    "en": "Price current hour incl. taxes and surcharges",
+    "no": "Viser gjeldende strømpris incl. mva og påslag"
+  },
+  "decimals": 5,
+  "units": {
+    "en": "NOK/kWh",
+    "no": "kr/kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/nok.svg"
+}

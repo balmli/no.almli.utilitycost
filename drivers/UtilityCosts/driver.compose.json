@@ -1,0 +1,42 @@
+{
+  "id": "UtilityCosts",
+  "name": {
+    "en": "Utility Costs",
+    "no": "Strømpriser"
+  },
+  "icon": "{{driverAssetsPath}}/icon.svg",
+  "images": {
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "small": "{{driverAssetsPath}}/images/small.png"
+  },
+  "class": "other",
+  "capabilities": [
+    "meter_sum_current",
+    "meter_sum_month",
+    "meter_price_excl",
+    "meter_price_incl",
+    "meter_cost_today",
+    "meter_grid_today",
+    "meter_cost_yesterday",
+    "meter_grid_yesterday",
+    "meter_cost_month",
+    "meter_grid_month",
+    "meter_cost_lastmonth",
+    "meter_grid_lastmonth",
+    "meter_consumption_hour",
+    "meter_consumption_maxmonth"
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_my_devices"
+      }
+    },
+    {
+      "id": "add_my_devices",
+      "template": "add_devices"
+    }
+  ]
+}

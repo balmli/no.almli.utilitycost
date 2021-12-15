@@ -1,0 +1,19 @@
+{
+  "id": "gridCapacity10_15",
+  "type": "number",
+  "label": {
+    "en": "10-15 kW",
+    "no": "10-15 kW"
+  },
+  "hint": {
+    "en": "Grid capacity 10 - 15 kW.",
+    "no": "Kapasitetsledd for nettleie 10 - 15 kW."
+  },
+  "value": 405,
+  "min": 0,
+  "max": 9999,
+  "units": {
+    "en": "kr/month",
+    "no": "kr/mnd"
+  }
+}

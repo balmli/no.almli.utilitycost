@@ -1,0 +1,13 @@
+{
+  "id": "costFormula",
+  "type": "text",
+  "label": {
+    "en": "Formula for utility price",
+    "no": "Formel for strømpris"
+  },
+  "value": "PRICE_NORDPOOL * 1.25 + 0.0299",
+  "hint": {
+    "en": "Formula to calculate hourly price. Use PRICE_NORDPOOL for the Nordpool spot price.",
+    "no": "Formel for å beregne strømpris inkl. mva og påslag. Bruk PRICE_NORDPOOL for Nordpool spotpris."
+  }
+}

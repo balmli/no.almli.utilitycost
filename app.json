@@ -1,0 +1,842 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "no.almli.utilitycost",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "brandColor": "#d06830",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Norwegian Utility Costs",
+    "no": "Norske strømpriser"
+  },
+  "description": {
+    "en": "Calculate utility costs",
+    "no": "Beregn kostnader for strøm og nettleie"
+  },
+  "category": [
+    "tools"
+  ],
+  "tags": {
+    "en": [
+      "utility",
+      "price",
+      "prices",
+      "spot",
+      "nordpool"
+    ],
+    "no": [
+      "strøm",
+      "strømpris",
+      "strømpriser",
+      "nettleie",
+      "spot",
+      "nordpool"
+    ]
+  },
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png"
+  },
+  "author": {
+    "name": "Bjørnar Almli",
+    "email": "bjornar.almli@gmail.com"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Bjørnar Almli",
+        "email": "bjornar.almli@gmail.com"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "bjornaralmli"
+      }
+    }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "meter_price_excl_changed",
+        "highlight": true,
+        "title": {
+          "en": "Utility price changed",
+          "no": "Strømpris eksl. mva ble endret"
+        },
+        "hint": {
+          "en": "Triggers when the utility price changes.",
+          "no": "Dette kortet trigges når strømprisen eksl. mva endres."
+        },
+        "tokens": [
+          {
+            "name": "meter_price_excl",
+            "type": "number",
+            "title": {
+              "en": "Price",
+              "no": "Pris"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          }
+        ]
+      },
+      {
+        "id": "meter_price_incl_changed",
+        "highlight": true,
+        "title": {
+          "en": "Utility price incl. taxes changed",
+          "no": "Strømpris inkl. mva og påslag ble endret"
+        },
+        "hint": {
+          "en": "Triggers when the utility price incl. taxes and surcharges changes.",
+          "no": "Dette kortet trigges når strømprisen inkl. mva og påslag endres."
+        },
+        "tokens": [
+          {
+            "name": "meter_price_incl",
+            "type": "number",
+            "title": {
+              "en": "Price",
+              "no": "Pris"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "price_excl_below",
+        "title": {
+          "en": "Is current price excl. taxes !{{below|above}}",
+          "no": "Er pris eksl. mva !{{under|over}}"
+        },
+        "titleFormatted": {
+          "en": "Is current price excl. taxes !{{below|above}} [[price]]",
+          "no": "Er pris eksl. mva !{{under|over}} [[price]]"
+        },
+        "hint": {
+          "en": "Condition to check if the current price excl. taxes is below or above a specific value.",
+          "no": "For å sjekke om pris eksl. mva er under eller over en spesifikk pris."
+        },
+        "args": [
+          {
+            "name": "price",
+            "type": "number",
+            "placeholder": {
+              "en": "price",
+              "no": "Pris"
+            }
+          },
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          }
+        ]
+      },
+      {
+        "id": "price_incl_below",
+        "title": {
+          "en": "Is current price incl. taxes !{{below|above}}",
+          "no": "Er pris inkl. mva !{{under|over}}"
+        },
+        "titleFormatted": {
+          "en": "Is current price incl. taxes !{{below|above}} [[price]]",
+          "no": "Er pris inkl. mva !{{under|over}} [[price]]"
+        },
+        "hint": {
+          "en": "Condition to check if the current price incl. taxes and surcharges is below or above a specific value.",
+          "no": "For å sjekke om pris inkl. mva og påslag er under eller over en spesifikk pris."
+        },
+        "args": [
+          {
+            "name": "price",
+            "type": "number",
+            "placeholder": {
+              "en": "price",
+              "no": "Pris"
+            }
+          },
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "update_consumption",
+        "title": {
+          "en": "Update consumption",
+          "no": "Oppdatér forbruk"
+        },
+        "titleFormatted": {
+          "en": "Update consumption with [[consumption]]",
+          "no": "Oppdatér forbruk med [[consumption]]"
+        },
+        "hint": {
+          "en": "Update with the consumption from a power meter.",
+          "no": "Oppdatér endring i forbruk fra en forbruksmåler."
+        },
+        "highlight": true,
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          },
+          {
+            "name": "consumption",
+            "type": "number",
+            "title": {
+              "en": "Consumption (W)",
+              "no": "Forbruk (W)"
+            },
+            "placeholder": {
+              "en": "Watt",
+              "no": "Watt"
+            }
+          }
+        ]
+      },
+      {
+        "id": "update_price",
+        "title": {
+          "en": "Update price",
+          "no": "Oppdatér pris"
+        },
+        "titleFormatted": {
+          "en": "Update price with [[price]]",
+          "no": "Oppdatér pris med [[price]]"
+        },
+        "hint": {
+          "en": "Update with the price from a price source.",
+          "no": "Oppdatér endring i pris fra en priskilde."
+        },
+        "highlight": true,
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          },
+          {
+            "name": "price",
+            "type": "number",
+            "title": {
+              "en": "Price incl. taxes and surcharges (kr/kWh)",
+              "no": "Pris inkl. mva og påslag (kr/kWh)"
+            },
+            "placeholder": {
+              "en": "kr/kWh",
+              "no": "kr/kWh"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "id": "UtilityCosts",
+      "name": {
+        "en": "Utility Costs",
+        "no": "Strømpriser"
+      },
+      "icon": "/drivers/UtilityCosts/assets/icon.svg",
+      "images": {
+        "large": "/drivers/UtilityCosts/assets/images/large.png",
+        "small": "/drivers/UtilityCosts/assets/images/small.png"
+      },
+      "class": "other",
+      "capabilities": [
+        "meter_sum_current",
+        "meter_sum_month",
+        "meter_price_excl",
+        "meter_price_incl",
+        "meter_cost_today",
+        "meter_grid_today",
+        "meter_cost_yesterday",
+        "meter_grid_yesterday",
+        "meter_cost_month",
+        "meter_grid_month",
+        "meter_cost_lastmonth",
+        "meter_grid_lastmonth",
+        "meter_consumption_hour",
+        "meter_consumption_maxmonth"
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Utility price",
+            "no": "Strømpris"
+          },
+          "children": [
+            {
+              "id": "priceNordpool",
+              "type": "checkbox",
+              "label": {
+                "en": "Price from Nordpool",
+                "no": "Pris fra Nordpool"
+              },
+              "value": true,
+              "hint": {
+                "en": "Price from Nordpool",
+                "no": "Pris fra Nordpool."
+              }
+            },
+            {
+              "id": "priceArea",
+              "type": "dropdown",
+              "label": {
+                "en": "Price area",
+                "no": "Prisområde"
+              },
+              "value": "Oslo",
+              "hint": {
+                "en": "Nordpool price area",
+                "no": "Prisområde for Nordpool spotpris."
+              },
+              "values": [
+                {
+                  "id": "Oslo",
+                  "label": {
+                    "en": "Sørøst-Norge (NO1)"
+                  }
+                },
+                {
+                  "id": "Kr.sand",
+                  "label": {
+                    "en": "Sørvest-Norge (NO2)"
+                  }
+                },
+                {
+                  "id": "Bergen",
+                  "label": {
+                    "en": "Vest-Norge (NO5)"
+                  }
+                },
+                {
+                  "id": "Tr.heim",
+                  "label": {
+                    "en": "Midt-Norge (NO3)"
+                  }
+                },
+                {
+                  "id": "Tromsø",
+                  "label": {
+                    "en": "Nord-Norge (NO4)"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "costFormula",
+              "type": "text",
+              "label": {
+                "en": "Formula for utility price",
+                "no": "Formel for strømpris"
+              },
+              "value": "PRICE_NORDPOOL * 1.25 + 0.0299",
+              "hint": {
+                "en": "Formula to calculate hourly price. Use PRICE_NORDPOOL for the Nordpool spot price.",
+                "no": "Formel for å beregne strømpris inkl. mva og påslag. Bruk PRICE_NORDPOOL for Nordpool spotpris."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Grid Energy",
+            "no": "Nettleie kapasitetsledd"
+          },
+          "children": [
+            {
+              "id": "gridCapacity0_5",
+              "type": "number",
+              "label": {
+                "en": "0-5 kW",
+                "no": "0-5 kW"
+              },
+              "hint": {
+                "en": "Grid capacity 0 - 5 kW.",
+                "no": "Kapasitetsledd for nettleie 0 - 5 kW."
+              },
+              "value": 175,
+              "min": 0,
+              "max": 9999,
+              "units": {
+                "en": "kr/month",
+                "no": "kr/mnd"
+              }
+            },
+            {
+              "id": "gridCapacity5_10",
+              "type": "number",
+              "label": {
+                "en": "5-10 kW",
+                "no": "5-10 kW"
+              },
+              "hint": {
+                "en": "Grid capacity 5 - 10 kW.",
+                "no": "Kapasitetsledd for nettleie 5 - 10 kW."
+              },
+              "value": 290,
+              "min": 0,
+              "max": 9999,
+              "units": {
+                "en": "kr/month",
+                "no": "kr/mnd"
+              }
+            },
+            {
+              "id": "gridCapacity10_15",
+              "type": "number",
+              "label": {
+                "en": "10-15 kW",
+                "no": "10-15 kW"
+              },
+              "hint": {
+                "en": "Grid capacity 10 - 15 kW.",
+                "no": "Kapasitetsledd for nettleie 10 - 15 kW."
+              },
+              "value": 405,
+              "min": 0,
+              "max": 9999,
+              "units": {
+                "en": "kr/month",
+                "no": "kr/mnd"
+              }
+            },
+            {
+              "id": "gridCapacity15_20",
+              "type": "number",
+              "label": {
+                "en": "15-20 kW",
+                "no": "15-20 kW"
+              },
+              "hint": {
+                "en": "Grid capacity 15 - 20 kW.",
+                "no": "Kapasitetsledd for nettleie 15 - 20 kW."
+              },
+              "value": 520,
+              "min": 0,
+              "max": 9999,
+              "units": {
+                "en": "kr/month",
+                "no": "kr/mnd"
+              }
+            },
+            {
+              "id": "gridCapacity20_25",
+              "type": "number",
+              "label": {
+                "en": "20-25 kW",
+                "no": "20-25 kW"
+              },
+              "hint": {
+                "en": "Grid capacity 20 - 25 kW.",
+                "no": "Kapasitetsledd for nettleie 20 - 25 kW."
+              },
+              "value": 635,
+              "min": 0,
+              "max": 9999,
+              "units": {
+                "en": "kr/month",
+                "no": "kr/mnd"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Grid Capacity",
+            "no": "Nettleie energiledd"
+          },
+          "children": [
+            {
+              "id": "gridEnergyDay",
+              "type": "number",
+              "label": {
+                "en": "Day",
+                "no": "Dagtid"
+              },
+              "hint": {
+                "en": "Grid energy price 06:00 - 22:00 per kWh.",
+                "no": "Energiledd 06:00 - 22:00 pr. kWh."
+              },
+              "value": 0.3489,
+              "min": 0,
+              "max": 5,
+              "units": {
+                "en": "kr/kWh",
+                "no": "kr/kWh"
+              }
+            },
+            {
+              "id": "gridEnergyNight",
+              "type": "number",
+              "label": {
+                "en": "Night",
+                "no": "Natt"
+              },
+              "hint": {
+                "en": "Grid energy price 22:00 - 06:00 per kWh.",
+                "no": "Energiledd 22:00 - 06:00 pr. kWh."
+              },
+              "value": 0.2489,
+              "min": 0,
+              "max": 5,
+              "units": {
+                "en": "kr/kWh",
+                "no": "kr/kWh"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "capabilities": {
+    "meter_consumption_hour": {
+      "type": "number",
+      "title": {
+        "en": "Consumption current hour",
+        "no": "Forbruk gjeldende time"
+      },
+      "desc": {
+        "en": "Consumption current hour.",
+        "no": "Forbruk gjeldende time."
+      },
+      "min": 0,
+      "decimals": 0,
+      "units": {
+        "en": "Wh",
+        "no": "Wh"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": false,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_consumption_maxmonth": {
+      "type": "number",
+      "title": {
+        "en": "Max. hourly consumption",
+        "no": "Maks. forbruk for time"
+      },
+      "desc": {
+        "en": "Maximum consumption for an hour this month.",
+        "no": "Maksimum forbruk for en time i gjeldende måned."
+      },
+      "min": 0,
+      "decimals": 0,
+      "units": {
+        "en": "Wh",
+        "no": "Wh"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": false,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_cost_lastmonth": {
+      "type": "number",
+      "title": {
+        "en": "Utility last month",
+        "no": "Strøm forrige måned"
+      },
+      "desc": {
+        "en": "Shows utility cost last month",
+        "no": "Viser strømkostnad forrige måned"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_cost_month": {
+      "type": "number",
+      "title": {
+        "en": "Utility this month",
+        "no": "Strøm denne måned"
+      },
+      "desc": {
+        "en": "Shows utility cost so far this month",
+        "no": "Viser strømkostnad så langt denne måned"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_cost_today": {
+      "type": "number",
+      "title": {
+        "en": "Utility today",
+        "no": "Strøm i dag"
+      },
+      "desc": {
+        "en": "Shows utility cost so far this hour",
+        "no": "Viser strømkostnad så langt denne timen"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_cost_yesterday": {
+      "type": "number",
+      "title": {
+        "en": "Utility yesterday",
+        "no": "Strøm i går"
+      },
+      "desc": {
+        "en": "Shows utility cost yesterday",
+        "no": "Viser strømkostnad i går"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_grid_lastmonth": {
+      "type": "number",
+      "title": {
+        "en": "Grid last month",
+        "no": "Nettleie forrige måned"
+      },
+      "desc": {
+        "en": "Shows grid cost last month",
+        "no": "Viser nettleie forrige måned"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_grid_month": {
+      "type": "number",
+      "title": {
+        "en": "Grid this month",
+        "no": "Nettleie denne måned"
+      },
+      "desc": {
+        "en": "Shows grid cost so far this month",
+        "no": "Viser nettleie så langt denne måned"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_grid_today": {
+      "type": "number",
+      "title": {
+        "en": "Grid today",
+        "no": "Nettleie i dag"
+      },
+      "desc": {
+        "en": "Shows grid cost so far this hour",
+        "no": "Viser nettleie så langt denne timen"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_grid_yesterday": {
+      "type": "number",
+      "title": {
+        "en": "Grid yesterday",
+        "no": "Nettleie i går"
+      },
+      "desc": {
+        "en": "Shows grid cost yesterday",
+        "no": "Viser nettleie i går"
+      },
+      "min": 0,
+      "decimals": 2,
+      "units": {
+        "en": "kr",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_price_excl": {
+      "type": "number",
+      "title": {
+        "en": "Price excl. taxes",
+        "no": "Pris eksl. mva"
+      },
+      "desc": {
+        "en": "Price current hour excl. taxes",
+        "no": "Viser gjeldende spot strømpris eksl. mva"
+      },
+      "decimals": 5,
+      "units": {
+        "en": "NOK/kWh",
+        "no": "kr/kWh"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_price_incl": {
+      "type": "number",
+      "title": {
+        "en": "Price incl. taxes",
+        "no": "Pris inkl. mva"
+      },
+      "desc": {
+        "en": "Price current hour incl. taxes and surcharges",
+        "no": "Viser gjeldende strømpris incl. mva og påslag"
+      },
+      "decimals": 5,
+      "units": {
+        "en": "NOK/kWh",
+        "no": "kr/kWh"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_sum_current": {
+      "type": "number",
+      "title": {
+        "en": "Current cost",
+        "no": "Gjeldene kostnad"
+      },
+      "desc": {
+        "en": "Current utility and grid cost.",
+        "no": "Gjeldende strøm- og nettleiekostnad."
+      },
+      "decimals": 2,
+      "units": {
+        "en": "NOK/h",
+        "no": "kr/h"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    },
+    "meter_sum_month": {
+      "type": "number",
+      "title": {
+        "en": "Sum monthly cost",
+        "no": "Sum månedlig kostnad"
+      },
+      "desc": {
+        "en": "Sum monthly cost.",
+        "no": "Sum månedlig kostnad."
+      },
+      "decimals": 2,
+      "units": {
+        "en": "NOK",
+        "no": "kr"
+      },
+      "getable": true,
+      "setable": false,
+      "greyout": true,
+      "insights": true,
+      "icon": "/assets/nok.svg"
+    }
+  }
+}

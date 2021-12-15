@@ -1,0 +1,45 @@
+{
+  "id": "priceArea",
+  "type": "dropdown",
+  "label": {
+    "en": "Price area",
+    "no": "Prisområde"
+  },
+  "value": "Oslo",
+  "hint": {
+    "en": "Nordpool price area",
+    "no": "Prisområde for Nordpool spotpris."
+  },
+  "values": [
+    {
+      "id": "Oslo",
+      "label": {
+        "en": "Sørøst-Norge (NO1)"
+      }
+    },
+    {
+      "id": "Kr.sand",
+      "label": {
+        "en": "Sørvest-Norge (NO2)"
+      }
+    },
+    {
+      "id": "Bergen",
+      "label": {
+        "en": "Vest-Norge (NO5)"
+      }
+    },
+    {
+      "id": "Tr.heim",
+      "label": {
+        "en": "Midt-Norge (NO3)"
+      }
+    },
+    {
+      "id": "Tromsø",
+      "label": {
+        "en": "Nord-Norge (NO4)"
+      }
+    }
+  ]
+}

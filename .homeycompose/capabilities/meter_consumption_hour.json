@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Consumption current hour",
+    "no": "Forbruk gjeldende time"
+  },
+  "desc": {
+    "en": "Consumption current hour.",
+    "no": "Forbruk gjeldende time."
+  },
+  "min": 0,
+  "decimals": 0,
+  "units": {
+    "en": "Wh",
+    "no": "Wh"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": false,
+  "icon": "/assets/nok.svg"
+}

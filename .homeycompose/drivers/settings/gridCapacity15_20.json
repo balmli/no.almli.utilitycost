@@ -1,0 +1,19 @@
+{
+  "id": "gridCapacity15_20",
+  "type": "number",
+  "label": {
+    "en": "15-20 kW",
+    "no": "15-20 kW"
+  },
+  "hint": {
+    "en": "Grid capacity 15 - 20 kW.",
+    "no": "Kapasitetsledd for nettleie 15 - 20 kW."
+  },
+  "value": 520,
+  "min": 0,
+  "max": 9999,
+  "units": {
+    "en": "kr/month",
+    "no": "kr/mnd"
+  }
+}

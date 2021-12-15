@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Utility today",
+    "no": "Strøm i dag"
+  },
+  "desc": {
+    "en": "Shows utility cost so far this hour",
+    "no": "Viser strømkostnad så langt denne timen"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/nok.svg"
+}

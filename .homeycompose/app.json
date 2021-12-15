@@ -1,0 +1,62 @@
+{
+  "id": "no.almli.utilitycost",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "brandColor": "#d06830",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Norwegian Utility Costs",
+    "no": "Norske strømpriser"
+  },
+  "description": {
+    "en": "Calculate utility costs",
+    "no": "Beregn kostnader for strøm og nettleie"
+  },
+  "category": [
+    "tools"
+  ],
+  "tags": {
+    "en": [
+      "utility",
+      "price",
+      "prices",
+      "spot",
+      "nordpool"
+    ],
+    "no": [
+      "strøm",
+      "strømpris",
+      "strømpriser",
+      "nettleie",
+      "spot",
+      "nordpool"
+    ]
+  },
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png"
+  },
+  "author": {
+    "name": "Bjørnar Almli",
+    "email": "bjornar.almli@gmail.com"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Bjørnar Almli",
+        "email": "bjornar.almli@gmail.com"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "bjornaralmli"
+      }
+    }
+  }
+}

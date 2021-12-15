@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Current cost",
+    "no": "Gjeldene kostnad"
+  },
+  "desc": {
+    "en": "Current utility and grid cost.",
+    "no": "Gjeldende strøm- og nettleiekostnad."
+  },
+  "decimals": 2,
+  "units": {
+    "en": "NOK/h",
+    "no": "kr/h"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/nok.svg"
+}

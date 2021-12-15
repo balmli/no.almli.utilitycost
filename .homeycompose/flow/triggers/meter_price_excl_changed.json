@@ -1,0 +1,29 @@
+{
+  "id": "meter_price_excl_changed",
+  "highlight": true,
+  "title": {
+    "en": "Utility price changed",
+    "no": "Strømpris eksl. mva ble endret"
+  },
+  "hint": {
+    "en": "Triggers when the utility price changes.",
+    "no": "Dette kortet trigges når strømprisen eksl. mva endres."
+  },
+  "tokens": [
+    {
+      "name": "meter_price_excl",
+      "type": "number",
+      "title": {
+        "en": "Price",
+        "no": "Pris"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    }
+  ]
+}

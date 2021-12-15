@@ -1,0 +1,19 @@
+{
+  "id": "gridCapacity5_10",
+  "type": "number",
+  "label": {
+    "en": "5-10 kW",
+    "no": "5-10 kW"
+  },
+  "hint": {
+    "en": "Grid capacity 5 - 10 kW.",
+    "no": "Kapasitetsledd for nettleie 5 - 10 kW."
+  },
+  "value": 290,
+  "min": 0,
+  "max": 9999,
+  "units": {
+    "en": "kr/month",
+    "no": "kr/mnd"
+  }
+}

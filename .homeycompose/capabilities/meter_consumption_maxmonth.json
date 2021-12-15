@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Max. hourly consumption",
+    "no": "Maks. forbruk for time"
+  },
+  "desc": {
+    "en": "Maximum consumption for an hour this month.",
+    "no": "Maksimum forbruk for en time i gjeldende måned."
+  },
+  "min": 0,
+  "decimals": 0,
+  "units": {
+    "en": "Wh",
+    "no": "Wh"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": false,
+  "icon": "/assets/nok.svg"
+}
