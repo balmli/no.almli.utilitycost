@@ -1,0 +1,36 @@
+{
+  "id": "priceCalcMethod",
+  "type": "dropdown",
+  "label": {
+    "en": "Price calculation",
+    "no": "Prisberegning"
+  },
+  "value": "nordpool_spot",
+  "hint": {
+    "en": "Method for calculating the utility price.  Select 'Spot' for spot, and edit the 'Formula for utility price' to add taxes and surcharges.  Select 'Fixed price' for fixed price agreements, and edit the 'Formula for utility price' for the price.  Select 'From flow' if the price comes from a price source, eg. Tibber. ",
+    "no": "Metode for å beregne strømprisen.  Velg 'Spotpris' for spotprisavtaler, og editer 'Formel for strømpris' for å legge på mva og påslag.  Velg 'Fastpris' for fastpris, og legg inn prisen i 'Formel for strømpris'.  Velg 'Fra flow' hvis prisen kommer fra en priskilde, f.eks. Tibber. "
+  },
+  "values": [
+    {
+      "id": "nordpool_spot",
+      "label": {
+        "en": "Spot",
+        "no": "Spotpris"
+      }
+    },
+    {
+      "id": "fixed",
+      "label": {
+        "en": "Fixed price",
+        "no": "Fastpris"
+      }
+    },
+    {
+      "id": "flow",
+      "label": {
+        "en": "From flow",
+        "no": "Fra flow"
+      }
+    }
+  ]
+}

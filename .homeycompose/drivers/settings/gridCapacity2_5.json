@@ -1,0 +1,19 @@
+{
+  "id": "gridCapacity2_5",
+  "type": "number",
+  "label": {
+    "en": "2-5 kW",
+    "no": "2-5 kW"
+  },
+  "hint": {
+    "en": "Grid capacity 2 - 5 kW incl. taxes.",
+    "no": "Kapasitetsledd for nettleie 2 - 5 kW inkl. mva og avgifter."
+  },
+  "value": 175,
+  "min": 0,
+  "max": 9999,
+  "units": {
+    "en": "kr/month",
+    "no": "kr/mnd"
+  }
+}

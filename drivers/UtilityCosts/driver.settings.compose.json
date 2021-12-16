@@ -7,8 +7,8 @@
     },
     "children": [
       {
-        "id": "priceNordpool",
-        "$extends": "priceNordpool"
+        "id": "priceCalcMethod",
+        "$extends": "priceCalcMethod"
       },
       {
         "id": "priceArea",
@@ -28,8 +28,12 @@
     },
     "children": [
       {
-        "id": "gridCapacity0_5",
-        "$extends": "gridCapacity0_5"
+        "id": "gridCapacity0_2",
+        "$extends": "gridCapacity0_2"
+      },
+      {
+        "id": "gridCapacity2_5",
+        "$extends": "gridCapacity2_5"
       },
       {
         "id": "gridCapacity5_10",

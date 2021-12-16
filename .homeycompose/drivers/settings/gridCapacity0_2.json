@@ -1,0 +1,19 @@
+{
+  "id": "gridCapacity0_2",
+  "type": "number",
+  "label": {
+    "en": "0-2 kW",
+    "no": "0-2 kW"
+  },
+  "hint": {
+    "en": "Grid capacity 0 - 2 kW incl. taxes.",
+    "no": "Kapasitetsledd for nettleie 0 - 2 kW inkl. mva og avgifter."
+  },
+  "value": 175,
+  "min": 0,
+  "max": 9999,
+  "units": {
+    "en": "kr/month",
+    "no": "kr/mnd"
+  }
+}

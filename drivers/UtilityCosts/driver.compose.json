@@ -1,8 +1,8 @@
 {
   "id": "UtilityCosts",
   "name": {
-    "en": "Utility Costs",
-    "no": "Strømpriser"
+    "en": "Norwegian Utility Bill",
+    "no": "Strømregning"
   },
   "icon": "{{driverAssetsPath}}/icon.svg",
   "images": {

@@ -9,8 +9,8 @@
     "local"
   ],
   "name": {
-    "en": "Norwegian Utility Costs",
-    "no": "Norske strømpriser"
+    "en": "Norwegian Utility Bill",
+    "no": "Strømregning"
   },
   "description": {
     "en": "Calculate utility costs",
@@ -270,8 +270,8 @@
     {
       "id": "UtilityCosts",
       "name": {
-        "en": "Utility Costs",
-        "no": "Strømpriser"
+        "en": "Norwegian Utility Bill",
+        "no": "Strømregning"
       },
       "icon": "/drivers/UtilityCosts/assets/icon.svg",
       "images": {
@@ -317,17 +317,40 @@
           },
           "children": [
             {
-              "id": "priceNordpool",
-              "type": "checkbox",
+              "id": "priceCalcMethod",
+              "type": "dropdown",
               "label": {
-                "en": "Price from Nordpool",
-                "no": "Pris fra Nordpool"
+                "en": "Price calculation",
+                "no": "Prisberegning"
               },
-              "value": true,
+              "value": "nordpool_spot",
               "hint": {
-                "en": "Price from Nordpool",
-                "no": "Pris fra Nordpool."
-              }
+                "en": "Method for calculating the utility price.  Select 'Spot' for spot, and edit the 'Formula for utility price' to add taxes and surcharges.  Select 'Fixed price' for fixed price agreements, and edit the 'Formula for utility price' for the price.  Select 'From flow' if the price comes from a price source, eg. Tibber. ",
+                "no": "Metode for å beregne strømprisen.  Velg 'Spotpris' for spotprisavtaler, og editer 'Formel for strømpris' for å legge på mva og påslag.  Velg 'Fastpris' for fastpris, og legg inn prisen i 'Formel for strømpris'.  Velg 'Fra flow' hvis prisen kommer fra en priskilde, f.eks. Tibber. "
+              },
+              "values": [
+                {
+                  "id": "nordpool_spot",
+                  "label": {
+                    "en": "Spot",
+                    "no": "Spotpris"
+                  }
+                },
+                {
+                  "id": "fixed",
+                  "label": {
+                    "en": "Fixed price",
+                    "no": "Fastpris"
+                  }
+                },
+                {
+                  "id": "flow",
+                  "label": {
+                    "en": "From flow",
+                    "no": "Fra flow"
+                  }
+                }
+              ]
             },
             {
               "id": "priceArea",
@@ -338,7 +361,7 @@
               },
               "value": "Oslo",
               "hint": {
-                "en": "Nordpool price area",
+                "en": "Nordpool price area.",
                 "no": "Prisområde for Nordpool spotpris."
               },
               "values": [
@@ -397,15 +420,34 @@
           },
           "children": [
             {
-              "id": "gridCapacity0_5",
+              "id": "gridCapacity0_2",
               "type": "number",
               "label": {
-                "en": "0-5 kW",
-                "no": "0-5 kW"
+                "en": "0-2 kW",
+                "no": "0-2 kW"
               },
               "hint": {
-                "en": "Grid capacity 0 - 5 kW.",
-                "no": "Kapasitetsledd for nettleie 0 - 5 kW."
+                "en": "Grid capacity 0 - 2 kW incl. taxes.",
+                "no": "Kapasitetsledd for nettleie 0 - 2 kW inkl. mva og avgifter."
+              },
+              "value": 175,
+              "min": 0,
+              "max": 9999,
+              "units": {
+                "en": "kr/month",
+                "no": "kr/mnd"
+              }
+            },
+            {
+              "id": "gridCapacity2_5",
+              "type": "number",
+              "label": {
+                "en": "2-5 kW",
+                "no": "2-5 kW"
+              },
+              "hint": {
+                "en": "Grid capacity 2 - 5 kW incl. taxes.",
+                "no": "Kapasitetsledd for nettleie 2 - 5 kW inkl. mva og avgifter."
               },
               "value": 175,
               "min": 0,
@@ -423,8 +465,8 @@
                 "no": "5-10 kW"
               },
               "hint": {
-                "en": "Grid capacity 5 - 10 kW.",
-                "no": "Kapasitetsledd for nettleie 5 - 10 kW."
+                "en": "Grid capacity 5 - 10 kW incl. taxes.",
+                "no": "Kapasitetsledd for nettleie 5 - 10 kW inkl. mva og avgifter."
               },
               "value": 290,
               "min": 0,
@@ -442,8 +484,8 @@
                 "no": "10-15 kW"
               },
               "hint": {
-                "en": "Grid capacity 10 - 15 kW.",
-                "no": "Kapasitetsledd for nettleie 10 - 15 kW."
+                "en": "Grid capacity 10 - 15 kW incl. taxes.",
+                "no": "Kapasitetsledd for nettleie 10 - 15 kW inkl. mva og avgifter."
               },
               "value": 405,
               "min": 0,
@@ -461,8 +503,8 @@
                 "no": "15-20 kW"
               },
               "hint": {
-                "en": "Grid capacity 15 - 20 kW.",
-                "no": "Kapasitetsledd for nettleie 15 - 20 kW."
+                "en": "Grid capacity 15 - 20 kW incl. taxes.",
+                "no": "Kapasitetsledd for nettleie 15 - 20 kW inkl. mva og avgifter."
               },
               "value": 520,
               "min": 0,
@@ -480,8 +522,8 @@
                 "no": "20-25 kW"
               },
               "hint": {
-                "en": "Grid capacity 20 - 25 kW.",
-                "no": "Kapasitetsledd for nettleie 20 - 25 kW."
+                "en": "Grid capacity 20 - 25 kW incl. taxes.",
+                "no": "Kapasitetsledd for nettleie 20 - 25 kW inkl. mva og avgifter."
               },
               "value": 635,
               "min": 0,
@@ -508,8 +550,8 @@
                 "no": "Dagtid"
               },
               "hint": {
-                "en": "Grid energy price 06:00 - 22:00 per kWh.",
-                "no": "Energiledd 06:00 - 22:00 pr. kWh."
+                "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes.",
+                "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter."
               },
               "value": 0.3489,
               "min": 0,
@@ -527,8 +569,8 @@
                 "no": "Natt"
               },
               "hint": {
-                "en": "Grid energy price 22:00 - 06:00 per kWh.",
-                "no": "Energiledd 22:00 - 06:00 pr. kWh."
+                "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes.",
+                "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter."
               },
               "value": 0.2489,
               "min": 0,

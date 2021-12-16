@@ -67,13 +67,15 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     try {
       this.clearCheckTime();
       const settings = this.getSettings();
-      if (settings.priceNordpool === true) {
+      if (settings.priceCalcMethod === 'nordpool_spot') {
         if (this.shallFetchData()) {
           await this.fetchData();
         }
         if (this._prices) {
           await this.onData();
         }
+      } else if (settings.priceCalcMethod === 'fixed') {
+        await this.fixedPriceCalculation();
       }
     } catch (err) {
       this.error(err);
@@ -123,7 +125,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
             const costFormula2 = costFormula.replace(/PRICE_NORDPOOL/g, `${price}`);
             const priceC = Math.round(100000 * this.parse(costFormula2)) / 100000;
             await this.setCapabilityValue('meter_price_incl', priceC).catch(this.error);
-            this.log(`Price calculation: ${costFormula2} => ${priceC}`);
+            this.log(`Spot price calculation: ${costFormula2} => ${priceC}`);
           } catch (err) {
             this.error('Price formula failed:', err);
           }
@@ -137,6 +139,30 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
   parse(str) {
     return Function(`'use strict'; return (${str})`)()
+  }
+
+  async fixedPriceCalculation() {
+    try {
+      const costFormula = this.getSetting('costFormula');
+      const costFormula2 = costFormula.replace(/PRICE_NORDPOOL/g, ``);
+      const price = Math.round(100000 * this.parse(costFormula2)) / 100000;
+      await this.setCapabilityValue('meter_price_excl', Math.round(100000 * price / 1.25) / 100000);
+      await this.setCapabilityValue('meter_price_incl', price);
+      this.log(`Fixed price calculation: ${costFormula2} => ${price}`);
+    } catch (err) {
+      this.error('Price formula failed:', err);
+    }
+  }
+
+  async onUpdatePrice(price) {
+    try {
+      await this.setSettings({ 'priceCalcMethod': 'flow' });
+      await this.setCapabilityValue('meter_price_excl', Math.round(100000 * price / 1.25) / 100000);
+      await this.setCapabilityValue('meter_price_incl', price);
+      this.log(`Price updated: => ${price}`);
+    } catch (err) {
+      this.error('Price from flow update failed:', err);
+    }
   }
 
   async onUpdateConsumption(consumption) {
@@ -297,8 +323,10 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     const settings = this.getSettings();
     const sumConsumptionMaxHour = this.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
 
-    if (sumConsumptionMaxHour < 5000) {
-      return settings.gridCapacity0_5;
+    if (sumConsumptionMaxHour < 2000) {
+      return settings.gridCapacity0_2;
+    } else if (sumConsumptionMaxHour >= 2000 && sumConsumptionMaxHour < 5000) {
+      return settings.gridCapacity2_5;
     } else if (sumConsumptionMaxHour >= 5000 && sumConsumptionMaxHour < 10000) {
       return settings.gridCapacity5_10;
     } else if (sumConsumptionMaxHour >= 10000 && sumConsumptionMaxHour < 15000) {
@@ -307,17 +335,6 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       return settings.gridCapacity15_20;
     } else if (sumConsumptionMaxHour >= 20000) {
       return settings.gridCapacity20_25;
-    }
-  }
-
-  async onUpdatePrice(price) {
-    try {
-      await this.setSettings({ 'priceNordpool': false });
-      await this.setCapabilityValue('meter_price_excl', price / 1.25).catch(this.error);
-      await this.setCapabilityValue('meter_price_incl', price).catch(this.error);
-      this.log(`Price updated: => ${price}`);
-    } catch (err) {
-      this.error('Price updated failed:', err);
     }
   }
 

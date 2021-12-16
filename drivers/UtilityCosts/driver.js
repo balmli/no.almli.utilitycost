@@ -11,7 +11,7 @@ module.exports = class UtilityCostsDriver extends Homey.Driver {
   async onPairListDevices() {
     return [
       {
-        "name": "Utility Costs",
+        "name": this.homey.__('name'),
         "data": {
           "id": 'utility-cost'
         }

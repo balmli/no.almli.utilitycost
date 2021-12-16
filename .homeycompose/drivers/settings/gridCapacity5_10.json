@@ -6,8 +6,8 @@
     "no": "5-10 kW"
   },
   "hint": {
-    "en": "Grid capacity 5 - 10 kW.",
-    "no": "Kapasitetsledd for nettleie 5 - 10 kW."
+    "en": "Grid capacity 5 - 10 kW incl. taxes.",
+    "no": "Kapasitetsledd for nettleie 5 - 10 kW inkl. mva og avgifter."
   },
   "value": 290,
   "min": 0,

@@ -8,8 +8,8 @@
     "local"
   ],
   "name": {
-    "en": "Norwegian Utility Costs",
-    "no": "Norske strømpriser"
+    "en": "Norwegian Utility Bill",
+    "no": "Strømregning"
   },
   "description": {
     "en": "Calculate utility costs",

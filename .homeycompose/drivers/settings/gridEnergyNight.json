@@ -6,8 +6,8 @@
     "no": "Natt"
   },
   "hint": {
-    "en": "Grid energy price 22:00 - 06:00 per kWh.",
-    "no": "Energiledd 22:00 - 06:00 pr. kWh."
+    "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes.",
+    "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter."
   },
   "value": 0.2489,
   "min": 0,
