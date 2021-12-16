@@ -1,8 +1,8 @@
 {
   "type": "number",
   "title": {
-    "en": "Price excl. taxes",
-    "no": "Pris eksl. mva"
+    "en": "Utility price excl. taxes",
+    "no": "Strømpris eksl. mva"
   },
   "desc": {
     "en": "Price current hour excl. taxes",
@@ -17,5 +17,5 @@
   "setable": false,
   "greyout": true,
   "insights": true,
-  "icon": "/assets/nok.svg"
+  "icon": "/assets/pricetag.svg"
 }

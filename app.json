@@ -606,7 +606,7 @@
       "setable": false,
       "greyout": true,
       "insights": false,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/consumption.svg"
     },
     "meter_consumption_maxmonth": {
       "type": "number",
@@ -628,7 +628,7 @@
       "setable": false,
       "greyout": true,
       "insights": false,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/consumption.svg"
     },
     "meter_cost_lastmonth": {
       "type": "number",
@@ -650,7 +650,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/utility.svg"
     },
     "meter_cost_month": {
       "type": "number",
@@ -672,7 +672,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/utility.svg"
     },
     "meter_cost_today": {
       "type": "number",
@@ -694,7 +694,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/utility.svg"
     },
     "meter_cost_yesterday": {
       "type": "number",
@@ -716,7 +716,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/utility.svg"
     },
     "meter_grid_lastmonth": {
       "type": "number",
@@ -738,7 +738,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/grid.svg"
     },
     "meter_grid_month": {
       "type": "number",
@@ -760,7 +760,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/grid.svg"
     },
     "meter_grid_today": {
       "type": "number",
@@ -782,7 +782,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/grid.svg"
     },
     "meter_grid_yesterday": {
       "type": "number",
@@ -804,13 +804,13 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/grid.svg"
     },
     "meter_price_excl": {
       "type": "number",
       "title": {
-        "en": "Price excl. taxes",
-        "no": "Pris eksl. mva"
+        "en": "Utility price excl. taxes",
+        "no": "Strømpris eksl. mva"
       },
       "desc": {
         "en": "Price current hour excl. taxes",
@@ -825,13 +825,13 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/pricetag.svg"
     },
     "meter_price_incl": {
       "type": "number",
       "title": {
-        "en": "Price incl. taxes",
-        "no": "Pris inkl. mva"
+        "en": "Utility price incl. taxes",
+        "no": "Strømpris inkl. mva"
       },
       "desc": {
         "en": "Price current hour incl. taxes and surcharges",
@@ -846,7 +846,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/pricetag.svg"
     },
     "meter_sum_current": {
       "type": "number",
@@ -867,7 +867,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/odometer.svg"
     },
     "meter_sum_month": {
       "type": "number",
@@ -888,7 +888,7 @@
       "setable": false,
       "greyout": true,
       "insights": true,
-      "icon": "/assets/nok.svg"
+      "icon": "/assets/monthlycost.svg"
     }
   }
 }
