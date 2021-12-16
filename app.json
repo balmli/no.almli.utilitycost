@@ -13,7 +13,7 @@
     "no": "Strømregning"
   },
   "description": {
-    "en": "Calculate utility costs",
+    "en": "Calculate utility and grid costs",
     "no": "Beregn kostnader for strøm og nettleie"
   },
   "category": [
@@ -70,6 +70,7 @@
       }
     }
   },
+  "homeyCommunityTopicId": 56678,
   "flow": {
     "triggers": [
       {
