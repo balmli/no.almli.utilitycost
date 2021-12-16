@@ -39,7 +39,8 @@
   "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
-    "large": "/assets/images/large.png"
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
     "name": "Bjørnar Almli",
@@ -50,6 +51,15 @@
       {
         "name": "Bjørnar Almli",
         "email": "bjornar.almli@gmail.com"
+      },
+      {
+        "name": "Eldar Skjeldestad Åsebø"
+      },
+      {
+        "name": "Morten Stang-Medhus"
+      },
+      {
+        "name": "Victor Pran"
       }
     ]
   },
