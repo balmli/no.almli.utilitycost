@@ -1,0 +1,19 @@
+{
+  "id": "gridFixedAmount",
+  "type": "number",
+  "label": {
+    "en": "Yearly fixed amount",
+    "no": "Årlig fastbeløp"
+  },
+  "hint": {
+    "en": "Yearly fixed amount existing regime incl. taxes.",
+    "no": "Årlig fastbeløp for nettleie for eksisterende regime inkl. mva og avgifter."
+  },
+  "value": 2050,
+  "min": 0,
+  "max": 9999,
+  "units": {
+    "en": "kr/year",
+    "no": "kr/år"
+  }
+}

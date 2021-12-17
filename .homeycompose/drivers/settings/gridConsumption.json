@@ -1,0 +1,19 @@
+{
+  "id": "gridConsumption",
+  "type": "number",
+  "label": {
+    "en": "Consumption based part",
+    "no": "Forbruksavhengig del"
+  },
+  "hint": {
+    "en": "Grid consumption based part per kWh incl. taxes.",
+    "no": "Forbruksavhengig del pr. kWh inkl. mva og avgifter."
+  },
+  "value": 0.4261,
+  "min": 0,
+  "max": 5,
+  "units": {
+    "en": "kr/kWh",
+    "no": "kr/kWh"
+  }
+}

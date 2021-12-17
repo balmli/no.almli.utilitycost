@@ -315,6 +315,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
   async calculateSumCost(consumption) {
     try {
+      const settings = this.getSettings();
       const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
       const gridPrice = this.getGridEnergyPrice();
 
@@ -323,13 +324,13 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
       const utilityMonth = this.getCapabilityValue(`meter_cost_month`) || 0;
       const gridMonth = this.getCapabilityValue(`meter_grid_month`) || 0;
-      const gridCapacityMonth = this.getGridCapacity();
+      const gridCapacityMonth = settings.gridNewRegime ? this.getGridCapacity() : 0;
       const sumMonth = utilityMonth + gridMonth + gridCapacityMonth;
       await this.setCapabilityValue(`meter_sum_month`, sumMonth);
 
       //this.log(`Calculate sum cost: Utility: ${utilityMonth}, Grid: ${gridMonth}, Grid capacity: ${gridCapacityMonth} => ${sumMonth}`);
     } catch (err) {
-      this.error('calculateGridCost failed: ', err);
+      this.error('calculateSumCost failed: ', err);
     }
   }
 
@@ -353,27 +354,42 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
   }
 
   getGridEnergyPrice() {
-    const settings = this.getSettings();
+    try {
+      const settings = this.getSettings();
+      if (settings.gridNewRegime) {
+        const momentNow = moment();
 
-    const momentNow = moment();
+        const dayStart = moment().startOf('day').add(6, 'hour');
+        const dayEnd = moment().startOf('day').add(22, 'hour');
+        const daytime = momentNow.isSameOrAfter(dayStart) && momentNow.isBefore(dayEnd);
+        const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
+        const lowPrice = !daytime || settings.gridEnergyLowWeekends && isWeekend;
 
-    const dayStart = moment().startOf('day').add(6, 'hour');
-    const dayEnd = moment().startOf('day').add(22, 'hour');
-    const daytime = momentNow.isSameOrAfter(dayStart) && momentNow.isBefore(dayEnd);
-    const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
-    const lowPrice = !daytime || settings.gridEnergyLowWeekends && isWeekend;
+        const winterStart = parseInt(settings.gridEnergyWinterStart);
+        const summerStart = parseInt(settings.gridEnergySummerStart);
+        const isSummerPeriod = winterStart < summerStart && momentNow.month() >= summerStart
+          || winterStart > summerStart && momentNow.month() >= summerStart && momentNow.month() < winterStart;
 
-    const winterStart = parseInt(settings.gridEnergyWinterStart);
-    const summerStart = parseInt(settings.gridEnergySummerStart);
-    const isSummerPeriod = winterStart < summerStart && momentNow.month() >= summerStart
-      || winterStart > summerStart && momentNow.month() >= summerStart && momentNow.month() < winterStart;
+        const price = isSummerPeriod ?
+          (lowPrice ? settings.gridEnergyNightSummer : settings.gridEnergyDaySummer) :
+          (lowPrice ? settings.gridEnergyNight : settings.gridEnergyDay);
 
-    const price = isSummerPeriod ?
-      (lowPrice ? settings.gridEnergyNightSummer : settings.gridEnergyDaySummer) :
-      (lowPrice ? settings.gridEnergyNight : settings.gridEnergyDay);
+        //this.log(`Get grid energy price (new regime): Weekend: ${isWeekend}, Low Price: ${lowPrice}, winterStart: ${winterStart}, summerStart: ${summerStart}, isSummerPeriod: ${isSummerPeriod}, price: ${price}`);
+        return price;
+      } else {
+        const gridConsumptionPrice = settings.gridConsumption;
 
-    //this.log(`Get grid energy price: Weekend: ${isWeekend}, Low Price: ${lowPrice}, winterStart: ${winterStart}, summerStart: ${summerStart}, isSummerPeriod: ${isSummerPeriod}, price: ${price}`);
-    return price;
+        const yearStart = moment().startOf('year');
+        const yearEnd = moment().startOf('year').add(1, 'year');
+        const numDaysInYear = yearEnd.diff(yearStart, 'days');
+        const gridFixedPrice = settings.gridFixedAmount / (numDaysInYear * 24);
+        const price = gridConsumptionPrice + gridFixedPrice;
+        //this.log(`Get grid energy price (old regime): consumption price: ${gridConsumptionPrice}, fixed price: ${gridFixedPrice}, price: ${price}`);
+        return price;
+      }
+    } catch (err) {
+      this.error('getGridEnergyPrice failed: ', err);
+    }
   }
 
 };

@@ -416,6 +416,66 @@
         {
           "type": "group",
           "label": {
+            "en": "Grid costs old regime",
+            "no": "Nettleie gammelt regime"
+          },
+          "children": [
+            {
+              "id": "gridFixedAmount",
+              "type": "number",
+              "label": {
+                "en": "Yearly fixed amount",
+                "no": "Årlig fastbeløp"
+              },
+              "hint": {
+                "en": "Yearly fixed amount existing regime incl. taxes.",
+                "no": "Årlig fastbeløp for nettleie for eksisterende regime inkl. mva og avgifter."
+              },
+              "value": 2050,
+              "min": 0,
+              "max": 9999,
+              "units": {
+                "en": "kr/year",
+                "no": "kr/år"
+              }
+            },
+            {
+              "id": "gridConsumption",
+              "type": "number",
+              "label": {
+                "en": "Consumption based part",
+                "no": "Forbruksavhengig del"
+              },
+              "hint": {
+                "en": "Grid consumption based part per kWh incl. taxes.",
+                "no": "Forbruksavhengig del pr. kWh inkl. mva og avgifter."
+              },
+              "value": 0.4261,
+              "min": 0,
+              "max": 5,
+              "units": {
+                "en": "kr/kWh",
+                "no": "kr/kWh"
+              }
+            },
+            {
+              "id": "gridNewRegime",
+              "type": "checkbox",
+              "label": {
+                "en": "New grid costs regime",
+                "no": "Nye regler for nettleie"
+              },
+              "hint": {
+                "en": "Check if the new regime for grid costs has started.",
+                "no": "Kryss av hvis nye regler for nettleie har startet."
+              },
+              "value": false
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
             "en": "Grid Energy",
             "no": "Nettleie kapasitetsledd"
           },
