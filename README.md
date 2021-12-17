@@ -15,6 +15,13 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.0.1
+
+- Support existing grid costs regime
+- Validation for the spot & fixed price cost formula
+- Separate grid energy prices for winter and summer 
+- Option for low price for weekends
+
 #### 1.0.0
 
 - Initial release
