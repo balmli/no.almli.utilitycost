@@ -2,12 +2,12 @@
   "id": "gridEnergyNight",
   "type": "number",
   "label": {
-    "en": "Night",
-    "no": "Natt"
+    "en": "Night winter",
+    "no": "Natt vinter"
   },
   "hint": {
-    "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes.",
-    "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter."
+    "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes winter period.",
+    "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter vinteren."
   },
   "value": 0.2489,
   "min": 0,

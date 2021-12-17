@@ -67,6 +67,26 @@
       {
         "id": "gridEnergyNight",
         "$extends": "gridEnergyNight"
+      },
+      {
+        "id": "gridEnergyDaySummer",
+        "$extends": "gridEnergyDaySummer"
+      },
+      {
+        "id": "gridEnergyNightSummer",
+        "$extends": "gridEnergyNightSummer"
+      },
+      {
+        "id": "gridEnergyWinterStart",
+        "$extends": "gridEnergyWinterStart"
+      },
+      {
+        "id": "gridEnergySummerStart",
+        "$extends": "gridEnergySummerStart"
+      },
+      {
+        "id": "gridEnergyLowWeekends",
+        "$extends": "gridEnergyLowWeekends"
       }
     ]
   }

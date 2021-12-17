@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "no.almli.utilitycost",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -547,12 +547,12 @@
               "id": "gridEnergyDay",
               "type": "number",
               "label": {
-                "en": "Day",
-                "no": "Dagtid"
+                "en": "Day winter",
+                "no": "Dagtid vinter"
               },
               "hint": {
-                "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes.",
-                "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter."
+                "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes winter period.",
+                "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter vinteren."
               },
               "value": 0.3489,
               "min": 0,
@@ -566,12 +566,12 @@
               "id": "gridEnergyNight",
               "type": "number",
               "label": {
-                "en": "Night",
-                "no": "Natt"
+                "en": "Night winter",
+                "no": "Natt vinter"
               },
               "hint": {
-                "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes.",
-                "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter."
+                "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes winter period.",
+                "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter vinteren."
               },
               "value": 0.2489,
               "min": 0,
@@ -580,6 +580,255 @@
                 "en": "kr/kWh",
                 "no": "kr/kWh"
               }
+            },
+            {
+              "id": "gridEnergyDaySummer",
+              "type": "number",
+              "label": {
+                "en": "Day summer",
+                "no": "Dagtid sommer"
+              },
+              "hint": {
+                "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes summer period.",
+                "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter sommeren."
+              },
+              "value": 0.4301,
+              "min": 0,
+              "max": 5,
+              "units": {
+                "en": "kr/kWh",
+                "no": "kr/kWh"
+              }
+            },
+            {
+              "id": "gridEnergyNightSummer",
+              "type": "number",
+              "label": {
+                "en": "Night summer",
+                "no": "Natt sommer"
+              },
+              "hint": {
+                "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes summer period.",
+                "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter sommeren."
+              },
+              "value": 0.3301,
+              "min": 0,
+              "max": 5,
+              "units": {
+                "en": "kr/kWh",
+                "no": "kr/kWh"
+              }
+            },
+            {
+              "id": "gridEnergyWinterStart",
+              "type": "dropdown",
+              "label": {
+                "en": "Winter period starts",
+                "no": "Vinterperiode starter"
+              },
+              "value": "0",
+              "hint": {
+                "en": "Select the correct month for the low grid enery price.",
+                "no": "Velg måned for når lav pris for energiledd starter."
+              },
+              "values": [
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "January",
+                    "no": "Januar"
+                  }
+                },
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "February",
+                    "no": "Februar"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "March",
+                    "no": "Mars"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "April",
+                    "no": "April"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "May",
+                    "no": "Mai"
+                  }
+                },
+                {
+                  "id": "5",
+                  "label": {
+                    "en": "June",
+                    "no": "Juni"
+                  }
+                },
+                {
+                  "id": "6",
+                  "label": {
+                    "en": "July",
+                    "no": "Juli"
+                  }
+                },
+                {
+                  "id": "7",
+                  "label": {
+                    "en": "August",
+                    "no": "August"
+                  }
+                },
+                {
+                  "id": "8",
+                  "label": {
+                    "en": "September",
+                    "no": "September"
+                  }
+                },
+                {
+                  "id": "9",
+                  "label": {
+                    "en": "October",
+                    "no": "Oktober"
+                  }
+                },
+                {
+                  "id": "10",
+                  "label": {
+                    "en": "November",
+                    "no": "November"
+                  }
+                },
+                {
+                  "id": "11",
+                  "label": {
+                    "en": "December",
+                    "no": "Desember"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "gridEnergySummerStart",
+              "type": "dropdown",
+              "label": {
+                "en": "Summer period starts",
+                "no": "Sommerperiode starter"
+              },
+              "value": "3",
+              "hint": {
+                "en": "Select the correct month for the high grid enery price.",
+                "no": "Velg måned for når høy pris for energiledd starter."
+              },
+              "values": [
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "January",
+                    "no": "Januar"
+                  }
+                },
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "February",
+                    "no": "Februar"
+                  }
+                },
+                {
+                  "id": "2",
+                  "label": {
+                    "en": "March",
+                    "no": "Mars"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "April",
+                    "no": "April"
+                  }
+                },
+                {
+                  "id": "4",
+                  "label": {
+                    "en": "May",
+                    "no": "Mai"
+                  }
+                },
+                {
+                  "id": "5",
+                  "label": {
+                    "en": "June",
+                    "no": "Juni"
+                  }
+                },
+                {
+                  "id": "6",
+                  "label": {
+                    "en": "July",
+                    "no": "Juli"
+                  }
+                },
+                {
+                  "id": "7",
+                  "label": {
+                    "en": "August",
+                    "no": "August"
+                  }
+                },
+                {
+                  "id": "8",
+                  "label": {
+                    "en": "September",
+                    "no": "September"
+                  }
+                },
+                {
+                  "id": "9",
+                  "label": {
+                    "en": "October",
+                    "no": "Oktober"
+                  }
+                },
+                {
+                  "id": "10",
+                  "label": {
+                    "en": "November",
+                    "no": "November"
+                  }
+                },
+                {
+                  "id": "11",
+                  "label": {
+                    "en": "December",
+                    "no": "Desember"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "gridEnergyLowWeekends",
+              "type": "checkbox",
+              "label": {
+                "en": "Low price weekends",
+                "no": "Lav pris i helgene"
+              },
+              "hint": {
+                "en": "Check if the low price is used in weekends.",
+                "no": "Velges hvis det er lav pris i helgene."
+              },
+              "value": true
             }
           ]
         }

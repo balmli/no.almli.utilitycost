@@ -1,0 +1,99 @@
+{
+  "id": "gridEnergyWinterStart",
+  "type": "dropdown",
+  "label": {
+    "en": "Winter period starts",
+    "no": "Vinterperiode starter"
+  },
+  "value": "0",
+  "hint": {
+    "en": "Select the correct month for the low grid enery price.",
+    "no": "Velg måned for når lav pris for energiledd starter."
+  },
+  "values": [
+    {
+      "id": "0",
+      "label": {
+        "en": "January",
+        "no": "Januar"
+      }
+    },
+    {
+      "id": "1",
+      "label": {
+        "en": "February",
+        "no": "Februar"
+      }
+    },
+    {
+      "id": "2",
+      "label": {
+        "en": "March",
+        "no": "Mars"
+      }
+    },
+    {
+      "id": "3",
+      "label": {
+        "en": "April",
+        "no": "April"
+      }
+    },
+    {
+      "id": "4",
+      "label": {
+        "en": "May",
+        "no": "Mai"
+      }
+    },
+    {
+      "id": "5",
+      "label": {
+        "en": "June",
+        "no": "Juni"
+      }
+    },
+    {
+      "id": "6",
+      "label": {
+        "en": "July",
+        "no": "Juli"
+      }
+    },
+    {
+      "id": "7",
+      "label": {
+        "en": "August",
+        "no": "August"
+      }
+    },
+    {
+      "id": "8",
+      "label": {
+        "en": "September",
+        "no": "September"
+      }
+    },
+    {
+      "id": "9",
+      "label": {
+        "en": "October",
+        "no": "Oktober"
+      }
+    },
+    {
+      "id": "10",
+      "label": {
+        "en": "November",
+        "no": "November"
+      }
+    },
+    {
+      "id": "11",
+      "label": {
+        "en": "December",
+        "no": "Desember"
+      }
+    }
+  ]
+}

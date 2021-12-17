@@ -1,0 +1,13 @@
+{
+  "id": "gridEnergyLowWeekends",
+  "type": "checkbox",
+  "label": {
+    "en": "Low price weekends",
+    "no": "Lav pris i helgene"
+  },
+  "hint": {
+    "en": "Check if the low price is used in weekends.",
+    "no": "Velges hvis det er lav pris i helgene."
+  },
+  "value": true
+}

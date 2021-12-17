@@ -111,25 +111,12 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
       const currentPrice = pricesLib.currentPrice(this._prices, localTime);
       const startAtHour = currentPrice ? pricesLib.toHour(currentPrice.startsAt) : undefined;
-      const price = currentPrice ? currentPrice.price : undefined;
-
       if (currentPrice) {
-        this.log('Current price:', startAtHour, price);
+        this.log('Current price:', startAtHour, currentPrice.price);
         const priceChanged = !this._lastPrice || startAtHour !== pricesLib.toHour(this._lastPrice.startsAt);
         if (priceChanged) {
           this._lastPrice = currentPrice;
-          await this.setCapabilityValue('meter_price_excl', price).catch(this.error);
-
-          try {
-            const costFormula = this.getSetting('costFormula');
-            const costFormula2 = costFormula.replace(/PRICE_NORDPOOL/g, `${price}`);
-            const priceC = Math.round(100000 * this.parse(costFormula2)) / 100000;
-            await this.setCapabilityValue('meter_price_incl', priceC).catch(this.error);
-            this.log(`Spot price calculation: ${costFormula2} => ${priceC}`);
-          } catch (err) {
-            this.error('Price formula failed:', err);
-          }
-
+          await this.spotPriceCalculation(currentPrice.price);
         }
       }
     } catch (err) {
@@ -141,28 +128,47 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     return Function(`'use strict'; return (${str})`)()
   }
 
-  async fixedPriceCalculation() {
+  async spotPriceCalculation(price) {
+    const costFormula = this.getSetting('costFormula');
     try {
-      const costFormula = this.getSetting('costFormula');
+      const costFormula2 = costFormula.replace(/PRICE_NORDPOOL/g, `${price}`);
+      const priceCalculated = this.roundPrice(this.parse(costFormula2));
+
+      await this.setCapabilityValue('meter_price_excl', price);
+      await this.setCapabilityValue('meter_price_incl', priceCalculated);
+
+      this.log(`Spot price calculation: ${costFormula2} => ${priceCalculated}`);
+    } catch (err) {
+      this.error(`Spot price formula failed: "${costFormula}"`, err);
+    }
+  }
+
+  async fixedPriceCalculation() {
+    const costFormula = this.getSetting('costFormula');
+    try {
       const costFormula2 = costFormula.replace(/PRICE_NORDPOOL/g, ``);
-      const price = Math.round(100000 * this.parse(costFormula2)) / 100000;
-      await this.setCapabilityValue('meter_price_excl', Math.round(100000 * price / 1.25) / 100000);
+      const price = this.roundPrice(this.parse(costFormula2));
+      await this.setCapabilityValue('meter_price_excl', this.roundPrice(price / 1.25));
       await this.setCapabilityValue('meter_price_incl', price);
       this.log(`Fixed price calculation: ${costFormula2} => ${price}`);
     } catch (err) {
-      this.error('Price formula failed:', err);
+      this.error(`Fixed price formula failed: "${costFormula}"`, err);
     }
   }
 
   async onUpdatePrice(price) {
     try {
       await this.setSettings({ 'priceCalcMethod': 'flow' });
-      await this.setCapabilityValue('meter_price_excl', Math.round(100000 * price / 1.25) / 100000);
+      await this.setCapabilityValue('meter_price_excl', this.roundPrice(price / 1.25));
       await this.setCapabilityValue('meter_price_incl', price);
       this.log(`Price updated: => ${price}`);
     } catch (err) {
       this.error('Price from flow update failed:', err);
     }
+  }
+
+  roundPrice(price) {
+    return Math.round(100000 * price) / 100000;
   }
 
   async onUpdateConsumption(consumption) {
@@ -244,13 +250,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       await this.setStoreValue('lastGridUpdate', thisUpdate);
 
       if (lastUpdate) {
-        const settings = this.getSettings();
-
-        const momentNow = moment();
-        const gridDayStart = moment().startOf('day').add(6, 'hour');
-        const gridDayEnd = moment().startOf('day').add(22, 'hour');
-        const gridDay = momentNow.isSameOrAfter(gridDayStart) && momentNow.isBefore(gridDayEnd);
-        const price = gridDay ? settings.gridEnergyDay : settings.gridEnergyNight;
+        const price = this.getGridEnergyPrice();
 
         const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
         const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
@@ -294,22 +294,15 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
   async calculateSumCost(consumption) {
     try {
-      const settings = this.getSettings();
-
-      const momentNow = moment();
-      const gridDayStart = moment().startOf('day').add(6, 'hour');
-      const gridDayEnd = moment().startOf('day').add(22, 'hour');
-      const gridDay = momentNow.isSameOrAfter(gridDayStart) && momentNow.isBefore(gridDayEnd);
-
       const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
-      const gridPrice = gridDay ? settings.gridEnergyDay : settings.gridEnergyNight;
+      const gridPrice = this.getGridEnergyPrice();
 
       const sumCurrent = consumption / (1000) * (utilityPrice + gridPrice);
       await this.setCapabilityValue(`meter_sum_current`, sumCurrent);
 
       const utilityMonth = this.getCapabilityValue(`meter_cost_month`) || 0;
       const gridMonth = this.getCapabilityValue(`meter_grid_month`) || 0;
-      const gridCapacityMonth = await this.getGridCapacity();
+      const gridCapacityMonth = this.getGridCapacity();
       const sumMonth = utilityMonth + gridMonth + gridCapacityMonth;
       await this.setCapabilityValue(`meter_sum_month`, sumMonth);
 
@@ -319,7 +312,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     }
   }
 
-  async getGridCapacity() {
+  getGridCapacity() {
     const settings = this.getSettings();
     const sumConsumptionMaxHour = this.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
 
@@ -336,6 +329,30 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     } else if (sumConsumptionMaxHour >= 20000) {
       return settings.gridCapacity20_25;
     }
+  }
+
+  getGridEnergyPrice() {
+    const settings = this.getSettings();
+
+    const momentNow = moment();
+
+    const dayStart = moment().startOf('day').add(6, 'hour');
+    const dayEnd = moment().startOf('day').add(22, 'hour');
+    const daytime = momentNow.isSameOrAfter(dayStart) && momentNow.isBefore(dayEnd);
+    const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
+    const lowPrice = !daytime || settings.gridEnergyLowWeekends && isWeekend;
+
+    const winterStart = parseInt(settings.gridEnergyWinterStart); 0
+    const summerStart = parseInt(settings.gridEnergySummerStart); 3
+    const isSummerPeriod = winterStart < summerStart && momentNow.month() >= summerStart
+      || winterStart > summerStart && momentNow.month() >= summerStart && momentNow.month() < winterStart;
+
+    const price = isSummerPeriod ?
+      (lowPrice ? settings.gridEnergyNightSummer : settings.gridEnergyDaySummer) :
+      (lowPrice ? settings.gridEnergyNight : settings.gridEnergyDay);
+
+    //this.log(`Get grid energy price: Weekend: ${isWeekend}, Low Price: ${lowPrice}, winterStart: ${winterStart}, summerStart: ${summerStart}, isSummerPeriod: ${isSummerPeriod}, price: ${price}`);
+    return price;
   }
 
 };
