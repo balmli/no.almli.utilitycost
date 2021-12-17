@@ -4,6 +4,7 @@ const Homey = require('homey');
 const moment = require('../../lib/moment-timezone-with-data');
 const pricesLib = require('../../lib/prices');
 const nordpool = require('../../lib/nordpool');
+const Formula = require('fparser');
 
 module.exports = class UtilityCostsDevice extends Homey.Device {
 
@@ -33,9 +34,27 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
   }
 
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    this._lastFetchData = undefined;
+    if (changedKeys.includes('costFormula')) {
+      this.validateCostFormula(newSettings.costFormula);
+    }
+    if (changedKeys.includes('priceArea')) {
+      this._lastFetchData = undefined;
+    }
     this._lastPrice = undefined;
-    this.scheduleCheckTime(5);
+    this.scheduleCheckTime(2);
+  }
+
+  validateCostFormula(costFormula) {
+    try {
+      const test = this.evaluatePrice(costFormula, costFormula.includes('PRICE_NORDPOOL') ? 1.23 : undefined);
+      this.log(`Formula validated OK => ${costFormula}`);
+    } catch (err) {
+      if (err.message) {
+        throw new Error(this.homey.__('errors.invalid_cost_formula_msg', { message: err.message }));
+      } else {
+        throw new Error(this.homey.__('errors.invalid_cost_formula'));
+      }
+    }
   }
 
   onDeleted() {
@@ -124,20 +143,13 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     }
   }
 
-  parse(str) {
-    return Function(`'use strict'; return (${str})`)()
-  }
-
   async spotPriceCalculation(price) {
     const costFormula = this.getSetting('costFormula');
     try {
-      const costFormula2 = costFormula.replace(/PRICE_NORDPOOL/g, `${price}`);
-      const priceCalculated = this.roundPrice(this.parse(costFormula2));
-
+      const priceCalculated = this.roundPrice(this.evaluatePrice(costFormula, price));
       await this.setCapabilityValue('meter_price_excl', price);
       await this.setCapabilityValue('meter_price_incl', priceCalculated);
-
-      this.log(`Spot price calculation: ${costFormula2} => ${priceCalculated}`);
+      this.log(`Spot price calculation: ${costFormula} => ${priceCalculated}`);
     } catch (err) {
       this.error(`Spot price formula failed: "${costFormula}"`, err);
     }
@@ -146,11 +158,10 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
   async fixedPriceCalculation() {
     const costFormula = this.getSetting('costFormula');
     try {
-      const costFormula2 = costFormula.replace(/PRICE_NORDPOOL/g, ``);
-      const price = this.roundPrice(this.parse(costFormula2));
+      const price = this.roundPrice(this.evaluatePrice(costFormula));
       await this.setCapabilityValue('meter_price_excl', this.roundPrice(price / 1.25));
       await this.setCapabilityValue('meter_price_incl', price);
-      this.log(`Fixed price calculation: ${costFormula2} => ${price}`);
+      this.log(`Fixed price calculation: ${costFormula} => ${price}`);
     } catch (err) {
       this.error(`Fixed price formula failed: "${costFormula}"`, err);
     }
@@ -164,6 +175,16 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       this.log(`Price updated: => ${price}`);
     } catch (err) {
       this.error('Price from flow update failed:', err);
+    }
+  }
+
+  evaluatePrice(str, price) {
+    const str2 = str.replace(/PRICE_NORDPOOL/g, `[PRICE_NORDPOOL]`);
+    const parser = new Formula(str2);
+    if (price) {
+      return parser.evaluate({ PRICE_NORDPOOL: price });
+    } else {
+      return parser.evaluate();
     }
   }
 
@@ -342,8 +363,8 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
     const lowPrice = !daytime || settings.gridEnergyLowWeekends && isWeekend;
 
-    const winterStart = parseInt(settings.gridEnergyWinterStart); 0
-    const summerStart = parseInt(settings.gridEnergySummerStart); 3
+    const winterStart = parseInt(settings.gridEnergyWinterStart);
+    const summerStart = parseInt(settings.gridEnergySummerStart);
     const isSummerPeriod = winterStart < summerStart && momentNow.month() >= summerStart
       || winterStart > summerStart && momentNow.month() >= summerStart && momentNow.month() < winterStart;
 

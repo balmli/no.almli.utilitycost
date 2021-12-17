@@ -9,6 +9,7 @@
   "author": "Bjørnar Almli",
   "license": "ISC",
   "dependencies": {
+    "fparser": "^2.0.1",
     "http.min": "2.1.0"
   },
   "devDependencies": {

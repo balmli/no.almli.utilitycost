@@ -1,3 +1,7 @@
 {
-  "name": "Norwegian Utility Bill"
+  "name": "Norwegian Utility Bill",
+  "errors": {
+    "invalid_cost_formula": "Invalid utility price formula",
+    "invalid_cost_formula_msg": "Invalid utility price formula: __message__"
+  }
 }
