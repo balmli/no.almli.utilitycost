@@ -18,6 +18,7 @@ To install the device:
 #### 1.0.2
 
 - Can now see the grid price
+- Added trigger for 'New level for grid capacity'
 
 #### 1.0.1
 

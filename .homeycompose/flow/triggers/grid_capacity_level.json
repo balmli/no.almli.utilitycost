@@ -1,0 +1,37 @@
+{
+  "id": "grid_capacity_level",
+  "highlight": true,
+  "title": {
+    "en": "New level for grid capacity",
+    "no": "Nytt nivå for kapasitetsledd for nettleie"
+  },
+  "hint": {
+    "en": "Triggers when a new level for grid capacity has been reached.",
+    "no": "Dette kortet trigges når man har nådd et nytt nivå for kapasitetsledd for nettleie."
+  },
+  "tokens": [
+    {
+      "name": "meter_consumption_maxmonth",
+      "type": "number",
+      "title": {
+        "en": "Max. hourly consumption",
+        "no": "Maks. forbruk for time"
+      }
+    },
+    {
+      "name": "grid_capacity_level",
+      "type": "number",
+      "title": {
+        "en": "Grid capacity level",
+        "no": "Nivå for kapasitetsledd"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    }
+  ]
+}

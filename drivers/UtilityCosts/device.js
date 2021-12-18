@@ -268,6 +268,18 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
         const newConsumptionMaxMonthWh = newMonth ? consumptionWh : (newConsumptionWh > sumConsumptionMaxHour ? newConsumptionWh : undefined);
         if (newConsumptionMaxMonthWh) {
           await this.setCapabilityValue(`meter_consumption_maxmonth`, newConsumptionMaxMonthWh);
+          if (!newMonth && (newConsumptionWh > sumConsumptionMaxHour)) {
+            const prevLevel = this.getGridCapacityLevel(sumConsumptionMaxHour);
+            const newLevel = this.getGridCapacityLevel(newConsumptionWh);
+            if (newLevel > prevLevel) {
+              await this.homey.flow.getDeviceTriggerCard('grid_capacity_level')
+                .trigger(this, {
+                  meter_consumption_maxmonth: newConsumptionMaxMonthWh,
+                  grid_capacity_level: newLevel
+                }, {})
+                .catch(err => this.error('Trigger grid_capacity_level failed: ', err));
+            }
+          }
         }
 
         const costToday = newDay ?
@@ -396,6 +408,22 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       return settings.gridCapacity15_20;
     } else if (sumConsumptionMaxHour >= 20000) {
       return settings.gridCapacity20_25;
+    }
+  }
+
+  getGridCapacityLevel(sumConsumptionMaxHour) {
+    if (sumConsumptionMaxHour < 2000) {
+      return 0;
+    } else if (sumConsumptionMaxHour >= 2000 && sumConsumptionMaxHour < 5000) {
+      return 1;
+    } else if (sumConsumptionMaxHour >= 5000 && sumConsumptionMaxHour < 10000) {
+      return 2;
+    } else if (sumConsumptionMaxHour >= 10000 && sumConsumptionMaxHour < 15000) {
+      return 3;
+    } else if (sumConsumptionMaxHour >= 15000 && sumConsumptionMaxHour < 20000) {
+      return 4;
+    } else if (sumConsumptionMaxHour >= 20000) {
+      return 5;
     }
   }
 
