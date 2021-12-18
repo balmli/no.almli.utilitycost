@@ -11,11 +11,11 @@ class UtilityCostsApp extends Homey.App {
     }
 
     async _initFlows() {
-        this.homey.flow.getConditionCard('price_excl_below')
-            .registerRunListener(args => args.device.getCapabilityValue(`meter_price_excl`) < args.price);
-
         this.homey.flow.getConditionCard('price_incl_below')
             .registerRunListener(args => args.device.getCapabilityValue(`meter_price_incl`) < args.price);
+
+        this.homey.flow.getConditionCard('gridprice_incl_below')
+            .registerRunListener(args => args.device.getCapabilityValue(`meter_gridprice_incl`) < args.price);
 
         this.homey.flow.getActionCard('update_consumption')
             .registerRunListener((args, state) => args.device.onUpdateConsumption(args.consumption));

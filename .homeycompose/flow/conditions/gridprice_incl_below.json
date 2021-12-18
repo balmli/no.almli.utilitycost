@@ -1,0 +1,30 @@
+{
+  "id": "gridprice_incl_below",
+  "title": {
+    "en": "Is current grid price incl. taxes !{{below|above}}",
+    "no": "Er nettleiepris inkl. mva !{{under|over}}"
+  },
+  "titleFormatted": {
+    "en": "Is current grid price incl. taxes !{{below|above}} [[price]]",
+    "no": "Er nettleiepris inkl. mva !{{under|over}} [[price]]"
+  },
+  "hint": {
+    "en": "Condition to check if the current grid price incl. taxes is below or above a specific value.",
+    "no": "For å sjekke om nettleiepris inkl. mva er under eller over en spesifikk pris."
+  },
+  "args": [
+    {
+      "name": "price",
+      "type": "number",
+      "placeholder": {
+        "en": "price",
+        "no": "Pris"
+      }
+    },
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    }
+  ]
+}

@@ -1,16 +1,16 @@
 {
   "id": "price_incl_below",
   "title": {
-    "en": "Is current price incl. taxes !{{below|above}}",
-    "no": "Er pris inkl. mva !{{under|over}}"
+    "en": "Is current utility price incl. taxes !{{below|above}}",
+    "no": "Er strømpris inkl. mva !{{under|over}}"
   },
   "titleFormatted": {
-    "en": "Is current price incl. taxes !{{below|above}} [[price]]",
-    "no": "Er pris inkl. mva !{{under|over}} [[price]]"
+    "en": "Is current utility price incl. taxes !{{below|above}} [[price]]",
+    "no": "Er strømpris inkl. mva !{{under|over}} [[price]]"
   },
   "hint": {
-    "en": "Condition to check if the current price incl. taxes and surcharges is below or above a specific value.",
-    "no": "For å sjekke om pris inkl. mva og påslag er under eller over en spesifikk pris."
+    "en": "Condition to check if the current utility price incl. taxes and surcharges is below or above a specific value.",
+    "no": "For å sjekke om strømpris inkl. mva og påslag er under eller over en spesifikk pris."
   },
   "args": [
     {
