@@ -274,7 +274,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
             if (newLevel > prevLevel) {
               await this.homey.flow.getDeviceTriggerCard('grid_capacity_level')
                 .trigger(this, {
-                  meter_consumption_maxmonth: newConsumptionMaxMonthWh,
+                  meter_consumption_maxmonth: Math.round(newConsumptionMaxMonthWh),
                   grid_capacity_level: newLevel
                 }, {})
                 .catch(err => this.error('Trigger grid_capacity_level failed: ', err));
