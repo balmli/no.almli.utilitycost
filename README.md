@@ -19,6 +19,7 @@ To install the device:
 
 - Can now see the grid price
 - Added trigger for 'New level for grid capacity'
+- Added condition to check if current cost is below / above a specific value
 
 #### 1.0.1
 

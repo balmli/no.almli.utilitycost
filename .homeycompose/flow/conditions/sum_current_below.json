@@ -1,0 +1,30 @@
+{
+  "id": "sum_current_below",
+  "title": {
+    "en": "Is current cost !{{below|above}}",
+    "no": "Er gjeldene kostnad !{{under|over}}"
+  },
+  "titleFormatted": {
+    "en": "Is current cost !{{below|above}} [[sum_current]] NOK/h",
+    "no": "Er gjeldene kostnad !{{under|over}} [[sum_current]] kr/h"
+  },
+  "hint": {
+    "en": "Condition to check if the current cost is below or above a specific value.",
+    "no": "For å sjekke om gjeldene kostnad er under eller over en spesifikk kostnad pr. time."
+  },
+  "args": [
+    {
+      "name": "sum_current",
+      "type": "number",
+      "placeholder": {
+        "en": "Current cost",
+        "no": "Gjeldene kostnad"
+      }
+    },
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    }
+  ]
+}

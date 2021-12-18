@@ -5,8 +5,8 @@
     "no": "Er strømpris inkl. mva !{{under|over}}"
   },
   "titleFormatted": {
-    "en": "Is current utility price incl. taxes !{{below|above}} [[price]]",
-    "no": "Er strømpris inkl. mva !{{under|over}} [[price]]"
+    "en": "Is current utility price incl. taxes !{{below|above}} [[price]] NOK/kWh",
+    "no": "Er strømpris inkl. mva !{{under|over}} [[price]] kr/kWh"
   },
   "hint": {
     "en": "Condition to check if the current utility price incl. taxes and surcharges is below or above a specific value.",

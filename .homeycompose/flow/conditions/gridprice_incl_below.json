@@ -5,8 +5,8 @@
     "no": "Er nettleiepris inkl. mva !{{under|over}}"
   },
   "titleFormatted": {
-    "en": "Is current grid price incl. taxes !{{below|above}} [[price]]",
-    "no": "Er nettleiepris inkl. mva !{{under|over}} [[price]]"
+    "en": "Is current grid price incl. taxes !{{below|above}} [[price]] NOK/kWh",
+    "no": "Er nettleiepris inkl. mva !{{under|over}} [[price]] kr/kWh"
   },
   "hint": {
     "en": "Condition to check if the current grid price incl. taxes is below or above a specific value.",

@@ -206,8 +206,8 @@
           "no": "Er nettleiepris inkl. mva !{{under|over}}"
         },
         "titleFormatted": {
-          "en": "Is current grid price incl. taxes !{{below|above}} [[price]]",
-          "no": "Er nettleiepris inkl. mva !{{under|over}} [[price]]"
+          "en": "Is current grid price incl. taxes !{{below|above}} [[price]] NOK/kWh",
+          "no": "Er nettleiepris inkl. mva !{{under|over}} [[price]] kr/kWh"
         },
         "hint": {
           "en": "Condition to check if the current grid price incl. taxes is below or above a specific value.",
@@ -236,8 +236,8 @@
           "no": "Er strømpris inkl. mva !{{under|over}}"
         },
         "titleFormatted": {
-          "en": "Is current utility price incl. taxes !{{below|above}} [[price]]",
-          "no": "Er strømpris inkl. mva !{{under|over}} [[price]]"
+          "en": "Is current utility price incl. taxes !{{below|above}} [[price]] NOK/kWh",
+          "no": "Er strømpris inkl. mva !{{under|over}} [[price]] kr/kWh"
         },
         "hint": {
           "en": "Condition to check if the current utility price incl. taxes and surcharges is below or above a specific value.",
@@ -250,6 +250,36 @@
             "placeholder": {
               "en": "price",
               "no": "Pris"
+            }
+          },
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          }
+        ]
+      },
+      {
+        "id": "sum_current_below",
+        "title": {
+          "en": "Is current cost !{{below|above}}",
+          "no": "Er gjeldene kostnad !{{under|over}}"
+        },
+        "titleFormatted": {
+          "en": "Is current cost !{{below|above}} [[sum_current]] NOK/h",
+          "no": "Er gjeldene kostnad !{{under|over}} [[sum_current]] kr/h"
+        },
+        "hint": {
+          "en": "Condition to check if the current cost is below or above a specific value.",
+          "no": "For å sjekke om gjeldene kostnad er under eller over en spesifikk kostnad pr. time."
+        },
+        "args": [
+          {
+            "name": "sum_current",
+            "type": "number",
+            "placeholder": {
+              "en": "Current cost",
+              "no": "Gjeldene kostnad"
             }
           },
           {
@@ -1253,8 +1283,8 @@
         "no": "Gjeldene kostnad"
       },
       "desc": {
-        "en": "Current utility and grid cost.",
-        "no": "Gjeldende strøm- og nettleiekostnad."
+        "en": "Current utility and grid cost per hour.",
+        "no": "Gjeldende strøm- og nettleiekostnad pr. time."
       },
       "decimals": 2,
       "units": {
