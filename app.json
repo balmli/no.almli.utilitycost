@@ -74,6 +74,35 @@
   "flow": {
     "triggers": [
       {
+        "id": "meter_gridprice_incl_changed",
+        "highlight": true,
+        "title": {
+          "en": "Grid price incl. taxes changed",
+          "no": "Nettleiepris inkl. mva og avgifter ble endret"
+        },
+        "hint": {
+          "en": "Triggers when the grid price incl. taxes and surcharges changes.",
+          "no": "Dette kortet trigges når nettleiepris inkl. mva og avgifter endres."
+        },
+        "tokens": [
+          {
+            "name": "meter_gridprice_incl",
+            "type": "number",
+            "title": {
+              "en": "Price",
+              "no": "Pris"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          }
+        ]
+      },
+      {
         "id": "meter_price_excl_changed",
         "highlight": true,
         "title": {
