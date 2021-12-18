@@ -5,7 +5,7 @@
     "no": "Strømpris eksl. mva"
   },
   "desc": {
-    "en": "Price current hour excl. taxes",
+    "en": "Utility price current hour excl. taxes",
     "no": "Viser gjeldende spot strømpris eksl. mva"
   },
   "decimals": 5,
@@ -17,5 +17,5 @@
   "setable": false,
   "greyout": true,
   "insights": true,
-  "icon": "/assets/pricetag.svg"
+  "uiComponent": null
 }

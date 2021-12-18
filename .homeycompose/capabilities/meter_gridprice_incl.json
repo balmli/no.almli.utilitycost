@@ -1,12 +1,12 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility price incl. taxes",
-    "no": "Strømpris inkl. mva"
+    "en": "Grid price incl. taxes",
+    "no": "Nettleiepris inkl. mva"
   },
   "desc": {
-    "en": "Utility price current hour incl. taxes and surcharges",
-    "no": "Viser gjeldende strømpris inkl. mva og påslag"
+    "en": "Gridprice current hour incl. taxes",
+    "no": "Viser gjeldende pris for nettleie inkl. mva og avgifter"
   },
   "decimals": 5,
   "units": {

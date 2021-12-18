@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.0.2
+
+- Can now see the grid price
+
 #### 1.0.1
 
 - Support existing grid costs regime

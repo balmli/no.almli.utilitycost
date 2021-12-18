@@ -15,6 +15,7 @@
     "meter_sum_month",
     "meter_price_excl",
     "meter_price_incl",
+    "meter_gridprice_incl",
     "meter_cost_today",
     "meter_grid_today",
     "meter_cost_yesterday",

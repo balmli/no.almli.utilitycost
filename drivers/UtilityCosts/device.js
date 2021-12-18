@@ -27,6 +27,9 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       if (!this.hasCapability('meter_sum_month')) {
         this.addCapability('meter_sum_month');
       }
+      if (!this.hasCapability('meter_gridprice_incl')) {
+        this.addCapability('meter_gridprice_incl');
+      }
       this.log(this.getName() + ' -> migrated OK');
     } catch (err) {
       this.error(err);
@@ -96,6 +99,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       } else if (settings.priceCalcMethod === 'fixed') {
         await this.fixedPriceCalculation();
       }
+      await this.gridPriceCalculation();
     } catch (err) {
       this.error(err);
     } finally {
@@ -110,9 +114,11 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       this.log('Will fetch prices:', this.getData().id, priceArea);
       const localTime = moment().startOf('day');
       const prices = await nordpool.fetchPrices(localTime, { priceArea, currency: 'NOK' });
-      this._lastFetchData = moment();
-      this._prices = prices;
-      this.log('Got prices:', this.getData().id, prices.length);
+      if (prices) {
+        this._lastFetchData = moment();
+        this._prices = prices;
+        this.log('Got prices:', this.getData().id, prices.length);
+      }
     } catch (err) {
       this.error(err);
     }
@@ -164,6 +170,46 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       this.log(`Fixed price calculation: ${costFormula} => ${price}`);
     } catch (err) {
       this.error(`Fixed price formula failed: "${costFormula}"`, err);
+    }
+  }
+
+  async gridPriceCalculation() {
+    const costFormula = this.getSetting('costFormula');
+    try {
+      const settings = this.getSettings();
+      if (settings.gridNewRegime) {
+        const momentNow = moment();
+
+        const dayStart = moment().startOf('day').add(6, 'hour');
+        const dayEnd = moment().startOf('day').add(22, 'hour');
+        const daytime = momentNow.isSameOrAfter(dayStart) && momentNow.isBefore(dayEnd);
+        const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
+        const lowPrice = !daytime || settings.gridEnergyLowWeekends && isWeekend;
+
+        const winterStart = parseInt(settings.gridEnergyWinterStart);
+        const summerStart = parseInt(settings.gridEnergySummerStart);
+        const isSummerPeriod = winterStart < summerStart && momentNow.month() >= summerStart
+          || winterStart > summerStart && momentNow.month() >= summerStart && momentNow.month() < winterStart;
+
+        const price = isSummerPeriod ?
+          (lowPrice ? settings.gridEnergyNightSummer : settings.gridEnergyDaySummer) :
+          (lowPrice ? settings.gridEnergyNight : settings.gridEnergyDay);
+
+        //this.log(`Get grid energy price (new regime): Weekend: ${isWeekend}, Low Price: ${lowPrice}, winterStart: ${winterStart}, summerStart: ${summerStart}, isSummerPeriod: ${isSummerPeriod}, price: ${price}`);
+        await this.setCapabilityValue('meter_gridprice_incl', this.roundPrice(price));
+      } else {
+        const gridConsumptionPrice = settings.gridConsumption;
+
+        const yearStart = moment().startOf('year');
+        const yearEnd = moment().startOf('year').add(1, 'year');
+        const numDaysInYear = yearEnd.diff(yearStart, 'days');
+        const gridFixedPrice = settings.gridFixedAmount / (numDaysInYear * 24);
+        const price = gridConsumptionPrice + gridFixedPrice;
+        //this.log(`Get grid energy price (old regime): consumption price: ${gridConsumptionPrice}, fixed price: ${gridFixedPrice}, price: ${price}`);
+        await this.setCapabilityValue('meter_gridprice_incl', this.roundPrice(price));
+      }
+    } catch (err) {
+      this.error(`Grid price formula failed: "${costFormula}"`, err);
     }
   }
 
@@ -271,7 +317,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       await this.setStoreValue('lastGridUpdate', thisUpdate);
 
       if (lastUpdate) {
-        const price = this.getGridEnergyPrice();
+        const price = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
 
         const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
         const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
@@ -317,7 +363,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     try {
       const settings = this.getSettings();
       const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
-      const gridPrice = this.getGridEnergyPrice();
+      const gridPrice = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
 
       const sumCurrent = consumption / (1000) * (utilityPrice + gridPrice);
       await this.setCapabilityValue(`meter_sum_current`, sumCurrent);
@@ -350,45 +396,6 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       return settings.gridCapacity15_20;
     } else if (sumConsumptionMaxHour >= 20000) {
       return settings.gridCapacity20_25;
-    }
-  }
-
-  getGridEnergyPrice() {
-    try {
-      const settings = this.getSettings();
-      if (settings.gridNewRegime) {
-        const momentNow = moment();
-
-        const dayStart = moment().startOf('day').add(6, 'hour');
-        const dayEnd = moment().startOf('day').add(22, 'hour');
-        const daytime = momentNow.isSameOrAfter(dayStart) && momentNow.isBefore(dayEnd);
-        const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
-        const lowPrice = !daytime || settings.gridEnergyLowWeekends && isWeekend;
-
-        const winterStart = parseInt(settings.gridEnergyWinterStart);
-        const summerStart = parseInt(settings.gridEnergySummerStart);
-        const isSummerPeriod = winterStart < summerStart && momentNow.month() >= summerStart
-          || winterStart > summerStart && momentNow.month() >= summerStart && momentNow.month() < winterStart;
-
-        const price = isSummerPeriod ?
-          (lowPrice ? settings.gridEnergyNightSummer : settings.gridEnergyDaySummer) :
-          (lowPrice ? settings.gridEnergyNight : settings.gridEnergyDay);
-
-        //this.log(`Get grid energy price (new regime): Weekend: ${isWeekend}, Low Price: ${lowPrice}, winterStart: ${winterStart}, summerStart: ${summerStart}, isSummerPeriod: ${isSummerPeriod}, price: ${price}`);
-        return price;
-      } else {
-        const gridConsumptionPrice = settings.gridConsumption;
-
-        const yearStart = moment().startOf('year');
-        const yearEnd = moment().startOf('year').add(1, 'year');
-        const numDaysInYear = yearEnd.diff(yearStart, 'days');
-        const gridFixedPrice = settings.gridFixedAmount / (numDaysInYear * 24);
-        const price = gridConsumptionPrice + gridFixedPrice;
-        //this.log(`Get grid energy price (old regime): consumption price: ${gridConsumptionPrice}, fixed price: ${gridFixedPrice}, price: ${price}`);
-        return price;
-      }
-    } catch (err) {
-      this.error('getGridEnergyPrice failed: ', err);
     }
   }
 

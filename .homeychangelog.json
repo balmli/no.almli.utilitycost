@@ -1,4 +1,8 @@
 {
+  "1.0.2": {
+    "en": "",
+    "no": ""
+  },
   "1.0.1": {
     "en": "Support existing grid costs regime. Validation for the spot & fixed price cost formula. Separate grid energy prices for winter and summer. Option for low price for weekends. ",
     "no": "Support for eksisterende regler for nettleie. Validering av spot og fastpris formler. Egne priser for vinter- og sommerperioder. Valgboks for lave priser i helger. "
