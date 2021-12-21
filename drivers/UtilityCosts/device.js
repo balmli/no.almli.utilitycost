@@ -199,14 +199,8 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
         await this.setCapabilityValue('meter_gridprice_incl', this.roundPrice(price));
       } else {
         const gridConsumptionPrice = settings.gridConsumption;
-
-        const yearStart = moment().startOf('year');
-        const yearEnd = moment().startOf('year').add(1, 'year');
-        const numDaysInYear = yearEnd.diff(yearStart, 'days');
-        const gridFixedPrice = settings.gridFixedAmount / (numDaysInYear * 24);
-        const price = gridConsumptionPrice + gridFixedPrice;
-        //this.log(`Get grid energy price (old regime): consumption price: ${gridConsumptionPrice}, fixed price: ${gridFixedPrice}, price: ${price}`);
-        await this.setCapabilityValue('meter_gridprice_incl', this.roundPrice(price));
+        //this.log(`Get grid energy price (old regime): price: ${gridConsumptionPrice}`);
+        await this.setCapabilityValue('meter_gridprice_incl', gridConsumptionPrice);
       }
     } catch (err) {
       this.error(`Grid price formula failed: "${costFormula}"`, err);
@@ -335,7 +329,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
         const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
 
         const costToday = newDay ?
-          consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
+          consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price + this.getGridFixedAmountPerDay()
           : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price;
 
         const costYesterday = newDay ?
@@ -390,6 +384,18 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     } catch (err) {
       this.error('calculateSumCost failed: ', err);
     }
+  }
+
+  getGridFixedAmountPerDay() {
+    try {
+      const yearStart = moment().startOf('year');
+      const yearEnd = moment().startOf('year').add(1, 'year');
+      const numDaysInYear = yearEnd.diff(yearStart, 'days');
+      return settings.gridNewRegime ? 0 : settings.gridFixedAmount / numDaysInYear;
+    } catch (err) {
+      this.error('getGridFixedAmountPerDay failed: ', err);
+    }
+    return 0;
   }
 
   getGridCapacity() {

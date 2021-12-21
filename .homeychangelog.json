@@ -1,4 +1,8 @@
 {
+  "1.0.3": {
+    "en": "Fixed calculation of grid yearly fixed amount. ",
+    "no": "Rettet beregning av fastbeløp for nettleie. "
+  },
   "1.0.2": {
     "en": "Can now see the grid price. Added trigger for 'New level for grid capacity'. Added condition to check if current cost is below / above a specific value. ",
     "no": "Viser nettleiepris.  Trigger for 'Nytt nivå for kapasitetsledd for nettleie'.  Ny sjekk for om gjeldene kostnad er under / over en spesifikk verdi. "

@@ -1,8 +1,8 @@
 {
   "type": "number",
   "title": {
-    "en": "Grid price incl. taxes",
-    "no": "Nettleiepris inkl. mva"
+    "en": "Grid price",
+    "no": "Nettleiepris"
   },
   "desc": {
     "en": "Gridprice current hour incl. taxes",

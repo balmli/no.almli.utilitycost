@@ -1,11 +1,10 @@
 import Homey from 'homey';
-
-const days = require('./lib/days');
+import moment from "./lib/moment-timezone-with-data";
 
 class UtilityCostsApp extends Homey.App {
 
     async onInit() {
-        days.setTimeZone(this.homey.clock.getTimezone());
+        moment.tz.setDefault(this.homey.clock.getTimezone());
         await this._initFlows();
         this.log('UtilityCostsApp is running...');
     }

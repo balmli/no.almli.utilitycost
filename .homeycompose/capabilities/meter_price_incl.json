@@ -1,8 +1,8 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility price incl. taxes",
-    "no": "Strømpris inkl. mva"
+    "en": "Utility price",
+    "no": "Strømpris"
   },
   "desc": {
     "en": "Utility price current hour incl. taxes and surcharges",
