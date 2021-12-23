@@ -15,6 +15,12 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.0.4
+
+- Can add more than one 'Norwegian Utility Bill' device
+- Added 'Sum daily cost' and 'Sum yearly cost' capabilities
+- Fixed calculation of grid yearly fixed amount
+
 #### 1.0.3
 
 - Fixed calculation of grid yearly fixed amount

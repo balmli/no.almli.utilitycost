@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Utility this year",
+    "no": "Strøm dette året"
+  },
+  "desc": {
+    "en": "Shows utility cost so far this year",
+    "no": "Viser strømkostnad så langt dette året"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": false,
+  "uiComponent": null
+}

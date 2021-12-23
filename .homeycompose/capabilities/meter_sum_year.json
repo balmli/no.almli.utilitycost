@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Sum yearly cost",
+    "no": "Sum årlig kostnad"
+  },
+  "desc": {
+    "en": "Sum yearly cost.",
+    "no": "Sum årlig kostnad."
+  },
+  "decimals": 2,
+  "units": {
+    "en": "NOK",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/dollar.svg"
+}

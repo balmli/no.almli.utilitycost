@@ -22,13 +22,27 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
   async migrate() {
     try {
       if (!this.hasCapability('meter_sum_current')) {
-        this.addCapability('meter_sum_current');
+        await this.addCapability('meter_sum_current');
       }
       if (!this.hasCapability('meter_sum_month')) {
-        this.addCapability('meter_sum_month');
+        await this.addCapability('meter_sum_month');
       }
       if (!this.hasCapability('meter_gridprice_incl')) {
-        this.addCapability('meter_gridprice_incl');
+        await this.addCapability('meter_gridprice_incl');
+      }
+      if (!this.hasCapability('meter_cost_year')) {
+        await this.addCapability('meter_cost_year');
+        await this.setCapabilityValue('meter_cost_year', this.getCapabilityValue('meter_cost_month') || 0);
+      }
+      if (!this.hasCapability('meter_grid_year')) {
+        await this.addCapability('meter_grid_year');
+        await this.setCapabilityValue('meter_grid_year', this.getCapabilityValue('meter_grid_month') || 0);
+      }
+      if (!this.hasCapability('meter_sum_day')) {
+        await  this.addCapability('meter_sum_day');
+      }
+      if (!this.hasCapability('meter_sum_year')) {
+        await this.addCapability('meter_sum_year');
       }
       this.log(this.getName() + ' -> migrated OK');
     } catch (err) {
@@ -244,6 +258,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       const startOfHour = moment().startOf('hour').valueOf();
       const startOfDay = moment().startOf('day').valueOf();
       const startOfMonth = moment().startOf('month').valueOf();
+      const startOfYear = moment().startOf('year').valueOf();
       const lastUpdate = this.getStoreValue('lastConsumptionUpdate');
       await this.setStoreValue('lastConsumptionUpdate', thisUpdate);
 
@@ -252,6 +267,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
         const newHour = (lastUpdate < startOfHour) && (thisUpdate >= startOfHour);
         const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
         const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
+        const newYear = (lastUpdate < startOfYear) && (thisUpdate >= startOfYear);
 
         const sumConsumptionHour = this.getCapabilityValue(`meter_consumption_hour`) || 0;
         const consumptionWh = consumption * (thisUpdate - lastUpdate) / (3600000);
@@ -306,6 +322,12 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
           await this.setCapabilityValue(`meter_cost_lastmonth`, newCostLastMonth);
         }
 
+        const sumCostYear = this.getCapabilityValue(`meter_cost_year`) || 0;
+        const newCostYear = newYear ? costToday : costToday + sumCostYear;
+        if (newCostYear !== undefined) {
+          await this.setCapabilityValue(`meter_cost_year`, newCostYear);
+        }
+
         //this.log(`Utility calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday},  (this month: ${sumCostMonth})`, this.getCapabilityValue(`meter_cost_today`));
       }
     } catch (err) {
@@ -318,6 +340,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       const thisUpdate = Date.now();
       const startOfDay = moment().startOf('day').valueOf();
       const startOfMonth = moment().startOf('month').valueOf();
+      const startOfYear = moment().startOf('year').valueOf();
 
       const lastUpdate = this.getStoreValue('lastGridUpdate');
       await this.setStoreValue('lastGridUpdate', thisUpdate);
@@ -327,10 +350,13 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
         const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
         const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
+        const newYear = (lastUpdate < startOfYear) && (thisUpdate >= startOfYear);
 
         const costToday = newDay ?
-          consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price + this.getGridFixedAmountPerDay()
-          : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price;
+          (consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
+          + this.getGridFixedAmountPerDay()
+          + this.getGridCapacityPerDay())
+          : (consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price);
 
         const costYesterday = newDay ?
           consumption * (startOfDay - lastUpdate) / (1000 * 3600000) * price
@@ -358,6 +384,12 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
           await this.setCapabilityValue(`meter_grid_lastmonth`, newCostLastMonth);
         }
 
+        const sumCostYear = this.getCapabilityValue(`meter_grid_year`) || 0;
+        const newCostYear = newYear ? costToday : costToday + sumCostYear;
+        if (newCostYear !== undefined) {
+          await this.setCapabilityValue(`meter_grid_year`, newCostYear);
+        }
+
         //this.log(`Grid calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday}`);
       }
     } catch (err) {
@@ -374,13 +406,11 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       const sumCurrent = consumption / (1000) * (utilityPrice + gridPrice);
       await this.setCapabilityValue(`meter_sum_current`, sumCurrent);
 
-      const utilityMonth = this.getCapabilityValue(`meter_cost_month`) || 0;
-      const gridMonth = this.getCapabilityValue(`meter_grid_month`) || 0;
-      const gridCapacityMonth = settings.gridNewRegime ? this.getGridCapacity() : 0;
-      const sumMonth = utilityMonth + gridMonth + gridCapacityMonth;
-      await this.setCapabilityValue(`meter_sum_month`, sumMonth);
+      await this.setCapabilityValue(`meter_sum_day`, (this.getCapabilityValue(`meter_cost_today`) || 0) + (this.getCapabilityValue(`meter_grid_today`) || 0));
+      await this.setCapabilityValue(`meter_sum_month`, (this.getCapabilityValue(`meter_cost_month`) || 0) + (this.getCapabilityValue(`meter_grid_month`) || 0));
+      await this.setCapabilityValue(`meter_sum_year`, (this.getCapabilityValue(`meter_cost_year`) || 0) + (this.getCapabilityValue(`meter_grid_year`) || 0));
 
-      //this.log(`Calculate sum cost: Utility: ${utilityMonth}, Grid: ${gridMonth}, Grid capacity: ${gridCapacityMonth} => ${sumMonth}`);
+      //this.log(`Calculate sum cost: Utility: ${utilityMonth}, Grid: ${gridMonth} => ${sumMonth}`);
     } catch (err) {
       this.error('calculateSumCost failed: ', err);
     }
@@ -388,12 +418,26 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
   getGridFixedAmountPerDay() {
     try {
+      const settings = this.getSettings();
       const yearStart = moment().startOf('year');
       const yearEnd = moment().startOf('year').add(1, 'year');
       const numDaysInYear = yearEnd.diff(yearStart, 'days');
       return settings.gridNewRegime ? 0 : settings.gridFixedAmount / numDaysInYear;
     } catch (err) {
       this.error('getGridFixedAmountPerDay failed: ', err);
+    }
+    return 0;
+  }
+
+  getGridCapacityPerDay() {
+    try {
+      const settings = this.getSettings();
+      const monthStart = moment().startOf('month');
+      const monthEnd = moment().startOf('month').add(1, 'month');
+      const numDaysInMonth = monthEnd.diff(monthStart, 'days');
+      return settings.gridNewRegime ? this.getGridCapacity() / numDaysInMonth : 0;
+    } catch (err) {
+      this.error('getGridCapacityPerDay failed: ', err);
     }
     return 0;
   }

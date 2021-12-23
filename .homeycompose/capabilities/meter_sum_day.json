@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Sum daily cost",
+    "no": "Sum daglig kostnad"
+  },
+  "desc": {
+    "en": "Sum daily cost.",
+    "no": "Sum daglig kostnad."
+  },
+  "decimals": 2,
+  "units": {
+    "en": "NOK",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/dollar.svg"
+}

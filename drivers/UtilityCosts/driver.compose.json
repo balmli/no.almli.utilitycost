@@ -25,7 +25,11 @@
     "meter_cost_lastmonth",
     "meter_grid_lastmonth",
     "meter_consumption_hour",
-    "meter_consumption_maxmonth"
+    "meter_consumption_maxmonth",
+    "meter_sum_day",
+    "meter_sum_year",
+    "meter_cost_year",
+    "meter_grid_year"
   ],
   "pair": [
     {
