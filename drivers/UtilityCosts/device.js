@@ -44,6 +44,9 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       if (!this.hasCapability('meter_sum_year')) {
         await this.addCapability('meter_sum_year');
       }
+      if (!this.hasCapability('meter_price_sum')) {
+        await this.addCapability('meter_price_sum');
+      }
       this.log(this.getName() + ' -> migrated OK');
     } catch (err) {
       this.error(err);
@@ -169,6 +172,8 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       const priceCalculated = this.roundPrice(this.evaluatePrice(costFormula, price));
       await this.setCapabilityValue('meter_price_excl', price);
       await this.setCapabilityValue('meter_price_incl', priceCalculated);
+      const gridPrice = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
+      await this.setCapabilityValue('meter_price_sum', priceCalculated + gridPrice);
       this.log(`Spot price calculation: ${costFormula} => ${priceCalculated}`);
     } catch (err) {
       this.error(`Spot price formula failed: "${costFormula}"`, err);
@@ -181,6 +186,8 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       const price = this.roundPrice(this.evaluatePrice(costFormula));
       await this.setCapabilityValue('meter_price_excl', this.roundPrice(price / 1.25));
       await this.setCapabilityValue('meter_price_incl', price);
+      const gridPrice = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
+      await this.setCapabilityValue('meter_price_sum', price + gridPrice);
       this.log(`Fixed price calculation: ${costFormula} => ${price}`);
     } catch (err) {
       this.error(`Fixed price formula failed: "${costFormula}"`, err);
@@ -210,11 +217,16 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
           (lowPrice ? settings.gridEnergyNight : settings.gridEnergyDay);
 
         //this.log(`Get grid energy price (new regime): Weekend: ${isWeekend}, Low Price: ${lowPrice}, winterStart: ${winterStart}, summerStart: ${summerStart}, isSummerPeriod: ${isSummerPeriod}, price: ${price}`);
-        await this.setCapabilityValue('meter_gridprice_incl', this.roundPrice(price));
+        const gridConsumptionPrice = this.roundPrice(price);
+        await this.setCapabilityValue('meter_gridprice_incl', gridConsumptionPrice);
+        const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
+        await this.setCapabilityValue('meter_price_sum', gridConsumptionPrice + utilityPrice);
       } else {
         const gridConsumptionPrice = settings.gridConsumption;
         //this.log(`Get grid energy price (old regime): price: ${gridConsumptionPrice}`);
         await this.setCapabilityValue('meter_gridprice_incl', gridConsumptionPrice);
+        const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
+        await this.setCapabilityValue('meter_price_sum', gridConsumptionPrice + utilityPrice);
       }
     } catch (err) {
       this.error(`Grid price formula failed: "${costFormula}"`, err);
@@ -226,6 +238,8 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       await this.setSettings({ 'priceCalcMethod': 'flow' });
       await this.setCapabilityValue('meter_price_excl', this.roundPrice(price / 1.25));
       await this.setCapabilityValue('meter_price_incl', price);
+      const gridPrice = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
+      await this.setCapabilityValue('meter_price_sum', price + gridPrice);
       this.log(`Price updated: => ${price}`);
     } catch (err) {
       this.error('Price from flow update failed:', err);

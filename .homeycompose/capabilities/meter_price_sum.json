@@ -1,0 +1,20 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Sum utility and grid price",
+    "no": "Sum strøm- og nettleiepris"
+  },
+  "desc": {
+    "en": "Sum utility and grid price",
+    "no": "Sum strøm- og nettleiepris"
+  },
+  "decimals": 5,
+  "units": {
+    "en": "NOK/kWh",
+    "no": "kr/kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "insights": false,
+  "uiComponent": null
+}

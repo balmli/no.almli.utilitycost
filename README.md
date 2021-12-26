@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.0.5
+
+- Added trigger for 'Sum utility and grid price changed'
+
 #### 1.0.4
 
 - Can add more than one 'Norwegian Utility Bill' device

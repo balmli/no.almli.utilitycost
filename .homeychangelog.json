@@ -1,4 +1,8 @@
 {
+  "1.0.5": {
+    "en": "Added trigger for 'Sum utility and grid price changed'. ",
+    "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. "
+  },
   "1.0.4": {
     "en": "Can add more than one 'Norwegian Utility Bill' device. Added 'Sum daily cost' and 'Sum yearly cost' capabilities. Fixed calculation of grid yearly fixed amount. ",
     "no": "Kan legge inn mer enn 'Strømregning' enhet. Lagt til 'Sum daglig kostnad' og 'Sum årlig kostnad'. Rettet beregning av fastbeløp for nettleie. "

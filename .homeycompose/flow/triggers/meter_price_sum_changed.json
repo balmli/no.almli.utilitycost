@@ -1,0 +1,29 @@
+{
+  "id": "meter_price_sum_changed",
+  "highlight": true,
+  "title": {
+    "en": "Sum utility and grid price changed",
+    "no": "Sum strøm- og nettleiepris ble endret"
+  },
+  "hint": {
+    "en": "Triggers when the sum of utility and grid price changes.",
+    "no": "Dette kortet trigges når sum av strøm- og nettleiepris endres."
+  },
+  "tokens": [
+    {
+      "name": "meter_price_sum",
+      "type": "number",
+      "title": {
+        "en": "Sum price",
+        "no": "Sum pris"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    }
+  ]
+}
