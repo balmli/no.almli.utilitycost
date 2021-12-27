@@ -31,6 +31,14 @@
     "meter_cost_year",
     "meter_grid_year"
   ],
+  "capabilitiesOptions": {
+    "meter_price_incl": {
+      "decimals": 5
+    },
+    "meter_gridprice_incl": {
+      "decimals": 5
+    }
+  },
   "pair": [
     {
       "id": "list_devices",

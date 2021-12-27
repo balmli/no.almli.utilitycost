@@ -426,6 +426,14 @@
         "meter_cost_year",
         "meter_grid_year"
       ],
+      "capabilitiesOptions": {
+        "meter_price_incl": {
+          "decimals": 5
+        },
+        "meter_gridprice_incl": {
+          "decimals": 5
+        }
+      },
       "pair": [
         {
           "id": "list_devices",
@@ -1019,6 +1027,44 @@
                 "no": "Velges hvis det er lav pris i helgene."
               },
               "value": true
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "System",
+            "no": "System"
+          },
+          "children": [
+            {
+              "id": "priceDecimals",
+              "type": "dropdown",
+              "label": {
+                "en": "Number of decimals",
+                "no": "Antall desimaler"
+              },
+              "value": "DEC5",
+              "hint": {
+                "en": "Number of decimals for prices.",
+                "no": "Antall desimaler for priser."
+              },
+              "values": [
+                {
+                  "id": "DEC2",
+                  "label": {
+                    "en": "2 decimals",
+                    "no": "2 desimaler"
+                  }
+                },
+                {
+                  "id": "DEC5",
+                  "label": {
+                    "en": "5 decimals",
+                    "no": "5 desimaler"
+                  }
+                }
+              ]
             }
           ]
         }

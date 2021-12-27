@@ -18,6 +18,7 @@ To install the device:
 #### 1.0.5
 
 - Added trigger for 'Sum utility and grid price changed'
+- Added options for number of decimals for prices
 
 #### 1.0.4
 

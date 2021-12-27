@@ -1,0 +1,29 @@
+{
+  "id": "priceDecimals",
+  "type": "dropdown",
+  "label": {
+    "en": "Number of decimals",
+    "no": "Antall desimaler"
+  },
+  "value": "DEC5",
+  "hint": {
+    "en": "Number of decimals for prices.",
+    "no": "Antall desimaler for priser."
+  },
+  "values": [
+    {
+      "id": "DEC2",
+      "label": {
+        "en": "2 decimals",
+        "no": "2 desimaler"
+      }
+    },
+    {
+      "id": "DEC5",
+      "label": {
+        "en": "5 decimals",
+        "no": "5 desimaler"
+      }
+    }
+  ]
+}

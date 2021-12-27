@@ -60,6 +60,9 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     if (changedKeys.includes('priceArea')) {
       this._lastFetchData = undefined;
     }
+    if (changedKeys.includes('priceDecimals')) {
+      await this.updatePriceDecimals(newSettings.priceDecimals);
+    }
     this._lastPrice = undefined;
     this.scheduleCheckTime(2);
   }
@@ -74,6 +77,22 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       } else {
         throw new Error(this.homey.__('errors.invalid_cost_formula'));
       }
+    }
+  }
+
+  async updatePriceDecimals(priceDecimals) {
+    try {
+      const decimals = priceDecimals === 'DEC2' ? 2 : 5;
+
+      const capOps1 = this.getCapabilityOptions('meter_price_incl');
+      capOps1.decimals = decimals;
+      await this.setCapabilityOptions('meter_price_incl', capOps1);
+
+      const capOps2 = this.getCapabilityOptions('meter_gridprice_incl');
+      capOps2.decimals = decimals;
+      await this.setCapabilityOptions('meter_gridprice_incl', capOps2);
+    } catch (err) {
+      this.log('Updating number of decimals failed: ', err);
     }
   }
 
