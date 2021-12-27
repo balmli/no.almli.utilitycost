@@ -1,4 +1,8 @@
 {
+  "1.0.6": {
+    "en": "Added trigger for 'Sum utility and grid price changed'. Added options for number of decimals for prices. ",
+    "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. Lagt til valg for antall desimaler for priser. "
+  },
   "1.0.5": {
     "en": "Added trigger for 'Sum utility and grid price changed'. Added options for number of decimals for prices. ",
     "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. Lagt til valg for antall desimaler for priser. "
@@ -13,7 +17,7 @@
   },
   "1.0.2": {
     "en": "Can now see the grid price. Added trigger for 'New level for grid capacity'. Added condition to check if current cost is below / above a specific value. ",
-    "no": "Viser nettleiepris.  Trigger for 'Nytt nivå for kapasitetsledd for nettleie'.  Ny sjekk for om gjeldene kostnad er under / over en spesifikk verdi. "
+    "no": "Viser nettleiepris.  Trigger for 'Nytt nivå for kapasitetsledd for nettleie'.  Ny sjekk for om gjeldende kostnad er under / over en spesifikk verdi. "
   },
   "1.0.1": {
     "en": "Support existing grid costs regime. Validation for the spot & fixed price cost formula. Separate grid energy prices for winter and summer. Option for low price for weekends. ",

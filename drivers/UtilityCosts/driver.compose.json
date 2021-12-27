@@ -37,6 +37,12 @@
     },
     "meter_gridprice_incl": {
       "decimals": 5
+    },
+    "meter_price_excl": {
+      "decimals": 5
+    },
+    "meter_price_sum": {
+      "decimals": 5
     }
   },
   "pair": [

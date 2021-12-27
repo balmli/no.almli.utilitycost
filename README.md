@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.0.6
+
+- Fixed typo
+
 #### 1.0.5
 
 - Added trigger for 'Sum utility and grid price changed'

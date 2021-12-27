@@ -2,7 +2,7 @@
   "type": "number",
   "title": {
     "en": "Current cost",
-    "no": "Gjeldene kostnad"
+    "no": "Gjeldende kostnad"
   },
   "desc": {
     "en": "Current utility and grid cost per hour.",

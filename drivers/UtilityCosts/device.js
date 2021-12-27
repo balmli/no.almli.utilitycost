@@ -91,6 +91,14 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
       const capOps2 = this.getCapabilityOptions('meter_gridprice_incl');
       capOps2.decimals = decimals;
       await this.setCapabilityOptions('meter_gridprice_incl', capOps2);
+
+      const capOps3 = this.getCapabilityOptions('meter_price_excl');
+      capOps3.decimals = decimals;
+      await this.setCapabilityOptions('meter_price_excl', capOps3);
+
+      const capOps4 = this.getCapabilityOptions('meter_price_sum');
+      capOps4.decimals = decimals;
+      await this.setCapabilityOptions('meter_price_sum', capOps4);
     } catch (err) {
       this.log('Updating number of decimals failed: ', err);
     }
