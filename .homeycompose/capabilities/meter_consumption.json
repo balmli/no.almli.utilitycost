@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Energy",
+    "no": "Energi"
+  },
+  "decimals": 2,
+  "units": {
+    "en": "kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "insights": false,
+  "uiComponent": null
+}

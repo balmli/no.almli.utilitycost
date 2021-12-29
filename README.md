@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.0.7
+
+- Costs will be updated regularly even if consumption is not updated regularly
+
 #### 1.0.6
 
 - Fixed typo

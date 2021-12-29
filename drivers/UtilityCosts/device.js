@@ -39,13 +39,16 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
         await this.setCapabilityValue('meter_grid_year', this.getCapabilityValue('meter_grid_month') || 0);
       }
       if (!this.hasCapability('meter_sum_day')) {
-        await  this.addCapability('meter_sum_day');
+        await this.addCapability('meter_sum_day');
       }
       if (!this.hasCapability('meter_sum_year')) {
         await this.addCapability('meter_sum_year');
       }
       if (!this.hasCapability('meter_price_sum')) {
         await this.addCapability('meter_price_sum');
+      }
+      if (!this.hasCapability('meter_consumption')) {
+        await this.addCapability('meter_consumption');
       }
       this.log(this.getName() + ' -> migrated OK');
     } catch (err) {
@@ -126,7 +129,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     this.curTimeout = this.homey.setTimeout(this.checkTime.bind(this), seconds * 1000);
   }
 
-  async checkTime(onoff, home_override) {
+  async checkTime() {
     if (this._deleted) {
       return;
     }
@@ -144,6 +147,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
         await this.fixedPriceCalculation();
       }
       await this.gridPriceCalculation();
+      await this.onUpdateConsumption();
     } catch (err) {
       this.error(err);
     } finally {
@@ -288,151 +292,160 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
   }
 
   async onUpdateConsumption(consumption) {
-    await this.calculateUtilityCost(consumption);
-    await this.calculateGridCost(consumption);
-    await this.calculateSumCost(consumption);
+    const startOfValues = await this.startOfValues();
+    if (consumption === undefined) {
+      consumption = this.getCapabilityValue('meter_consumption');
+    } else {
+      await this.setCapabilityValue('meter_consumption', consumption);
+    }
+    if (consumption !== undefined && consumption !== null && startOfValues.lastUpdate) {
+      await this.calculateUtilityCost(consumption, startOfValues);
+      await this.calculateGridCost(consumption, startOfValues);
+      await this.calculateSumCost(consumption);
+    }
   }
 
-  async calculateUtilityCost(consumption) {
+  async startOfValues() {
+    const thisUpdate = Date.now();
+    const startOfHour = moment().startOf('hour').valueOf();
+    const startOfDay = moment().startOf('day').valueOf();
+    const startOfMonth = moment().startOf('month').valueOf();
+    const startOfYear = moment().startOf('year').valueOf();
+
+    const lastUpdate = this.getStoreValue('lastConsumptionUpdate');
+    await this.setStoreValue('lastConsumptionUpdate', thisUpdate);
+
+    const newHour = (lastUpdate < startOfHour) && (thisUpdate >= startOfHour);
+    const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
+    const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
+    const newYear = (lastUpdate < startOfYear) && (thisUpdate >= startOfYear);
+
+    return {
+      thisUpdate,
+      lastUpdate,
+      startOfHour,
+      startOfDay,
+      startOfMonth,
+      startOfYear,
+      newHour,
+      newDay,
+      newMonth,
+      newYear
+    };
+  }
+
+  async calculateUtilityCost(consumption, { thisUpdate, lastUpdate, startOfDay, newHour, newDay, newMonth, newYear }) {
     try {
-      const thisUpdate = Date.now();
-      const startOfHour = moment().startOf('hour').valueOf();
-      const startOfDay = moment().startOf('day').valueOf();
-      const startOfMonth = moment().startOf('month').valueOf();
-      const startOfYear = moment().startOf('year').valueOf();
-      const lastUpdate = this.getStoreValue('lastConsumptionUpdate');
-      await this.setStoreValue('lastConsumptionUpdate', thisUpdate);
+      const price = this.getCapabilityValue(`meter_price_incl`) || 0;
 
-      if (lastUpdate) {
-        const price = this.getCapabilityValue(`meter_price_incl`) || 0;
-        const newHour = (lastUpdate < startOfHour) && (thisUpdate >= startOfHour);
-        const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
-        const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
-        const newYear = (lastUpdate < startOfYear) && (thisUpdate >= startOfYear);
+      const sumConsumptionHour = this.getCapabilityValue(`meter_consumption_hour`) || 0;
+      const consumptionWh = consumption * (thisUpdate - lastUpdate) / (3600000);
+      const newConsumptionWh = newHour ? consumptionWh : consumptionWh + sumConsumptionHour;
+      await this.setCapabilityValue(`meter_consumption_hour`, newConsumptionWh);
 
-        const sumConsumptionHour = this.getCapabilityValue(`meter_consumption_hour`) || 0;
-        const consumptionWh = consumption * (thisUpdate - lastUpdate) / (3600000);
-        const newConsumptionWh = newHour ? consumptionWh : consumptionWh + sumConsumptionHour;
-        await this.setCapabilityValue(`meter_consumption_hour`, newConsumptionWh);
-
-        const sumConsumptionMaxHour = this.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
-        const newConsumptionMaxMonthWh = newMonth ? consumptionWh : (newConsumptionWh > sumConsumptionMaxHour ? newConsumptionWh : undefined);
-        if (newConsumptionMaxMonthWh) {
-          await this.setCapabilityValue(`meter_consumption_maxmonth`, newConsumptionMaxMonthWh);
-          if (!newMonth && (newConsumptionWh > sumConsumptionMaxHour)) {
-            const prevLevel = this.getGridCapacityLevel(sumConsumptionMaxHour);
-            const newLevel = this.getGridCapacityLevel(newConsumptionWh);
-            if (newLevel > prevLevel) {
-              await this.homey.flow.getDeviceTriggerCard('grid_capacity_level')
-                .trigger(this, {
-                  meter_consumption_maxmonth: Math.round(newConsumptionMaxMonthWh),
-                  grid_capacity_level: newLevel
-                }, {})
-                .catch(err => this.error('Trigger grid_capacity_level failed: ', err));
-            }
+      const sumConsumptionMaxHour = this.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
+      const newConsumptionMaxMonthWh = newMonth ? consumptionWh : (newConsumptionWh > sumConsumptionMaxHour ? newConsumptionWh : undefined);
+      if (newConsumptionMaxMonthWh) {
+        await this.setCapabilityValue(`meter_consumption_maxmonth`, newConsumptionMaxMonthWh);
+        if (!newMonth && (newConsumptionWh > sumConsumptionMaxHour)) {
+          const prevLevel = this.getGridCapacityLevel(sumConsumptionMaxHour);
+          const newLevel = this.getGridCapacityLevel(newConsumptionWh);
+          if (newLevel > prevLevel) {
+            await this.homey.flow.getDeviceTriggerCard('grid_capacity_level')
+              .trigger(this, {
+                meter_consumption_maxmonth: Math.round(newConsumptionMaxMonthWh),
+                grid_capacity_level: newLevel
+              }, {})
+              .catch(err => this.error('Trigger grid_capacity_level failed: ', err));
           }
         }
-
-        const costToday = newDay ?
-          consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
-          : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price;
-
-        const costYesterday = newDay ?
-          consumption * (startOfDay - lastUpdate) / (1000 * 3600000) * price
-          : undefined;
-
-        const sumCostToday = this.getCapabilityValue(`meter_cost_today`) || 0;
-        const newCostToday = newDay ? costToday : costToday + sumCostToday;
-        if (newCostToday !== undefined) {
-          await this.setCapabilityValue(`meter_cost_today`, newCostToday);
-        }
-
-        const newCostYesterday = newDay ? sumCostToday + costYesterday : undefined;
-        if (newCostYesterday !== undefined) {
-          await this.setCapabilityValue(`meter_cost_yesterday`, newCostYesterday);
-        }
-
-        const sumCostMonth = this.getCapabilityValue(`meter_cost_month`) || 0;
-        const newCostMonth = newMonth ? costToday : costToday + sumCostMonth;
-        if (newCostMonth !== undefined) {
-          await this.setCapabilityValue(`meter_cost_month`, newCostMonth);
-        }
-
-        const newCostLastMonth = newMonth ? sumCostMonth + costYesterday : undefined;
-        if (newCostLastMonth !== undefined) {
-          await this.setCapabilityValue(`meter_cost_lastmonth`, newCostLastMonth);
-        }
-
-        const sumCostYear = this.getCapabilityValue(`meter_cost_year`) || 0;
-        const newCostYear = newYear ? costToday : costToday + sumCostYear;
-        if (newCostYear !== undefined) {
-          await this.setCapabilityValue(`meter_cost_year`, newCostYear);
-        }
-
-        //this.log(`Utility calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday},  (this month: ${sumCostMonth})`, this.getCapabilityValue(`meter_cost_today`));
       }
+
+      const costToday = newDay ?
+        consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
+        : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price;
+
+      const costYesterday = newDay ?
+        consumption * (startOfDay - lastUpdate) / (1000 * 3600000) * price
+        : undefined;
+
+      const sumCostToday = this.getCapabilityValue(`meter_cost_today`) || 0;
+      const newCostToday = newDay ? costToday : costToday + sumCostToday;
+      if (newCostToday !== undefined) {
+        await this.setCapabilityValue(`meter_cost_today`, newCostToday);
+      }
+
+      const newCostYesterday = newDay ? sumCostToday + costYesterday : undefined;
+      if (newCostYesterday !== undefined) {
+        await this.setCapabilityValue(`meter_cost_yesterday`, newCostYesterday);
+      }
+
+      const sumCostMonth = this.getCapabilityValue(`meter_cost_month`) || 0;
+      const newCostMonth = newMonth ? costToday : costToday + sumCostMonth;
+      if (newCostMonth !== undefined) {
+        await this.setCapabilityValue(`meter_cost_month`, newCostMonth);
+      }
+
+      const newCostLastMonth = newMonth ? sumCostMonth + costYesterday : undefined;
+      if (newCostLastMonth !== undefined) {
+        await this.setCapabilityValue(`meter_cost_lastmonth`, newCostLastMonth);
+      }
+
+      const sumCostYear = this.getCapabilityValue(`meter_cost_year`) || 0;
+      const newCostYear = newYear ? costToday : costToday + sumCostYear;
+      if (newCostYear !== undefined) {
+        await this.setCapabilityValue(`meter_cost_year`, newCostYear);
+      }
+
+      //this.log(`Utility calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday},  (this month: ${sumCostMonth})`, this.getCapabilityValue(`meter_cost_today`));
     } catch (err) {
       this.error('calculateUtilityCost failed: ', err);
     }
   }
 
-  async calculateGridCost(consumption) {
+  async calculateGridCost(consumption, { thisUpdate, lastUpdate, startOfDay, newDay, newMonth, newYear }) {
     try {
-      const thisUpdate = Date.now();
-      const startOfDay = moment().startOf('day').valueOf();
-      const startOfMonth = moment().startOf('month').valueOf();
-      const startOfYear = moment().startOf('year').valueOf();
+      const price = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
 
-      const lastUpdate = this.getStoreValue('lastGridUpdate');
-      await this.setStoreValue('lastGridUpdate', thisUpdate);
-
-      if (lastUpdate) {
-        const price = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
-
-        const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
-        const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
-        const newYear = (lastUpdate < startOfYear) && (thisUpdate >= startOfYear);
-
-        const costToday = newDay ?
-          (consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
+      const costToday = newDay ?
+        (consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
           + this.getGridFixedAmountPerDay()
           + this.getGridCapacityPerDay())
-          : (consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price);
+        : (consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price);
 
-        const costYesterday = newDay ?
-          consumption * (startOfDay - lastUpdate) / (1000 * 3600000) * price
-          : undefined;
+      const costYesterday = newDay ?
+        consumption * (startOfDay - lastUpdate) / (1000 * 3600000) * price
+        : undefined;
 
-        const sumCostToday = this.getCapabilityValue(`meter_grid_today`) || 0;
-        const newCostToday = newDay ? costToday : costToday + sumCostToday;
-        if (newCostToday !== undefined) {
-          await this.setCapabilityValue(`meter_grid_today`, newCostToday);
-        }
-
-        const newCostYesterday = newDay ? sumCostToday + costYesterday : undefined;
-        if (newCostYesterday !== undefined) {
-          await this.setCapabilityValue(`meter_grid_yesterday`, newCostYesterday);
-        }
-
-        const sumCostMonth = this.getCapabilityValue(`meter_grid_month`) || 0;
-        const newCostMonth = newMonth ? costToday : costToday + sumCostMonth;
-        if (newCostMonth !== undefined) {
-          await this.setCapabilityValue(`meter_grid_month`, newCostMonth);
-        }
-
-        const newCostLastMonth = newMonth ? sumCostMonth + costYesterday : undefined;
-        if (newCostLastMonth !== undefined) {
-          await this.setCapabilityValue(`meter_grid_lastmonth`, newCostLastMonth);
-        }
-
-        const sumCostYear = this.getCapabilityValue(`meter_grid_year`) || 0;
-        const newCostYear = newYear ? costToday : costToday + sumCostYear;
-        if (newCostYear !== undefined) {
-          await this.setCapabilityValue(`meter_grid_year`, newCostYear);
-        }
-
-        //this.log(`Grid calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday}`);
+      const sumCostToday = this.getCapabilityValue(`meter_grid_today`) || 0;
+      const newCostToday = newDay ? costToday : costToday + sumCostToday;
+      if (newCostToday !== undefined) {
+        await this.setCapabilityValue(`meter_grid_today`, newCostToday);
       }
+
+      const newCostYesterday = newDay ? sumCostToday + costYesterday : undefined;
+      if (newCostYesterday !== undefined) {
+        await this.setCapabilityValue(`meter_grid_yesterday`, newCostYesterday);
+      }
+
+      const sumCostMonth = this.getCapabilityValue(`meter_grid_month`) || 0;
+      const newCostMonth = newMonth ? costToday : costToday + sumCostMonth;
+      if (newCostMonth !== undefined) {
+        await this.setCapabilityValue(`meter_grid_month`, newCostMonth);
+      }
+
+      const newCostLastMonth = newMonth ? sumCostMonth + costYesterday : undefined;
+      if (newCostLastMonth !== undefined) {
+        await this.setCapabilityValue(`meter_grid_lastmonth`, newCostLastMonth);
+      }
+
+      const sumCostYear = this.getCapabilityValue(`meter_grid_year`) || 0;
+      const newCostYear = newYear ? costToday : costToday + sumCostYear;
+      if (newCostYear !== undefined) {
+        await this.setCapabilityValue(`meter_grid_year`, newCostYear);
+      }
+
+      //this.log(`Grid calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday}`);
     } catch (err) {
       this.error('calculateGridCost failed: ', err);
     }
@@ -440,7 +453,6 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
 
   async calculateSumCost(consumption) {
     try {
-      const settings = this.getSettings();
       const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
       const gridPrice = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
 

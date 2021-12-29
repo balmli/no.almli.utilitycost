@@ -29,7 +29,8 @@
     "meter_sum_day",
     "meter_sum_year",
     "meter_cost_year",
-    "meter_grid_year"
+    "meter_grid_year",
+    "meter_consumption"
   ],
   "capabilitiesOptions": {
     "meter_price_incl": {

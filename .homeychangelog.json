@@ -1,4 +1,8 @@
 {
+  "1.0.7": {
+    "en": "Added trigger for 'Sum utility and grid price changed'. Added options for number of decimals for prices. Costs will be updated regularly even if consumption is not updated regularly. ",
+    "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. Lagt til valg for antall desimaler for priser. Kostnader oppdateres jevnlig selv om forbruk ikke oppdateres jevnlig. "
+  },
   "1.0.6": {
     "en": "Added trigger for 'Sum utility and grid price changed'. Added options for number of decimals for prices. ",
     "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. Lagt til valg for antall desimaler for priser. "
