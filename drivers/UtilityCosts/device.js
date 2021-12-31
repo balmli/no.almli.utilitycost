@@ -301,6 +301,7 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     if (consumption !== undefined && consumption !== null && startOfValues.lastUpdate) {
       await this.calculateUtilityCost(consumption, startOfValues);
       await this.calculateGridCost(consumption, startOfValues);
+      await this.calculateMaxConsumptionHour(consumption, startOfValues);
       await this.calculateSumCost(consumption);
     }
   }
@@ -334,32 +335,9 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     };
   }
 
-  async calculateUtilityCost(consumption, { thisUpdate, lastUpdate, startOfDay, newHour, newDay, newMonth, newYear }) {
+  async calculateUtilityCost(consumption, { thisUpdate, lastUpdate, startOfDay, newDay, newMonth, newYear }) {
     try {
       const price = this.getCapabilityValue(`meter_price_incl`) || 0;
-
-      const sumConsumptionHour = this.getCapabilityValue(`meter_consumption_hour`) || 0;
-      const consumptionWh = consumption * (thisUpdate - lastUpdate) / (3600000);
-      const newConsumptionWh = newHour ? consumptionWh : consumptionWh + sumConsumptionHour;
-      await this.setCapabilityValue(`meter_consumption_hour`, newConsumptionWh);
-
-      const sumConsumptionMaxHour = this.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
-      const newConsumptionMaxMonthWh = newMonth ? consumptionWh : (newConsumptionWh > sumConsumptionMaxHour ? newConsumptionWh : undefined);
-      if (newConsumptionMaxMonthWh) {
-        await this.setCapabilityValue(`meter_consumption_maxmonth`, newConsumptionMaxMonthWh);
-        if (!newMonth && (newConsumptionWh > sumConsumptionMaxHour)) {
-          const prevLevel = this.getGridCapacityLevel(sumConsumptionMaxHour);
-          const newLevel = this.getGridCapacityLevel(newConsumptionWh);
-          if (newLevel > prevLevel) {
-            await this.homey.flow.getDeviceTriggerCard('grid_capacity_level')
-              .trigger(this, {
-                meter_consumption_maxmonth: Math.round(newConsumptionMaxMonthWh),
-                grid_capacity_level: newLevel
-              }, {})
-              .catch(err => this.error('Trigger grid_capacity_level failed: ', err));
-          }
-        }
-      }
 
       const costToday = newDay ?
         consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
@@ -403,15 +381,18 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     }
   }
 
-  async calculateGridCost(consumption, { thisUpdate, lastUpdate, startOfDay, newDay, newMonth, newYear }) {
+  async calculateGridCost(consumption, { thisUpdate, lastUpdate, startOfDay, newHour, newDay, newMonth, newYear }) {
     try {
       const price = this.getCapabilityValue(`meter_gridprice_incl`) || 0;
 
+      const gridFixedAmount = newDay ? this.getGridFixedAmountPerDay() : 0;
+      const gridCapacityCost = newDay ?
+        this.getGridCapacityAddedCost(consumption, { thisUpdate, lastUpdate: startOfDay, newHour, newMonth })
+      : this.getGridCapacityAddedCost(consumption, { thisUpdate, lastUpdate, newHour, newMonth });
+
       const costToday = newDay ?
-        (consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
-          + this.getGridFixedAmountPerDay()
-          + this.getGridCapacityPerDay())
-        : (consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price);
+        (consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price + gridFixedAmount + gridCapacityCost)
+        : (consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price + gridCapacityCost);
 
       const costYesterday = newDay ?
         consumption * (startOfDay - lastUpdate) / (1000 * 3600000) * price
@@ -451,6 +432,45 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     }
   }
 
+  calculateConsumptionHour(consumption, { thisUpdate, lastUpdate, newHour, newMonth }) {
+    const sumConsumptionHour = this.getCapabilityValue(`meter_consumption_hour`) || 0;
+    const consumptionWh = consumption * (thisUpdate - lastUpdate) / (3600000);
+    const newConsumptionWh = newHour ? consumptionWh : consumptionWh + sumConsumptionHour;
+
+    const sumConsumptionMaxHour = this.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
+    const newConsumptionMaxMonthWh = newMonth ? consumptionWh : (newConsumptionWh > sumConsumptionMaxHour ? newConsumptionWh : undefined);
+
+    return { newConsumptionWh, sumConsumptionMaxHour, newConsumptionMaxMonthWh };
+  }
+
+  async calculateMaxConsumptionHour(consumption, { thisUpdate, lastUpdate, newHour, newMonth }) {
+    try {
+      const {
+        newConsumptionWh,
+        sumConsumptionMaxHour,
+        newConsumptionMaxMonthWh
+      } = this.calculateConsumptionHour(consumption, { thisUpdate, lastUpdate, newHour, newMonth });
+      await this.setCapabilityValue(`meter_consumption_hour`, newConsumptionWh);
+
+      if (newConsumptionMaxMonthWh) {
+        await this.setCapabilityValue(`meter_consumption_maxmonth`, newConsumptionMaxMonthWh);
+
+        const prevLevel = newMonth ? 0 : this.getGridCapacityLevel(sumConsumptionMaxHour);
+        const newLevel = this.getGridCapacityLevel(newConsumptionMaxMonthWh);
+        if (newLevel > prevLevel) {
+          await this.homey.flow.getDeviceTriggerCard('grid_capacity_level')
+            .trigger(this, {
+              meter_consumption_maxmonth: Math.round(newConsumptionMaxMonthWh),
+              grid_capacity_level: newLevel
+            }, {})
+            .catch(err => this.error('Trigger grid_capacity_level failed: ', err));
+        }
+      }
+    } catch (err) {
+      this.error('calculateMaxConsumptionHour failed: ', err);
+    }
+  }
+
   async calculateSumCost(consumption) {
     try {
       const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
@@ -482,22 +502,29 @@ module.exports = class UtilityCostsDevice extends Homey.Device {
     return 0;
   }
 
-  getGridCapacityPerDay() {
+  getGridCapacityAddedCost(consumption, { thisUpdate, lastUpdate, newHour, newMonth }) {
     try {
       const settings = this.getSettings();
-      const monthStart = moment().startOf('month');
-      const monthEnd = moment().startOf('month').add(1, 'month');
-      const numDaysInMonth = monthEnd.diff(monthStart, 'days');
-      return settings.gridNewRegime ? this.getGridCapacity() / numDaysInMonth : 0;
+      if (settings.gridNewRegime) {
+        const {
+          sumConsumptionMaxHour,
+          newConsumptionMaxMonthWh
+        } = this.calculateConsumptionHour(consumption, { thisUpdate, lastUpdate, newHour, newMonth });
+
+        if (newConsumptionMaxMonthWh) {
+          const prevCost = newMonth ? 0 : this.getGridCapacity(sumConsumptionMaxHour);
+          const newCost = this.getGridCapacity(newConsumptionMaxMonthWh);
+          return newCost - prevCost;
+        }
+      }
     } catch (err) {
-      this.error('getGridCapacityPerDay failed: ', err);
+      this.error('getGridCapacityAddedCost failed: ', err);
     }
     return 0;
   }
 
-  getGridCapacity() {
+  getGridCapacity(sumConsumptionMaxHour) {
     const settings = this.getSettings();
-    const sumConsumptionMaxHour = this.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
 
     if (sumConsumptionMaxHour < 2000) {
       return settings.gridCapacity0_2;

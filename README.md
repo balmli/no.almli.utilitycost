@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.0.8
+
+- Grid capacity cost is added as max. hourly consumption increases
+
 #### 1.0.7
 
 - Costs will be updated regularly even if consumption is not updated regularly
