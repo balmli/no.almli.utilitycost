@@ -1,4 +1,8 @@
 {
+  "1.1.0": {
+    "en": " ",
+    "no": " "
+  },
   "1.0.8": {
     "en": "Grid capacity cost is added as max. hourly consumption increases. ",
     "no": "Kapasitetsledd legges til når maks. forbruk pr. time øker. "
