@@ -1,5 +1,6 @@
 {
   "name": "Strømregning",
+  "nameDevice": "Strømregning Enhet",
   "errors": {
     "invalid_cost_formula": "Ugyldig formel for strømpris",
     "invalid_cost_formula_msg": "Ugyldig formel for strømpris: __message__"

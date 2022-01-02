@@ -314,7 +314,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=UtilityCosts"
+            "filter": "driver_id=UtilityCosts|UtilityCostsDevice"
           }
         ]
       }
@@ -339,7 +339,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=UtilityCosts"
+            "filter": "driver_id=UtilityCosts|UtilityCostsDevice"
           },
           {
             "name": "consumption",
@@ -394,11 +394,6 @@
   },
   "drivers": [
     {
-      "id": "UtilityCosts",
-      "name": {
-        "en": "Norwegian Utility Bill",
-        "no": "Strømregning"
-      },
       "icon": "/drivers/UtilityCosts/assets/icon.svg",
       "images": {
         "large": "/drivers/UtilityCosts/assets/images/large.png",
@@ -425,7 +420,8 @@
         "meter_sum_year",
         "meter_cost_year",
         "meter_grid_year",
-        "meter_consumption"
+        "meter_consumption",
+        "meter_price_sum"
       ],
       "capabilitiesOptions": {
         "meter_price_incl": {
@@ -454,6 +450,11 @@
           "template": "add_devices"
         }
       ],
+      "id": "UtilityCosts",
+      "name": {
+        "en": "Norwegian Utility Bill",
+        "no": "Strømregning"
+      },
       "settings": [
         {
           "type": "group",
@@ -1037,6 +1038,109 @@
             }
           ]
         },
+        {
+          "type": "group",
+          "label": {
+            "en": "System",
+            "no": "System"
+          },
+          "children": [
+            {
+              "id": "priceDecimals",
+              "type": "dropdown",
+              "label": {
+                "en": "Number of decimals",
+                "no": "Antall desimaler"
+              },
+              "value": "DEC5",
+              "hint": {
+                "en": "Number of decimals for prices.",
+                "no": "Antall desimaler for priser."
+              },
+              "values": [
+                {
+                  "id": "DEC2",
+                  "label": {
+                    "en": "2 decimals",
+                    "no": "2 desimaler"
+                  }
+                },
+                {
+                  "id": "DEC5",
+                  "label": {
+                    "en": "5 decimals",
+                    "no": "5 desimaler"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "/drivers/UtilityCostsDevice/assets/icon.svg",
+      "images": {
+        "large": "/drivers/UtilityCostsDevice/assets/images/large.png",
+        "small": "/drivers/UtilityCostsDevice/assets/images/small.png"
+      },
+      "class": "other",
+      "capabilities": [
+        "meter_sum_current",
+        "meter_sum_month",
+        "meter_price_excl",
+        "meter_price_incl",
+        "meter_gridprice_incl",
+        "meter_cost_today",
+        "meter_grid_today",
+        "meter_cost_yesterday",
+        "meter_grid_yesterday",
+        "meter_cost_month",
+        "meter_grid_month",
+        "meter_cost_lastmonth",
+        "meter_grid_lastmonth",
+        "meter_consumption_hour",
+        "meter_consumption_maxmonth",
+        "meter_sum_day",
+        "meter_sum_year",
+        "meter_cost_year",
+        "meter_grid_year",
+        "meter_consumption",
+        "meter_price_sum"
+      ],
+      "capabilitiesOptions": {
+        "meter_price_incl": {
+          "decimals": 5
+        },
+        "meter_gridprice_incl": {
+          "decimals": 5
+        },
+        "meter_price_excl": {
+          "decimals": 5
+        },
+        "meter_price_sum": {
+          "decimals": 5
+        }
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "UtilityCostsDevice",
+      "name": {
+        "en": "Norwegian Utility Bill Device",
+        "no": "Strømregning Enhet"
+      },
+      "settings": [
         {
           "type": "group",
           "label": {

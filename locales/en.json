@@ -1,5 +1,6 @@
 {
   "name": "Norwegian Utility Bill",
+  "nameDevice": "Norwegian Utility Bill Device",
   "errors": {
     "invalid_cost_formula": "Invalid utility price formula",
     "invalid_cost_formula_msg": "Invalid utility price formula: __message__"

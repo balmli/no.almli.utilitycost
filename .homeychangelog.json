@@ -1,7 +1,7 @@
 {
   "1.1.0": {
-    "en": " ",
-    "no": " "
+    "en": "Added support for slave devices. ",
+    "no": "La inn støtte for slave-enheter. "
   },
   "1.0.8": {
     "en": "Grid capacity cost is added as max. hourly consumption increases. ",

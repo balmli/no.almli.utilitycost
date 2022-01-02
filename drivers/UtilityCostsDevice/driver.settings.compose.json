@@ -1,0 +1,15 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "System",
+      "no": "System"
+    },
+    "children": [
+      {
+        "id": "priceDecimals",
+        "$extends": "priceDecimals"
+      }
+    ]
+  }
+]

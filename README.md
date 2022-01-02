@@ -17,6 +17,8 @@ To install the device:
 
 #### 1.1.0
 
+- Added support for slave devices
+
 #### 1.0.8
 
 - Grid capacity cost is added as max. hourly consumption increases

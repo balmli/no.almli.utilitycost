@@ -24,7 +24,7 @@
     {
       "name": "device",
       "type": "device",
-      "filter": "driver_id=UtilityCosts"
+      "filter": "driver_id=UtilityCosts|UtilityCostsDevice"
     }
   ]
 }

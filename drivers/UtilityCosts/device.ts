@@ -5,20 +5,17 @@ import {BaseDevice} from '../../lib/BaseDevice';
 const moment = require('../../lib/moment-timezone-with-data');
 const pricesLib = require('../../lib/prices');
 const nordpool = require('../../lib/nordpool');
-import {DeviceHandler} from '../../lib/DeviceHandler';
+import {DeviceSettings} from '../../lib/DeviceHandler';
 
 module.exports = class UtilityCostsDevice extends BaseDevice {
 
-    _dh!: DeviceHandler;
     _lastFetchData: any;
     _lastPrice: any;
     _prices: any;
-    _deleted?: boolean;
-    curTimeout?: NodeJS.Timeout;
 
     async onInit(): Promise<void> {
         super.onInit();
-        this._dh = new DeviceHandler(this);
+
         this._lastFetchData = undefined;
         this._lastPrice = undefined;
         this._prices = undefined;
@@ -80,53 +77,11 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             await this.updatePriceDecimals(newSettings.priceDecimals);
         }
         this._lastPrice = undefined;
+        const ds: DeviceSettings = {
+            ...newSettings
+        };
+        this._dh.setSettings(ds);
         this.scheduleCheckTime(2);
-    }
-
-    async updatePriceDecimals(priceDecimals: string) {
-        try {
-            const decimals = priceDecimals === 'DEC2' ? 2 : 5;
-
-            const capOps1 = this.getCapabilityOptions('meter_price_incl');
-            capOps1.decimals = decimals;
-            await this.setCapabilityOptions('meter_price_incl', capOps1);
-
-            const capOps2 = this.getCapabilityOptions('meter_gridprice_incl');
-            capOps2.decimals = decimals;
-            await this.setCapabilityOptions('meter_gridprice_incl', capOps2);
-
-            const capOps3 = this.getCapabilityOptions('meter_price_excl');
-            capOps3.decimals = decimals;
-            await this.setCapabilityOptions('meter_price_excl', capOps3);
-
-            const capOps4 = this.getCapabilityOptions('meter_price_sum');
-            capOps4.decimals = decimals;
-            await this.setCapabilityOptions('meter_price_sum', capOps4);
-        } catch (err) {
-            this.logger.error('Updating number of decimals failed: ', err);
-        }
-    }
-
-    onDeleted() {
-        this._deleted = true;
-        this.clearCheckTime();
-        this.logger.verbose(this.getName() + ' -> device deleted');
-    }
-
-    clearCheckTime() {
-        if (this.curTimeout) {
-            this.homey.clearTimeout(this.curTimeout);
-            this.curTimeout = undefined;
-        }
-    }
-
-    scheduleCheckTime(seconds = 60) {
-        if (this._deleted) {
-            return;
-        }
-        this.clearCheckTime();
-        this.logger.verbose(`Checking time in ${seconds} seconds`);
-        this.curTimeout = this.homey.setTimeout(this.checkTime.bind(this), seconds * 1000);
     }
 
     async checkTime() {
@@ -186,7 +141,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             const currentPrice = pricesLib.currentPrice(this._prices, localTime);
             const startAtHour = currentPrice ? pricesLib.toHour(currentPrice.startsAt) : undefined;
             if (currentPrice) {
-                this.logger.info('Current price:', startAtHour, currentPrice.price);
+                this.logger.verbose('Current price:', startAtHour, currentPrice.price);
                 const priceChanged = !this._lastPrice || startAtHour !== pricesLib.toHour(this._lastPrice.startsAt);
                 if (priceChanged) {
                     this._lastPrice = currentPrice;

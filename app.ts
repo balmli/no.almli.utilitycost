@@ -1,5 +1,6 @@
 import Homey from 'homey';
 import moment from "./lib/moment-timezone-with-data";
+import {DeviceHandler} from "./lib/DeviceHandler";
 
 class UtilityCostsApp extends Homey.App {
 
@@ -25,6 +26,16 @@ class UtilityCostsApp extends Homey.App {
         this.homey.flow.getActionCard('update_price')
             .registerRunListener((args, state) => args.device.onUpdatePrice(args.price));
     }
+
+    getDeviceHandler(): DeviceHandler | undefined {
+        const driver = this.homey.drivers.getDriver('UtilityCosts');
+        const devices = driver.getDevices();
+        if (devices.length > 0) {
+            // @ts-ignore
+            return devices[0].getDeviceHandler();
+        }
+    }
+
 }
 
 module.exports = UtilityCostsApp;
