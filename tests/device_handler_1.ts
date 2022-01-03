@@ -53,6 +53,18 @@ describe('Devices', function () {
             const response = dh.evaluatePrice('min(1,2)');
             expect(response).eq(1);
         });
+        it('Check evaluatePrice - monthly hours - 1', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.evaluatePrice('PRICE_NORDPOOL * 1.25 + 0.0299 + 39/MONTHLY_HOURS', 1.23, '2022-01-01T00:01:00.000+01:00');
+            expect(response).to.be.closeTo(1.61982, 0.0001);
+        });
+        it('Check evaluatePrice - monthly hours - 2', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.evaluatePrice('PRICE_NORDPOOL * 1.25 + 0.0299 + 39/MONTHLY_HOURS', 1.23, '2022-02-05T00:01:00.000+01:00');
+            expect(response).to.be.closeTo(1.62544, 0.0001);
+        });
     });
 
     describe('Check validateCostFormula', function () {

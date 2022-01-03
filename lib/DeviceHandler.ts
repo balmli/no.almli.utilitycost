@@ -80,9 +80,15 @@ export class DeviceHandler {
         this.settings = settings;
     }
 
-    evaluatePrice(str: string, price?: number) {
+    evaluatePrice(str: string, price?: number, aDate?: any) {
+        const momentNow = aDate ? moment(aDate) : moment();
+        const monthStart = momentNow.startOf('month');
+        const monthEnd = moment(momentNow).startOf('month').add(1, 'month');
+        const numHoursInMonth = monthEnd.diff(monthStart, 'days') * 24;
+
         const str2 = str.replace(/PRICE_NORDPOOL/g, `[PRICE_NORDPOOL]`);
-        const parser = new Formula(str2);
+        const str3 = str2.replace(/MONTHLY_HOURS/g, `${numHoursInMonth}`);
+        const parser = new Formula(str3);
         if (price) {
             return parser.evaluate({PRICE_NORDPOOL: price});
         } else {

@@ -1,7 +1,7 @@
 {
   "1.1.0": {
-    "en": "Added support for slave devices. Added action cards to update settings. ",
-    "no": "La inn støtte for slave-enheter. Lagt til kort for å oppdatere innstillinger. "
+    "en": "Added support for slave devices. Added action cards to update settings. Added 'MONTHLY_HOURS' tag that can be used in the utility price formula. ",
+    "no": "La inn støtte for slave-enheter. Lagt til kort for å oppdatere innstillinger. La til 'MONTHLY_HOURS' tagg som kan brukes i strømpris-formel. "
   },
   "1.0.8": {
     "en": "Grid capacity cost is added as max. hourly consumption increases. ",
