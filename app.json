@@ -1615,11 +1615,11 @@
               "type": "checkbox",
               "label": {
                 "en": "Reset power meter daily",
-                "no": "Reset energimåler daglig"
+                "no": "Nullstill energimåler daglig"
               },
               "hint": {
                 "en": "Check if accumulated power meter (Energy) should be reset daily.",
-                "no": "Kryss av hvis energimåler (Energi) skal resettes daglig."
+                "no": "Kryss av hvis energimåler (Energi) skal nullstilles daglig."
               },
               "value": true
             }
@@ -1745,11 +1745,11 @@
               "type": "checkbox",
               "label": {
                 "en": "Reset power meter daily",
-                "no": "Reset energimåler daglig"
+                "no": "Nullstill energimåler daglig"
               },
               "hint": {
                 "en": "Check if accumulated power meter (Energy) should be reset daily.",
-                "no": "Kryss av hvis energimåler (Energi) skal resettes daglig."
+                "no": "Kryss av hvis energimåler (Energi) skal nullstilles daglig."
               },
               "value": true
             }
