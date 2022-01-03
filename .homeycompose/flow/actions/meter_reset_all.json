@@ -1,0 +1,18 @@
+{
+  "id": "meter_reset_all",
+  "title": {
+    "en": "Reset all values",
+    "no": "Nullstill alle verdier"
+  },
+  "hint": {
+    "en": "NB! This will reset all accumulated values.",
+    "no": "NB! Nullstiller alle akkumulerte verdier."
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts|UtilityCostsDevice"
+    }
+  ]
+}

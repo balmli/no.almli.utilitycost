@@ -37,6 +37,10 @@ class UtilityCostsApp extends Homey.App {
 
         this.homey.flow.getActionCard('meter_power_reset')
             .registerRunListener((args, state) => args.device.onMeterPowerReset());
+
+        this.homey.flow.getActionCard('meter_reset_all')
+            .registerRunListener((args, state) => args.device.onMeterResetAll());
+
     }
 
     getDeviceHandler(): DeviceHandler | undefined {

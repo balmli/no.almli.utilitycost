@@ -21,6 +21,8 @@ To install the device:
 - Added action cards to update settings
 - Added 'MONTHLY_HOURS' tag that can be used in the utility price formula
 - Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities
+- Added action card to reset the 'Energy' (kWh) capability
+- Added action card to reset all accumulated capabilities
 
 #### 1.0.8
 

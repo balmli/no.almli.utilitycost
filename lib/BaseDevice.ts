@@ -80,4 +80,28 @@ export class BaseDevice extends Homey.Device {
         }
     }
 
+    async onMeterResetAll() {
+        try {
+            await this.setCapabilityValue("meter_consumption_hour", 0);
+            await this.setCapabilityValue("meter_consumption_maxmonth", 0);
+            await this.setCapabilityValue("meter_cost_lastmonth", 0);
+            await this.setCapabilityValue("meter_cost_month", 0);
+            await this.setCapabilityValue("meter_cost_today", 0);
+            await this.setCapabilityValue("meter_cost_year", 0);
+            await this.setCapabilityValue("meter_cost_yesterday", 0);
+            await this.setCapabilityValue("meter_grid_lastmonth", 0);
+            await this.setCapabilityValue("meter_grid_month", 0);
+            await this.setCapabilityValue("meter_grid_today", 0);
+            await this.setCapabilityValue("meter_grid_year", 0);
+            await this.setCapabilityValue("meter_grid_yesterday", 0);
+            await this.setCapabilityValue("meter_power.acc", 0);
+            await this.setCapabilityValue("meter_power.year", 0);
+            await this.setCapabilityValue("meter_sum_day", 0);
+            await this.setCapabilityValue("meter_sum_month", 0);
+            await this.setCapabilityValue("meter_sum_year", 0);
+        } catch (err) {
+            this.logger.error('Resetting all values failed: ', err);
+        }
+    }
+
 }
