@@ -1,0 +1,112 @@
+{
+  "id": "set_gridcapacity_settings",
+  "title": {
+    "en": "Update grid capacity settings",
+    "no": "Oppdatér innstillinger for nettleie kapasitetsledd"
+  },
+  "titleFormatted": {
+    "en": "Update grid capacity settings to [[gridCapacity0_2]], [[gridCapacity2_5]], [[gridCapacity5_10]], [[gridCapacity10_15]], [[gridCapacity15_20]], [[gridCapacity20_25]]",
+    "no": "Oppdatér innstillinger for nettleie kapasitetsledd til [[gridCapacity0_2]], [[gridCapacity2_5]], [[gridCapacity5_10]], [[gridCapacity10_15]], [[gridCapacity15_20]], [[gridCapacity20_25]]"
+  },
+  "hint": {
+    "en": "Update grid capacity settings.",
+    "no": "Oppdatér innstillinger for nettleie kapasitetsledd."
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    },
+    {
+      "name": "gridCapacity0_2",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9999,
+      "title": {
+        "en": "0-2 kW",
+        "no": "0-2 kW"
+      },
+      "placeholder": {
+        "en": "kr/month",
+        "no": "kr/mnd"
+      }
+    },
+    {
+      "name": "gridCapacity2_5",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9999,
+      "title": {
+        "en": "2-5 kW",
+        "no": "2-5 kW"
+      },
+      "placeholder": {
+        "en": "kr/month",
+        "no": "kr/mnd"
+      }
+    },
+    {
+      "name": "gridCapacity5_10",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9999,
+      "title": {
+        "en": "5-10 kW",
+        "no": "5-10 kW"
+      },
+      "placeholder": {
+        "en": "kr/month",
+        "no": "kr/mnd"
+      }
+    },
+    {
+      "name": "gridCapacity10_15",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9999,
+      "title": {
+        "en": "10-15 kW",
+        "no": "10-15 kW"
+      },
+      "placeholder": {
+        "en": "kr/month",
+        "no": "kr/mnd"
+      }
+    },
+    {
+      "name": "gridCapacity15_20",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9999,
+      "title": {
+        "en": "15-20 kW",
+        "no": "15-20 kW"
+      },
+      "placeholder": {
+        "en": "kr/month",
+        "no": "kr/mnd"
+      }
+    },
+    {
+      "name": "gridCapacity20_25",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 9999,
+      "title": {
+        "en": "20-25 kW",
+        "no": "20-25 kW"
+      },
+      "placeholder": {
+        "en": "kr/month",
+        "no": "kr/mnd"
+      }
+    }
+  ]
+}

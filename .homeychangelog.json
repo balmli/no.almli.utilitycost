@@ -1,7 +1,7 @@
 {
   "1.1.0": {
-    "en": "Added support for slave devices. ",
-    "no": "La inn støtte for slave-enheter. "
+    "en": "Added support for slave devices. Added action cards to update settings. ",
+    "no": "La inn støtte for slave-enheter. Lagt til kort for å oppdatere innstillinger. "
   },
   "1.0.8": {
     "en": "Grid capacity cost is added as max. hourly consumption increases. ",

@@ -163,4 +163,41 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         await this._dh.updateConsumption(consumption, moment());
     }
 
+    async onSetGridCostsSettings(args: any) {
+        const ds: DeviceSettings = this.getSettings();
+        if (args.gridFixedAmount !== undefined) ds.gridFixedAmount = args.gridFixedAmount;
+        if (args.gridConsumption !== undefined) ds.gridConsumption = args.gridConsumption;
+        if (args.gridNewRegime !== undefined) ds.gridNewRegime = args.gridNewRegime;
+        await this.setSettings(ds);
+        this._dh.setSettings(ds);
+        this.scheduleCheckTime(2);
+    }
+
+    async onSetGridCapacitySettings(args: any) {
+        const ds: DeviceSettings = this.getSettings();
+        if (args.gridCapacity0_2 !== undefined) ds.gridCapacity0_2 = args.gridCapacity0_2;
+        if (args.gridCapacity2_5 !== undefined) ds.gridCapacity2_5 = args.gridCapacity2_5;
+        if (args.gridCapacity5_10 !== undefined) ds.gridCapacity5_10 = args.gridCapacity5_10;
+        if (args.gridCapacity10_15 !== undefined) ds.gridCapacity10_15 = args.gridCapacity10_15;
+        if (args.gridCapacity15_20 !== undefined) ds.gridCapacity15_20 = args.gridCapacity15_20;
+        if (args.gridCapacity20_25 !== undefined) ds.gridCapacity20_25 = args.gridCapacity20_25;
+        await this.setSettings(ds);
+        this._dh.setSettings(ds);
+        this.scheduleCheckTime(2);
+    }
+
+    async onSetGridEnergySettings(args: any) {
+        const ds: DeviceSettings = this.getSettings();
+        if (args.gridEnergyDay !== undefined) ds.gridEnergyDay = args.gridEnergyDay;
+        if (args.gridEnergyNight !== undefined) ds.gridEnergyNight = args.gridEnergyNight;
+        if (args.gridEnergyDaySummer !== undefined) ds.gridEnergyDaySummer = args.gridEnergyDaySummer;
+        if (args.gridEnergyNightSummer !== undefined) ds.gridEnergyNightSummer = args.gridEnergyNightSummer;
+        if (args.gridEnergyWinterStart !== undefined) ds.gridEnergyWinterStart = args.gridEnergyWinterStart;
+        if (args.gridEnergySummerStart !== undefined) ds.gridEnergySummerStart = args.gridEnergySummerStart;
+        if (args.gridEnergyLowWeekends !== undefined) ds.gridEnergyLowWeekends = args.gridEnergyLowWeekends;
+        await this.setSettings(ds);
+        this._dh.setSettings(ds);
+        this.scheduleCheckTime(2);
+    }
+
 };

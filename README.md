@@ -18,6 +18,7 @@ To install the device:
 #### 1.1.0
 
 - Added support for slave devices
+- Added action cards to update settings
 
 #### 1.0.8
 

@@ -44,7 +44,7 @@
   {
     "type": "group",
     "label": {
-      "en": "Grid Energy",
+      "en": "Grid Capacity",
       "no": "Nettleie kapasitetsledd"
     },
     "children": [
@@ -77,7 +77,7 @@
   {
     "type": "group",
     "label": {
-      "en": "Grid Capacity",
+      "en": "Grid Energy",
       "no": "Nettleie energiledd"
     },
     "children": [

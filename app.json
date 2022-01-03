@@ -321,6 +321,492 @@
     ],
     "actions": [
       {
+        "id": "set_grid_costs_settings",
+        "title": {
+          "en": "Update grid costs (old regime) settings",
+          "no": "Oppdatér innstillinger for nettleie (gammelt regime)"
+        },
+        "titleFormatted": {
+          "en": "Update grid costs (old regime) settings to [[gridFixedAmount]], [[gridConsumption]], [[gridNewRegime]]",
+          "no": "Oppdatér innstillinger for nettleie (gammelt regime) til [[gridFixedAmount]], [[gridConsumption]], [[gridNewRegime]]"
+        },
+        "hint": {
+          "en": "Update grid costs (old regime) settings.",
+          "no": "Oppdatér innstillinger for nettleie (gammelt regime)."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          },
+          {
+            "name": "gridFixedAmount",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 9999,
+            "title": {
+              "en": "Yearly fixed amount",
+              "no": "Årlig fastbeløp"
+            },
+            "placeholder": {
+              "en": "kr/year",
+              "no": "kr/år"
+            }
+          },
+          {
+            "name": "gridConsumption",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 5,
+            "title": {
+              "en": "Consumption based part",
+              "no": "Forbruksavhengig del"
+            },
+            "placeholder": {
+              "en": "kr/kWh",
+              "no": "kr/kWh"
+            }
+          },
+          {
+            "name": "gridNewRegime",
+            "type": "dropdown",
+            "required": false,
+            "title": {
+              "en": "New grid costs regime",
+              "no": "Nye regler for nettleie"
+            },
+            "values": [
+              {
+                "id": "false",
+                "label": {
+                  "en": "No",
+                  "no": "Nei"
+                }
+              },
+              {
+                "id": "true",
+                "label": {
+                  "en": "Yes",
+                  "no": "Ja"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_gridcapacity_settings",
+        "title": {
+          "en": "Update grid capacity settings",
+          "no": "Oppdatér innstillinger for nettleie kapasitetsledd"
+        },
+        "titleFormatted": {
+          "en": "Update grid capacity settings to [[gridCapacity0_2]], [[gridCapacity2_5]], [[gridCapacity5_10]], [[gridCapacity10_15]], [[gridCapacity15_20]], [[gridCapacity20_25]]",
+          "no": "Oppdatér innstillinger for nettleie kapasitetsledd til [[gridCapacity0_2]], [[gridCapacity2_5]], [[gridCapacity5_10]], [[gridCapacity10_15]], [[gridCapacity15_20]], [[gridCapacity20_25]]"
+        },
+        "hint": {
+          "en": "Update grid capacity settings.",
+          "no": "Oppdatér innstillinger for nettleie kapasitetsledd."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          },
+          {
+            "name": "gridCapacity0_2",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 9999,
+            "title": {
+              "en": "0-2 kW",
+              "no": "0-2 kW"
+            },
+            "placeholder": {
+              "en": "kr/month",
+              "no": "kr/mnd"
+            }
+          },
+          {
+            "name": "gridCapacity2_5",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 9999,
+            "title": {
+              "en": "2-5 kW",
+              "no": "2-5 kW"
+            },
+            "placeholder": {
+              "en": "kr/month",
+              "no": "kr/mnd"
+            }
+          },
+          {
+            "name": "gridCapacity5_10",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 9999,
+            "title": {
+              "en": "5-10 kW",
+              "no": "5-10 kW"
+            },
+            "placeholder": {
+              "en": "kr/month",
+              "no": "kr/mnd"
+            }
+          },
+          {
+            "name": "gridCapacity10_15",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 9999,
+            "title": {
+              "en": "10-15 kW",
+              "no": "10-15 kW"
+            },
+            "placeholder": {
+              "en": "kr/month",
+              "no": "kr/mnd"
+            }
+          },
+          {
+            "name": "gridCapacity15_20",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 9999,
+            "title": {
+              "en": "15-20 kW",
+              "no": "15-20 kW"
+            },
+            "placeholder": {
+              "en": "kr/month",
+              "no": "kr/mnd"
+            }
+          },
+          {
+            "name": "gridCapacity20_25",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 9999,
+            "title": {
+              "en": "20-25 kW",
+              "no": "20-25 kW"
+            },
+            "placeholder": {
+              "en": "kr/month",
+              "no": "kr/mnd"
+            }
+          }
+        ]
+      },
+      {
+        "id": "set_gridenergy_settings",
+        "title": {
+          "en": "Update grid energy settings",
+          "no": "Oppdatér innstillinger for nettleie energiledd"
+        },
+        "titleFormatted": {
+          "en": "Update grid energy settings to [[gridEnergyDay]], [[gridEnergyNight]], [[gridEnergyDaySummer]], [[gridEnergyNightSummer]], [[gridEnergyWinterStart]], [[gridEnergySummerStart]], [[gridEnergyLowWeekends]]",
+          "no": "Oppdatér innstillinger for nettleie energiledd til [[gridEnergyDay]], [[gridEnergyNight]], [[gridEnergyDaySummer]], [[gridEnergyNightSummer]], [[gridEnergyWinterStart]], [[gridEnergySummerStart]], [[gridEnergyLowWeekends]]"
+        },
+        "hint": {
+          "en": "Update grid energy settings.",
+          "no": "Oppdatér innstillinger for nettleie energiledd."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          },
+          {
+            "name": "gridEnergyDay",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 5,
+            "title": {
+              "en": "Day winter",
+              "no": "Dagtid vinter"
+            },
+            "placeholder": {
+              "en": "kr/kWh",
+              "no": "kr/kWh"
+            }
+          },
+          {
+            "name": "gridEnergyNight",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 5,
+            "title": {
+              "en": "Night winter",
+              "no": "Natt vinter"
+            },
+            "placeholder": {
+              "en": "kr/kWh",
+              "no": "kr/kWh"
+            }
+          },
+          {
+            "name": "gridEnergyDaySummer",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 5,
+            "title": {
+              "en": "Day summer",
+              "no": "Dagtid sommer"
+            },
+            "placeholder": {
+              "en": "kr/kWh",
+              "no": "kr/kWh"
+            }
+          },
+          {
+            "name": "gridEnergyNightSummer",
+            "type": "number",
+            "required": false,
+            "min": 0,
+            "max": 5,
+            "title": {
+              "en": "Night summer",
+              "no": "Natt sommer"
+            },
+            "placeholder": {
+              "en": "kr/kWh",
+              "no": "kr/kWh"
+            }
+          },
+          {
+            "name": "gridEnergyWinterStart",
+            "type": "dropdown",
+            "required": false,
+            "title": {
+              "en": "Winter period starts",
+              "no": "Vinterperiode starter"
+            },
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "January",
+                  "no": "Januar"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "February",
+                  "no": "Februar"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "March",
+                  "no": "Mars"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "April",
+                  "no": "April"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "May",
+                  "no": "Mai"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "June",
+                  "no": "Juni"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "July",
+                  "no": "Juli"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "August",
+                  "no": "August"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "September",
+                  "no": "September"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "October",
+                  "no": "Oktober"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "November",
+                  "no": "November"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "December",
+                  "no": "Desember"
+                }
+              }
+            ]
+          },
+          {
+            "name": "gridEnergySummerStart",
+            "type": "dropdown",
+            "required": false,
+            "title": {
+              "en": "Summer period starts",
+              "no": "Sommerperiode starter"
+            },
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "January",
+                  "no": "Januar"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "February",
+                  "no": "Februar"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "March",
+                  "no": "Mars"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "April",
+                  "no": "April"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "May",
+                  "no": "Mai"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "June",
+                  "no": "Juni"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "July",
+                  "no": "Juli"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "August",
+                  "no": "August"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "September",
+                  "no": "September"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "October",
+                  "no": "Oktober"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "November",
+                  "no": "November"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "December",
+                  "no": "Desember"
+                }
+              }
+            ]
+          },
+          {
+            "name": "gridEnergyLowWeekends",
+            "type": "dropdown",
+            "required": false,
+            "title": {
+              "en": "Low price weekends",
+              "no": "Lav pris i helgene"
+            },
+            "values": [
+              {
+                "id": "false",
+                "label": {
+                  "en": "No",
+                  "no": "Nei"
+                }
+              },
+              {
+                "id": "true",
+                "label": {
+                  "en": "Yes",
+                  "no": "Ja"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
         "id": "update_consumption",
         "title": {
           "en": "Update consumption",
@@ -622,7 +1108,7 @@
         {
           "type": "group",
           "label": {
-            "en": "Grid Energy",
+            "en": "Grid Capacity",
             "no": "Nettleie kapasitetsledd"
           },
           "children": [
@@ -745,7 +1231,7 @@
         {
           "type": "group",
           "label": {
-            "en": "Grid Capacity",
+            "en": "Grid Energy",
             "no": "Nettleie energiledd"
           },
           "children": [
