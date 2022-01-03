@@ -18,6 +18,12 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
 
     async migrate() {
         try {
+            if (!this.hasCapability('meter_power.acc')) {
+                await this.addCapability('meter_power.acc');
+            }
+            if (!this.hasCapability('meter_power.year')) {
+                await this.addCapability('meter_power.year');
+            }
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);
@@ -75,7 +81,9 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         const globalDeviceHandler = this.homey.app.getDeviceHandler();
         if (globalDeviceHandler) {
             this._dh.setSettings({
-                ...globalDeviceHandler.getSettings()
+                ...globalDeviceHandler.getSettings(),
+                priceDecimals: this.getSetting('priceDecimals'),
+                resetEnergyDaily: this.getSetting('resetEnergyDaily')
             });
         }
     }

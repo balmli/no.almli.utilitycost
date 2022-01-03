@@ -321,6 +321,24 @@
     ],
     "actions": [
       {
+        "id": "meter_power_reset",
+        "title": {
+          "en": "Reset power meter",
+          "no": "Nullstill energimåler"
+        },
+        "hint": {
+          "en": "Reset the accumulated power usage (kWh).",
+          "no": "Nullstill energimåleren (kWh)."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts|UtilityCostsDevice"
+          }
+        ]
+      },
+      {
         "id": "set_grid_costs_settings",
         "title": {
           "en": "Update grid costs (old regime) settings",
@@ -907,7 +925,9 @@
         "meter_cost_year",
         "meter_grid_year",
         "meter_consumption",
-        "meter_price_sum"
+        "meter_price_sum",
+        "meter_power.acc",
+        "meter_power.year"
       ],
       "capabilitiesOptions": {
         "meter_price_incl": {
@@ -921,6 +941,18 @@
         },
         "meter_price_sum": {
           "decimals": 5
+        },
+        "meter_power.acc": {
+          "title": {
+            "en": "Energy",
+            "no": "Energi"
+          }
+        },
+        "meter_power.year": {
+          "title": {
+            "en": "Energy this year",
+            "no": "Energi dette året"
+          }
         }
       },
       "pair": [
@@ -1559,6 +1591,19 @@
                   }
                 }
               ]
+            },
+            {
+              "id": "resetEnergyDaily",
+              "type": "checkbox",
+              "label": {
+                "en": "Reset power meter daily",
+                "no": "Reset energimåler daglig"
+              },
+              "hint": {
+                "en": "Check if accumulated power meter (Energy) should be reset daily.",
+                "no": "Kryss av hvis energimåler (Energi) skal resettes daglig."
+              },
+              "value": true
             }
           ]
         }
@@ -1592,7 +1637,9 @@
         "meter_cost_year",
         "meter_grid_year",
         "meter_consumption",
-        "meter_price_sum"
+        "meter_price_sum",
+        "meter_power.acc",
+        "meter_power.year"
       ],
       "capabilitiesOptions": {
         "meter_price_incl": {
@@ -1606,6 +1653,18 @@
         },
         "meter_price_sum": {
           "decimals": 5
+        },
+        "meter_power.acc": {
+          "title": {
+            "en": "Energy",
+            "no": "Energi"
+          }
+        },
+        "meter_power.year": {
+          "title": {
+            "en": "Energy this year",
+            "no": "Energi dette året"
+          }
         }
       },
       "pair": [
@@ -1662,6 +1721,19 @@
                   }
                 }
               ]
+            },
+            {
+              "id": "resetEnergyDaily",
+              "type": "checkbox",
+              "label": {
+                "en": "Reset power meter daily",
+                "no": "Reset energimåler daglig"
+              },
+              "hint": {
+                "en": "Check if accumulated power meter (Energy) should be reset daily.",
+                "no": "Kryss av hvis energimåler (Energi) skal resettes daglig."
+              },
+              "value": true
             }
           ]
         }
@@ -1672,12 +1744,12 @@
     "meter_consumption": {
       "type": "number",
       "title": {
-        "en": "Energy",
-        "no": "Energi"
+        "en": "Power",
+        "no": "Effekt"
       },
       "decimals": 2,
       "units": {
-        "en": "kWh"
+        "en": "W"
       },
       "getable": true,
       "setable": false,

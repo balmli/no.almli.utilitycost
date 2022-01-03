@@ -1,0 +1,18 @@
+{
+  "id": "meter_power_reset",
+  "title": {
+    "en": "Reset power meter",
+    "no": "Nullstill energimåler"
+  },
+  "hint": {
+    "en": "Reset the accumulated power usage (kWh).",
+    "no": "Nullstill energimåleren (kWh)."
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts|UtilityCostsDevice"
+    }
+  ]
+}

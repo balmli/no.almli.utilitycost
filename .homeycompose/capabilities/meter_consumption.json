@@ -1,12 +1,12 @@
 {
   "type": "number",
   "title": {
-    "en": "Energy",
-    "no": "Energi"
+    "en": "Power",
+    "no": "Effekt"
   },
   "decimals": 2,
   "units": {
-    "en": "kWh"
+    "en": "W"
   },
   "getable": true,
   "setable": false,

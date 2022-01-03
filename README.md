@@ -20,6 +20,7 @@ To install the device:
 - Added support for slave devices
 - Added action cards to update settings
 - Added 'MONTHLY_HOURS' tag that can be used in the utility price formula
+- Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities
 
 #### 1.0.8
 

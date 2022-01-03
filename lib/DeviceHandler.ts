@@ -27,6 +27,7 @@ export class DeviceSettings {
     gridEnergyLowWeekends!: boolean;
 
     priceDecimals!: number;
+    resetEnergyDaily!: boolean;
 }
 
 export class StartValues {
@@ -232,10 +233,35 @@ export class DeviceHandler {
             await this.device.setCapabilityValue('meter_consumption', consumption);
         }
         if (consumption !== undefined && consumption !== null && startOfValues.lastUpdate) {
+            await this.calculateEnergy(consumption, startOfValues);
             await this.calculateUtilityCost(consumption, startOfValues);
             await this.calculateGridCost(consumption, startOfValues);
             await this.calculateMaxConsumptionHour(consumption, startOfValues);
             await this.calculateSumCost(consumption);
+        }
+    }
+
+    async calculateEnergy(consumption: number, startValues: StartValues): Promise<void> {
+        const {thisUpdate, lastUpdate, startOfDay, startOfYear, newDay, newYear} = startValues;
+        if (!lastUpdate) {
+            return;
+        }
+        try {
+            const energyAcc = this.device.getCapabilityValue(`meter_power.acc`) || 0;
+            const newEnergyAcc = newDay && this.settings.resetEnergyDaily ?
+                consumption * (thisUpdate - startOfDay) / (1000 * 3600000)
+                : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) + energyAcc;
+            await this.device.setCapabilityValue(`meter_power.acc`, newEnergyAcc);
+
+            const energyYearlyAcc = this.device.getCapabilityValue(`meter_power.year`) || 0;
+            const newEnergyYearlyAcc = newYear ?
+                consumption * (thisUpdate - startOfYear) / (1000 * 3600000)
+                : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) + energyYearlyAcc;
+            await this.device.setCapabilityValue(`meter_power.year`, newEnergyYearlyAcc);
+
+            this.device.logger.debug(`Energy calculation:`, newEnergyAcc, newEnergyYearlyAcc);
+        } catch (err) {
+            this.device.logger.error('calculateEnergy failed: ', err);
         }
     }
 

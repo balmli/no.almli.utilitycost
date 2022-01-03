@@ -71,4 +71,13 @@ export class BaseDevice extends Homey.Device {
             this.logger.error('Updating number of decimals failed: ', err);
         }
     }
+
+    async onMeterPowerReset() {
+        try {
+            await this.setCapabilityValue('meter_power.acc', 0);
+        } catch (err) {
+            this.logger.error('Resetting the power meter failed: ', err);
+        }
+    }
+
 }

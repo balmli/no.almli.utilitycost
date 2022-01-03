@@ -56,6 +56,12 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             if (!this.hasCapability('meter_consumption')) {
                 await this.addCapability('meter_consumption');
             }
+            if (!this.hasCapability('meter_power.acc')) {
+                await this.addCapability('meter_power.acc');
+            }
+            if (!this.hasCapability('meter_power.year')) {
+                await this.addCapability('meter_power.year');
+            }
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);

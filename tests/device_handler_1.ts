@@ -274,7 +274,8 @@ describe('Devices', function () {
             const device = new HomeyDevice();
             device.setSettings({
                 gridNewRegime: false,
-                gridFixedAmount: 2050
+                gridFixedAmount: 2050,
+                resetEnergyDaily: true
             });
             device.setCapabilityValue('meter_price_incl', 1.5);
             device.setCapabilityValue('meter_gridprice_incl', 0.5);
@@ -286,6 +287,8 @@ describe('Devices', function () {
 
             //console.log(device.getCapabilityValues());
             expect(device.getCapabilityValue('meter_consumption')).eq(1000);
+            expect(device.getCapabilityValue('meter_power.acc')).eq(1);
+            expect(device.getCapabilityValue('meter_power.year')).eq(1);
             expect(device.getCapabilityValue('meter_cost_today')).eq(1.5);
             expect(device.getCapabilityValue('meter_cost_yesterday')).eq(0);
             expect(device.getCapabilityValue('meter_cost_month')).eq(1.5);
@@ -306,6 +309,8 @@ describe('Devices', function () {
             await dh.updateConsumption(2000, '2022-01-02T00:00:00.000+01:00');
             //console.log(device.getCapabilityValues());
             expect(device.getCapabilityValue('meter_consumption')).eq(2000);
+            expect(device.getCapabilityValue('meter_power.acc')).eq(0);
+            expect(device.getCapabilityValue('meter_power.year')).eq(47);
             expect(device.getCapabilityValue('meter_cost_today')).eq(0);
             expect(device.getCapabilityValue('meter_cost_yesterday')).eq(70.5);
             expect(device.getCapabilityValue('meter_cost_month')).eq(1.5);
@@ -324,11 +329,12 @@ describe('Devices', function () {
             expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(2000);
 
         });
-        it('Check updateConsumption 1', async function () {
+        it('Check updateConsumption 2', async function () {
             const device = new HomeyDevice();
             device.setSettings({
                 gridNewRegime: false,
-                gridFixedAmount: 2050
+                gridFixedAmount: 2050,
+                resetEnergyDaily: true
             });
             device.setCapabilityValue('meter_price_incl', 1.5);
             device.setCapabilityValue('meter_gridprice_incl', 0.5);
@@ -342,6 +348,8 @@ describe('Devices', function () {
 
             //console.log(device.getCapabilityValues());
             expect(device.getCapabilityValue('meter_consumption')).eq(1000);
+            expect(device.getCapabilityValue('meter_power.acc')).eq(1);
+            expect(device.getCapabilityValue('meter_power.year')).eq(1);
             expect(device.getCapabilityValue('meter_cost_today')).eq(1.5);
             expect(device.getCapabilityValue('meter_cost_yesterday')).eq(0);
             expect(device.getCapabilityValue('meter_cost_month')).eq(1.5);
@@ -359,26 +367,77 @@ describe('Devices', function () {
             expect(device.getCapabilityValue('meter_sum_year')).to.be.closeTo(2, 0.00001);
             expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(1000);
 
-            await dh.updateConsumption(2000, '2022-01-02T00:00:00.000+01:00');
+            await dh.updateConsumption(2000, '2022-01-02T02:00:00.000+01:00');
             //console.log(device.getCapabilityValues());
             expect(device.getCapabilityValue('meter_consumption')).eq(2000);
-            expect(device.getCapabilityValue('meter_cost_today')).eq(0);
+            expect(device.getCapabilityValue('meter_power.acc')).eq(4);
+            expect(device.getCapabilityValue('meter_power.year')).eq(51);
+            expect(device.getCapabilityValue('meter_cost_today')).eq(6);
             expect(device.getCapabilityValue('meter_cost_yesterday')).eq(70.5);
-            expect(device.getCapabilityValue('meter_cost_month')).eq(1.5);
+            expect(device.getCapabilityValue('meter_cost_month')).eq(7.5);
             expect(device.getCapabilityValue('meter_cost_lastmonth')).eq(0);
-            expect(device.getCapabilityValue('meter_cost_year')).eq(1.5);
-            expect(device.getCapabilityValue('meter_grid_today')).to.be.closeTo(0, 0.00001);
+            expect(device.getCapabilityValue('meter_cost_year')).eq(7.5);
+            expect(device.getCapabilityValue('meter_grid_today')).to.be.closeTo(2, 0.00001);
             expect(device.getCapabilityValue('meter_grid_yesterday')).to.be.closeTo(23.5, 0.00001);
-            expect(device.getCapabilityValue('meter_grid_month')).to.be.closeTo(0.5, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_month')).to.be.closeTo(2.5, 0.00001);
             expect(device.getCapabilityValue('meter_grid_lastmonth')).to.be.closeTo(0, 0.00001);
-            expect(device.getCapabilityValue('meter_grid_year')).to.be.closeTo(0.5, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_year')).to.be.closeTo(2.5, 0.00001);
             expect(device.getCapabilityValue('meter_consumption_hour')).eq(2000);
             expect(device.getCapabilityValue('meter_sum_current')).eq(4);
-            expect(device.getCapabilityValue('meter_sum_day')).to.be.closeTo(0, 0.00001);
-            expect(device.getCapabilityValue('meter_sum_month')).to.be.closeTo(2, 0.00001);
-            expect(device.getCapabilityValue('meter_sum_year')).to.be.closeTo(2, 0.00001);
+            expect(device.getCapabilityValue('meter_sum_day')).to.be.closeTo(8, 0.00001);
+            expect(device.getCapabilityValue('meter_sum_month')).to.be.closeTo(10, 0.00001);
+            expect(device.getCapabilityValue('meter_sum_year')).to.be.closeTo(10, 0.00001);
             expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(2000);
 
+        });
+    });
+
+    describe('Check calculateEnergy', function () {
+        it('Check calculateEnergy 1', async function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const sv1 = await dh.startOfValues('2022-04-01T00:00:00.000+01:00');
+            const sv2 = await dh.startOfValues('2022-04-01T01:01:06.000+01:00');
+            await dh.calculateEnergy(1000, sv2);
+            //console.log(sv2, device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_power.acc')).to.be.closeTo(1.018333, 0.000001);
+            expect(device.getCapabilityValue('meter_power.year')).to.be.closeTo(1.018333, 0.000001);
+        });
+        it('Check calculateEnergy 2', async function () {
+            const device = new HomeyDevice();
+            device.setSettings({
+                resetEnergyDaily: true
+            })
+            const dh = new DeviceHandler(device);
+            const sv0 = await dh.startOfValues('2021-12-31T23:00:00.000+01:00');
+            const sv1 = await dh.startOfValues('2022-01-01T00:00:00.000+01:00');
+            await dh.calculateEnergy(1234, sv1);
+            //console.log(sv1, device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_power.acc')).to.be.closeTo(0, 0.000001);
+            expect(device.getCapabilityValue('meter_power.year')).to.be.closeTo(0, 0.000001);
+            const sv2 = await dh.startOfValues('2022-01-01T01:01:06.000+01:00');
+            await dh.calculateEnergy(3456, sv2);
+            //console.log(sv2, device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_power.acc')).to.be.closeTo(3.51936, 0.000001);
+            expect(device.getCapabilityValue('meter_power.year')).to.be.closeTo(3.51936, 0.000001);
+        });
+        it('Check calculateEnergy 3 ', async function () {
+            const device = new HomeyDevice();
+            device.setSettings({
+                resetEnergyDaily: false
+            })
+            const dh = new DeviceHandler(device);
+            const sv0 = await dh.startOfValues('2021-12-31T23:00:00.000+01:00');
+            const sv1 = await dh.startOfValues('2022-01-01T00:00:00.000+01:00');
+            await dh.calculateEnergy(1234, sv1);
+            //console.log(sv1, device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_power.acc')).to.be.closeTo(1.234, 0.000001);
+            expect(device.getCapabilityValue('meter_power.year')).to.be.closeTo(0, 0.000001);
+            const sv2 = await dh.startOfValues('2022-01-01T01:01:06.000+01:00');
+            await dh.calculateEnergy(3456, sv2);
+            //console.log(sv2, device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_power.acc')).to.be.closeTo(4.75336, 0.000001);
+            expect(device.getCapabilityValue('meter_power.year')).to.be.closeTo(3.51936, 0.000001);
         });
     });
 

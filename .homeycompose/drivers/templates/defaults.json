@@ -26,7 +26,9 @@
     "meter_cost_year",
     "meter_grid_year",
     "meter_consumption",
-    "meter_price_sum"
+    "meter_price_sum",
+    "meter_power.acc",
+    "meter_power.year"
   ],
   "capabilitiesOptions": {
     "meter_price_incl": {
@@ -40,6 +42,18 @@
     },
     "meter_price_sum": {
       "decimals": 5
+    },
+    "meter_power.acc": {
+      "title": {
+        "en": "Energy",
+        "no": "Energi"
+      }
+    },
+    "meter_power.year": {
+      "title": {
+        "en": "Energy this year",
+        "no": "Energi dette året"
+      }
     }
   },
   "pair": [

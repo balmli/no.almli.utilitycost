@@ -121,6 +121,10 @@
       {
         "id": "priceDecimals",
         "$extends": "priceDecimals"
+      },
+      {
+        "id": "resetEnergyDaily",
+        "$extends": "resetEnergyDaily"
       }
     ]
   }
