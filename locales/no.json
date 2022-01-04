@@ -3,6 +3,8 @@
   "nameDevice": "Strømregning Enhet",
   "errors": {
     "invalid_cost_formula": "Ugyldig formel for strømpris",
-    "invalid_cost_formula_msg": "Ugyldig formel for strømpris: __message__"
+    "invalid_cost_formula_msg": "Ugyldig formel for strømpris: __message__",
+    "invalid_cost_formula_fixed_amount": "Ugyldig formel for månedlig fastbeløp for strøm",
+    "invalid_cost_formula_fixed_amount_msg": "Ugyldig formel for månedlig fastbeløp for strøm: __message__"
   }
 }

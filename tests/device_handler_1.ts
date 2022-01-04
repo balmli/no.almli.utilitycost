@@ -91,6 +91,66 @@ describe('Devices', function () {
         });
     });
 
+    describe('Check evaluateFixedAmount', function () {
+        it('Check evaluateFixedAmount 1', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.evaluateFixedAmount('1+2');
+            expect(response).eq(3);
+        });
+        it('Check evaluateFixedAmount - fails', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            try {
+                const response = dh.evaluateFixedAmount('XXX * 1.25 + 0.0299', 1.23);
+            } catch (err: any) {
+                expect(err.message).eq('Wrong character for function at position 3');
+            }
+        });
+        it('Check evaluateFixedAmount - a function', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.evaluateFixedAmount('min(1,2)');
+            expect(response).eq(1);
+        });
+        it('Check evaluateFixedAmount - monthly hours - 1', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.evaluateFixedAmount('0.02 * MONTHLY_HOURS', '2022-01-01T00:01:00.000+01:00');
+            expect(response).to.be.closeTo(14.88, 0.0001);
+        });
+        it('Check evaluateFixedAmount - monthly hours - 2', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.evaluateFixedAmount('0.02 * MONTHLY_HOURS',  '2022-02-05T00:01:00.000+01:00');
+            expect(response).to.be.closeTo(13.44, 0.0001);
+        });
+    });
+
+    describe('Check validateCostFormulaFixedAmount', function () {
+        it('Check validateCostFormulaFixedAmount 1', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.validateCostFormulaFixedAmount('1+2');
+            expect(response).eq(true);
+        });
+        it('Check validateCostFormulaFixedAmount 2', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const response = dh.validateCostFormulaFixedAmount('MONTHLY_HOURS * 2.05');
+            expect(response).eq(true);
+        });
+        it('Check validateCostFormulaFixedAmount 3', function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            try {
+                dh.validateCostFormulaFixedAmount('xxx * 1.25 + 0.0299');
+            } catch (err: any) {
+                expect(err.message).eq('errors.invalid_cost_formula_fixed_amount_msg');
+            }
+        });
+    });
+
     describe('Check roundPrice', function () {
         it('Check roundPrice 1', function () {
             const device = new HomeyDevice();
@@ -266,6 +326,12 @@ describe('Devices', function () {
             expect(sv2.newMonth).eq(true);
             expect(sv2.newYear).eq(true);
         });
+        it('Check startOfValues 4', async function () {
+            const device = new HomeyDevice();
+            const dh = new DeviceHandler(device);
+            const sv1 = await dh.startOfValues('2021-12-31T23:59:00+01:00');
+            expect(sv1.now.format()).eq('2021-12-31T23:59:00+01:00');
+        });
     });
 
 
@@ -389,6 +455,91 @@ describe('Devices', function () {
             expect(device.getCapabilityValue('meter_sum_year')).to.be.closeTo(10, 0.00001);
             expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(2000);
 
+        });
+        it('Check updateConsumption 3', async function () {
+            const device = new HomeyDevice();
+            device.setSettings({
+                priceCalcMethod: 'nordpool_spot',
+                costFormula: 'PRICE_NORDPOOL * 1.25 + 0.0299',
+                costFormulaFixedAmount: '39',
+                gridFixedAmount: 2050,
+                gridConsumption: 0.4123,
+                gridNewRegime: false,
+                resetEnergyDaily: true,
+
+            });
+            const dh = new DeviceHandler(device, {
+                addFixedUtilityCosts: true,
+                addCapabilityCosts: true
+            });
+
+            await dh.spotPriceCalculation(1.1234);
+            await dh.gridPriceCalculation('2022-01-01T00:00:00+01:00')
+
+            expect(device.getCapabilityValue('meter_price_incl')).eq(1.43415);
+            expect(device.getCapabilityValue('meter_gridprice_incl')).eq(0.4123);
+            expect(device.getCapabilityValue('meter_price_sum')).eq(1.84645);
+
+            await dh.updateConsumption(0, '2021-12-31T23:59:00+01:00');
+
+            await dh.updateConsumption(0, '2022-01-01T00:00:00+01:00');
+            expect(device.getCapabilityValue('meter_cost_today')).to.be.closeTo(0*1.43415 + 39/31, 0.00001);
+
+            await dh.updateConsumption(1000, '2022-01-01T01:00:00+01:00');
+            //console.log(device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_consumption')).eq(1000);
+            expect(device.getCapabilityValue('meter_power.acc')).eq(1);
+            expect(device.getCapabilityValue('meter_power.year')).eq(1);
+            expect(device.getCapabilityValue('meter_cost_today')).to.be.closeTo(1.43415 + 39/31, 0.00001);
+            expect(device.getCapabilityValue('meter_cost_yesterday')).eq(0);
+            expect(device.getCapabilityValue('meter_cost_month')).to.be.closeTo(1.43415 + 39/31, 0.00001);
+            expect(device.getCapabilityValue('meter_cost_lastmonth')).eq(0);
+            expect(device.getCapabilityValue('meter_cost_year')).to.be.closeTo(1.43415 + 39/31, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_today')).to.be.closeTo(0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_yesterday')).eq(0);
+            expect(device.getCapabilityValue('meter_grid_month')).to.be.closeTo(0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_lastmonth')).eq(0);
+            expect(device.getCapabilityValue('meter_grid_year')).to.be.closeTo(0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_consumption_hour')).eq(1000);
+            expect(device.getCapabilityValue('meter_sum_current')).eq(1.84645);
+            expect(device.getCapabilityValue('meter_sum_day')).to.be.closeTo(1.43415 + 39/31 + 0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_sum_month')).to.be.closeTo(1.43415 + 39/31 + 0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_sum_year')).to.be.closeTo(1.43415 + 39/31 + 0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(1000);
+
+            await dh.updateConsumption(2000, '2022-01-01T23:00:00+01:00');
+            expect(device.getCapabilityValue('meter_cost_today')).to.be.closeTo((1 + 2*22)*1.43415 + 39/31, 0.00001);
+
+            await dh.updateConsumption(2000, '2022-01-01T23:59:59+01:00');
+            expect(device.getCapabilityValue('meter_cost_today')).to.be.closeTo((1 + 2*23)*1.43415 + 39/31, 0.001);
+
+            await dh.updateConsumption(2000, '2022-01-02T00:00:00+01:00');
+            expect(device.getCapabilityValue('meter_cost_today')).to.be.closeTo(0*1.43415 + 39/31, 0.00001);
+            expect(device.getCapabilityValue('meter_cost_month')).to.be.closeTo((1 + 2*23)*1.43415 + 2*39/31, 0.001);
+            //expect(device.getCapabilityValue('meter_grid_today')).to.be.closeTo(4*0.4123 + 2050/365, 0.00001);
+            //expect(device.getCapabilityValue('meter_grid_month')).to.be.closeTo((1 + 2*23 + 2)*0.4123 + 2*2050/365, 0.00001); // TODO
+
+            await dh.updateConsumption(2000, '2022-01-02T02:00:00+01:00');
+            //console.log(device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_consumption')).eq(2000);
+            expect(device.getCapabilityValue('meter_power.acc')).eq(4);
+            expect(device.getCapabilityValue('meter_power.year')).eq(51);
+            expect(device.getCapabilityValue('meter_cost_today')).to.be.closeTo(4*1.43415 + 39/31, 0.00001);
+            expect(device.getCapabilityValue('meter_cost_yesterday')).to.be.closeTo((1 + 2*23)*1.43415 + 39/31, 0.00001);
+            expect(device.getCapabilityValue('meter_cost_month')).to.be.closeTo((1 + 2*23 + 4)*1.43415 + 2*39/31, 0.001);
+            expect(device.getCapabilityValue('meter_cost_lastmonth')).eq(0);
+            expect(device.getCapabilityValue('meter_cost_year')).to.be.closeTo((1 + 2*23 + 4)*1.43415 + 2*39/31, 0.001);
+            expect(device.getCapabilityValue('meter_grid_today')).to.be.closeTo(4*0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_yesterday')).to.be.closeTo((1 + 2*23)*0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_month')).to.be.closeTo((1 + 2*23 + 4)*0.4123 + 2*2050/365, 0.001);
+            expect(device.getCapabilityValue('meter_grid_lastmonth')).to.be.closeTo(0, 0.00001);
+            expect(device.getCapabilityValue('meter_grid_year')).to.be.closeTo((1 + 2*23 + 4)*0.4123 + 2*2050/365, 0.001);
+            expect(device.getCapabilityValue('meter_consumption_hour')).eq(2000);
+            expect(device.getCapabilityValue('meter_sum_current')).eq((1.43415 + 0.4123) * 2);
+            expect(device.getCapabilityValue('meter_sum_day')).to.be.closeTo(4*1.43415 + 39/31 + 4*0.4123 + 2050/365, 0.00001);
+            expect(device.getCapabilityValue('meter_sum_month')).to.be.closeTo((1 + 2*23 + 4)*1.43415 + 2*39/31 + (1 + 2*23 + 4)*0.4123 + 2*2050/365, 0.01);
+            expect(device.getCapabilityValue('meter_sum_year')).to.be.closeTo((1 + 2*23 + 4)*1.43415 + 2*39/31 + (1 + 2*23 + 4)*0.4123 + 2*2050/365, 0.01);
+            expect(device.getCapabilityValue('meter_consumption_maxmonth')).to.be.closeTo(3999.444444, 0.00001);
         });
     });
 
@@ -645,6 +796,29 @@ describe('Devices', function () {
             expect(device.getCapabilityValue('meter_sum_day')).eq(150);
             expect(device.getCapabilityValue('meter_sum_month')).eq(260);
             expect(device.getCapabilityValue('meter_sum_year')).eq(370);
+        });
+    });
+
+    describe('Check getUtilityFixedAmountPerDay', function () {
+        it('Check getUtilityFixedAmountPerDay 1', async function () {
+            const device = new HomeyDevice();
+            device.setSettings({
+                costFormulaFixedAmount: '39'
+            });
+            const dh = new DeviceHandler(device);
+            const sv = await dh.startOfValues('2022-04-01T00:00:00+01:00');
+
+            expect(dh.getUtilityFixedAmountPerDay(sv)).to.be.closeTo(1.3, 0.000001);
+        });
+        it('Check getUtilityFixedAmountPerDay 2', async function () {
+            const device = new HomeyDevice();
+            device.setSettings({
+                costFormulaFixedAmount: '0.02 * MONTHLY_HOURS'
+            });
+            const dh = new DeviceHandler(device);
+            const sv = await dh.startOfValues('2022-04-01T00:00:00+01:00');
+
+            expect(dh.getUtilityFixedAmountPerDay(sv)).to.be.closeTo(0.48, 0.000001);
         });
     });
 

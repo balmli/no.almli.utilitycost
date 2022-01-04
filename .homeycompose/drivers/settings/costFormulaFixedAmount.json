@@ -1,0 +1,13 @@
+{
+  "id": "costFormulaFixedAmount",
+  "type": "text",
+  "label": {
+    "en": "Fixed monthly utility cost",
+    "no": "Månedlig fastbeløp for strøm"
+  },
+  "value": "0",
+  "hint": {
+    "en": "Formula to calculate the fixed monthly utility cost incl. taxes, which is independent of consumption. In NOK/month. ",
+    "no": "Formel for å beregne månedlig fastbeløp for strøm inkl. mva, som uavhengig av forbruk. I kr/mnd. "
+  }
+}

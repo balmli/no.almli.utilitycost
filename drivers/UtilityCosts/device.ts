@@ -76,6 +76,9 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         if (changedKeys.includes('costFormula')) {
             this._dh.validateCostFormula(newSettings.costFormula);
         }
+        if (changedKeys.includes('costFormulaFixedAmount')) {
+            this._dh.validateCostFormulaFixedAmount(newSettings.costFormulaFixedAmount);
+        }
         if (changedKeys.includes('priceArea')) {
             this._lastFetchData = undefined;
         }

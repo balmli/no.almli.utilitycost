@@ -1,7 +1,7 @@
 {
   "id": "UtilityCostsDevice",
   "name": {
-    "en": "Norwegian Utility Bill Device",
+    "en": "Utility Bill Device",
     "no": "Strømregning Enhet"
   },
   "$extends": [

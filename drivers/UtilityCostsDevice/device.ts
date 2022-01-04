@@ -9,6 +9,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     async onInit(): Promise<void> {
         super.onInit();
         this._dh.setOptions({
+            addFixedUtilityCosts: false,
             addCapabilityCosts: false
         });
         await this.migrate();

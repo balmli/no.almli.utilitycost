@@ -2,8 +2,8 @@
   {
     "type": "group",
     "label": {
-      "en": "Utility price",
-      "no": "Strømpris"
+      "en": "Utility costs",
+      "no": "Strømkostnader"
     },
     "children": [
       {
@@ -17,6 +17,10 @@
       {
         "id": "costFormula",
         "$extends": "costFormula"
+      },
+      {
+        "id": "costFormulaFixedAmount",
+        "$extends": "costFormulaFixedAmount"
       }
     ]
   },

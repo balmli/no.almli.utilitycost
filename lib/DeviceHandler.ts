@@ -6,6 +6,7 @@ export class DeviceSettings {
     priceCalcMethod!: string;
     priceArea!: string;
     costFormula!: string;
+    costFormulaFixedAmount!: string;
 
     gridFixedAmount!: number;
     gridConsumption!: number;
@@ -45,10 +46,12 @@ export class StartValues {
 }
 
 export class DeviceHandlerOptions {
+    addFixedUtilityCosts?: boolean;
     addCapabilityCosts?: boolean;
 }
 
 const defaultOptions: DeviceHandlerOptions = {
+    addFixedUtilityCosts: true,
     addCapabilityCosts: true,
 }
 
@@ -57,8 +60,10 @@ export class DeviceHandler {
     private device: any;
     private options: DeviceHandlerOptions;
     private settings!: DeviceSettings;
+    private debug: boolean;
 
     constructor(homeyDevice: any, options?: DeviceHandlerOptions) {
+        this.debug = false;
         this.device = homeyDevice;
         this.options = options ? options : defaultOptions;
         const settings = this.device.getSettings();
@@ -66,6 +71,10 @@ export class DeviceHandler {
             ...settings
         };
         this.setSettings(ds);
+    }
+
+    setDebug(debug: boolean) {
+        this.debug = debug;
     }
 
     setOptions(options: DeviceHandlerOptions): void {
@@ -107,6 +116,31 @@ export class DeviceHandler {
                 throw new Error(this.device.homey.__('errors.invalid_cost_formula_msg', {message: err.message}));
             } else {
                 throw new Error(this.device.homey.__('errors.invalid_cost_formula'));
+            }
+        }
+    }
+
+    evaluateFixedAmount(str: string, aDate?: any) {
+        const momentNow = aDate ? moment(aDate) : moment();
+        const monthStart = momentNow.startOf('month');
+        const monthEnd = moment(momentNow).startOf('month').add(1, 'month');
+        const numHoursInMonth = monthEnd.diff(monthStart, 'days') * 24;
+
+        const str3 = str.replace(/MONTHLY_HOURS/g, `${numHoursInMonth}`);
+        const parser = new Formula(str3);
+        return parser.evaluate();
+    }
+
+    validateCostFormulaFixedAmount(costFormulaFixedAmount: string): boolean {
+        try {
+            const test = this.evaluateFixedAmount(costFormulaFixedAmount);
+            this.device.logger.info(`Formula validated OK => ${costFormulaFixedAmount}`);
+            return true;
+        } catch (err: any) {
+            if (err.message) {
+                throw new Error(this.device.homey.__('errors.invalid_cost_formula_fixed_amount_msg', {message: err.message}));
+            } else {
+                throw new Error(this.device.homey.__('errors.invalid_cost_formula_fixed_amount'));
             }
         }
     }
@@ -196,10 +230,11 @@ export class DeviceHandler {
     async startOfValues(aDate: any): Promise<StartValues> {
         const now = moment(aDate);
         const thisUpdate = now.valueOf();
-        const startOfHour = now.startOf('hour').valueOf();
-        const startOfDay = now.startOf('day').valueOf();
-        const startOfMonth = now.startOf('month').valueOf();
-        const startOfYear = now.startOf('year').valueOf();
+
+        const startOfHour = moment(thisUpdate).startOf('hour').valueOf();
+        const startOfDay = moment(thisUpdate).startOf('day').valueOf();
+        const startOfMonth = moment(thisUpdate).startOf('month').valueOf();
+        const startOfYear = moment(thisUpdate).startOf('year').valueOf();
 
         const lastUpdate = this.device.getStoreValue('lastConsumptionUpdate');
         await this.device.setStoreValue('lastConsumptionUpdate', thisUpdate);
@@ -273,8 +308,10 @@ export class DeviceHandler {
         try {
             const price = this.device.getCapabilityValue(`meter_price_incl`) || 0;
 
+            const utilityFixedAmount = newDay ? this.getUtilityFixedAmountPerDay(startValues) : 0;
+
             const costToday = newDay ?
-                consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price
+                consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price + utilityFixedAmount
                 : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price;
 
             const costYesterday = newDay ?
@@ -283,32 +320,37 @@ export class DeviceHandler {
 
             const sumCostToday = this.device.getCapabilityValue(`meter_cost_today`) || 0;
             const newCostToday = newDay ? costToday : costToday + sumCostToday;
-            if (newCostToday !== undefined) {
-                await this.device.setCapabilityValue(`meter_cost_today`, newCostToday);
-            }
+            await this.device.setCapabilityValue(`meter_cost_today`, newCostToday);
 
-            const newCostYesterday = newDay ? sumCostToday + costYesterday : undefined;
-            if (newCostYesterday !== undefined) {
-                await this.device.setCapabilityValue(`meter_cost_yesterday`, newCostYesterday);
+            if (newDay) {
+                await this.device.setCapabilityValue(`meter_cost_yesterday`, sumCostToday + costYesterday);
             }
 
             const sumCostMonth = this.device.getCapabilityValue(`meter_cost_month`) || 0;
             const newCostMonth = newMonth ? costToday : costToday + sumCostMonth;
-            if (newCostMonth !== undefined) {
-                await this.device.setCapabilityValue(`meter_cost_month`, newCostMonth);
-            }
+            await this.device.setCapabilityValue(`meter_cost_month`, newCostMonth);
 
-            const newCostLastMonth = newMonth ? sumCostMonth + costYesterday : undefined;
-            if (newCostLastMonth !== undefined) {
-                await this.device.setCapabilityValue(`meter_cost_lastmonth`, newCostLastMonth);
+            if (newMonth) {
+                await this.device.setCapabilityValue(`meter_cost_lastmonth`, sumCostMonth + costYesterday);
             }
 
             const sumCostYear = this.device.getCapabilityValue(`meter_cost_year`) || 0;
             const newCostYear = newYear ? costToday : costToday + sumCostYear;
-            if (newCostYear !== undefined) {
-                await this.device.setCapabilityValue(`meter_cost_year`, newCostYear);
-            }
+            await this.device.setCapabilityValue(`meter_cost_year`, newCostYear);
 
+            if (this.debug) {
+                console.log(
+                    consumption,
+                    startValues,
+                    '\ntoday: ',
+                    costToday,
+                    sumCostToday,
+                    newCostToday,
+                    '\ncost month: ',
+                    sumCostMonth,
+                    newCostMonth
+                );
+            }
             this.device.logger.debug(`Utility calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday},  (this month: ${sumCostMonth})`, this.device.getCapabilityValue(`meter_cost_today`));
         } catch (err) {
             this.device.logger.error('calculateUtilityCost failed: ', err);
@@ -432,10 +474,29 @@ export class DeviceHandler {
         }
     }
 
+    getUtilityFixedAmountPerDay(startValues: StartValues): number {
+        const costFormulaFixedAmount = this.settings.costFormulaFixedAmount;
+        try {
+            if (this.options.addFixedUtilityCosts !== true) {
+                return 0;
+            }
+
+            const monthlyCost = this.evaluateFixedAmount(costFormulaFixedAmount, startValues.now);
+            const monthStart = moment(startValues.now).startOf('month');
+            const monthEnd = moment(startValues.now).startOf('month').add(1, 'month');
+            const numDaysInMonth = monthEnd.diff(monthStart, 'days');
+
+            return monthlyCost / numDaysInMonth;
+        } catch (err) {
+            this.device.logger.error(`getUtilityFixedAmountPerDay failed: "${costFormulaFixedAmount}"`, err);
+        }
+        return 0;
+    }
+
     getGridFixedAmountPerDay(startValues: StartValues): number {
         try {
             if (this.settings.gridNewRegime ||
-                this.options.addCapabilityCosts === false) {
+                this.options.addCapabilityCosts !== true) {
                 return 0;
             }
             const yearStart = moment(startValues.now).startOf('year');
@@ -451,7 +512,7 @@ export class DeviceHandler {
     getGridCapacityAddedCost(consumption: number, startValues: StartValues): number {
         try {
             if (!this.settings.gridNewRegime ||
-                this.options.addCapabilityCosts === false) {
+                this.options.addCapabilityCosts !== true) {
                 return 0;
             }
             const {

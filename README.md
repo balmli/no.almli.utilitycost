@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.1.1
+
+- Added separate formula for fixed monthly utility costs
+
 #### 1.1.0
 
 - Added support for slave devices

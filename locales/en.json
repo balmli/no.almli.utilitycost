@@ -1,8 +1,10 @@
 {
-  "name": "Norwegian Utility Bill",
-  "nameDevice": "Norwegian Utility Bill Device",
+  "name": "Utility Bill",
+  "nameDevice": "Utility Bill Device",
   "errors": {
     "invalid_cost_formula": "Invalid utility price formula",
-    "invalid_cost_formula_msg": "Invalid utility price formula: __message__"
+    "invalid_cost_formula_msg": "Invalid utility price formula: __message__",
+    "invalid_cost_formula_fixed_amount": "Invalid formula for monthly fixed amount",
+    "invalid_cost_formula_fixed_amount_msg": "Invalid formula for monthly fixed amount: __message__"
   }
 }

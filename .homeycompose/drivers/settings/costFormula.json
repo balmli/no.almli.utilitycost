@@ -7,7 +7,7 @@
   },
   "value": "PRICE_NORDPOOL * 1.25 + 0.0299",
   "hint": {
-    "en": "Formula to calculate hourly price. Use PRICE_NORDPOOL for the Nordpool spot price. Use MONTHLY_HOURS for number of hours in a month. ",
-    "no": "Formel for å beregne strømpris inkl. mva og påslag. Bruk PRICE_NORDPOOL for Nordpool spotpris. Bruk MONTHLY_HOURS for antall timer pr. måned. "
+    "en": "Formula to calculate hourly price incl. taxes and surcharges. Use PRICE_NORDPOOL for the Nordpool spot price. Use MONTHLY_HOURS for number of hours in a month. In NOK/kWh. ",
+    "no": "Formel for å beregne strømpris inkl. mva og påslag. Bruk PRICE_NORDPOOL for Nordpool spotpris. Bruk MONTHLY_HOURS for antall timer pr. måned. I kr/kWh. "
   }
 }
