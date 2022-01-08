@@ -1,16 +1,16 @@
 {
   "id": "update_consumption",
   "title": {
-    "en": "Update consumption",
-    "no": "Oppdatér forbruk"
+    "en": "Update consumption (W)",
+    "no": "Oppdatér forbruk (W)"
   },
   "titleFormatted": {
-    "en": "Update consumption with [[consumption]]",
-    "no": "Oppdatér forbruk med [[consumption]]"
+    "en": "Update consumption with [[consumption]] W",
+    "no": "Oppdatér forbruk med [[consumption]] W"
   },
   "hint": {
-    "en": "Update with the consumption from a power meter.",
-    "no": "Oppdatér endring i forbruk fra en forbruksmåler."
+    "en": "Update with the power (W) from a power meter. Use this flow or the 'Update energy with X kWh' action card, but not both. ",
+    "no": "Oppdatér med effekt (W) fra en forbruksmåler. Bruk dette kortet eller 'Oppdatér energi med X kWh', men ikke begge. "
   },
   "highlight": true,
   "args": [
@@ -23,8 +23,8 @@
       "name": "consumption",
       "type": "number",
       "title": {
-        "en": "Consumption (W)",
-        "no": "Forbruk (W)"
+        "en": "Power (W)",
+        "no": "Effekt (W)"
       },
       "placeholder": {
         "en": "Watt",

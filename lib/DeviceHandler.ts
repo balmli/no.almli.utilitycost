@@ -276,6 +276,23 @@ export class DeviceHandler {
         }
     }
 
+    async updateEnergy(energy: number, aDate: any) {
+        const momentNow = moment(aDate);
+        const thisUpdate = momentNow.valueOf();
+
+        const lastUpdate = this.device.getStoreValue('lastConsumptionUpdate');
+        const lastEnergy = this.device.getCapabilityValue('meter_energy');
+        await this.device.setCapabilityValue('meter_energy', energy);
+
+        if (lastEnergy === undefined || lastEnergy === null || !lastUpdate) {
+            await this.device.setStoreValue('lastConsumptionUpdate', thisUpdate);
+            return;
+        }
+
+        const consumption = (energy - lastEnergy) * 1000 * 3600000 / (thisUpdate - lastUpdate);
+        await this.updateConsumption(consumption, aDate);
+    }
+
     async calculateEnergy(consumption: number, startValues: StartValues): Promise<void> {
         const {thisUpdate, lastUpdate, startOfDay, startOfYear, newDay, newYear} = startValues;
         if (!lastUpdate) {

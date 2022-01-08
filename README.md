@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.2.0
+
+- Added action card 'Update energy with X kWh' to update with energy (kWh) instead of power (W)
+
 #### 1.1.1
 
 - Added separate formula for fixed monthly utility costs

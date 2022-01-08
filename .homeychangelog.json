@@ -1,4 +1,8 @@
 {
+  "1.2.0": {
+    "en": "Added action card 'Update energy with X kWh' to update with energy (kWh) instead of power (W). ",
+    "no": "La inn kort 'Oppdatér energi med X kWh' for å oppdatere med energi (kWh) i stedet for effekt (W). "
+  },
   "1.1.1": {
     "en": "Added support for slave devices. Added action cards to update settings. Added 'MONTHLY_HOURS' tag that can be used in the utility price formula. Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities. Added action card to reset the 'Energy' (kWh) capability. Added action card to reset all accumulated capabilities. Added separate formula for fixed monthly utility costs.",
     "no": "La inn støtte for slave-enheter. Lagt til kort for å oppdatere innstillinger. La til 'MONTHLY_HOURS' tagg som kan brukes i strømpris-formel. La inn felt for 'Energi' (kWh) og 'Energi dette året' (kWh). Lagt til kort for å nullstille energimåler. Lagt til kort for å nullstille alle akkumulerte verdier. La inn egen formel for månedlig fastbeløp for strøm. "

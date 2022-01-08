@@ -25,6 +25,9 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             if (!this.hasCapability('meter_power.year')) {
                 await this.addCapability('meter_power.year');
             }
+            if (!this.hasCapability('meter_energy')) {
+                await this.addCapability('meter_energy');
+            }
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);
@@ -75,6 +78,12 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         this.logger.debug(`New consumption: ${consumption}`);
         this.updateSettings();
         await this._dh.updateConsumption(consumption, moment());
+    }
+
+    async onUpdateEnergy(energy: number) {
+        this.logger.debug(`New energy: ${energy}`);
+        this.updateSettings();
+        await this._dh.updateEnergy(energy, moment());
     }
 
     updateSettings(): void {
