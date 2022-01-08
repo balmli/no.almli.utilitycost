@@ -63,7 +63,9 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
 
                 const localTime = moment();
                 await this._dh.gridPriceCalculation(localTime);
-                await this._dh.updateConsumption(undefined, localTime);
+                if (this.getStoreValue('consumptionMinute')) {
+                    await this._dh.updateConsumption(undefined, localTime);
+                }
             } else {
                 this.logger.warn(`Unable to calculate: no master device`);
             }
@@ -77,12 +79,14 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     async onUpdateConsumption(consumption: number) {
         this.logger.debug(`New consumption: ${consumption}`);
         this.updateSettings();
+        this.setStoreValue('consumptionMinute', true);
         await this._dh.updateConsumption(consumption, moment());
     }
 
     async onUpdateEnergy(energy: number) {
         this.logger.debug(`New energy: ${energy}`);
         this.updateSettings();
+        this.setStoreValue('consumptionMinute', false);
         await this._dh.updateEnergy(energy, moment());
     }
 

@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.2.1
+
+- Small fix for action card 'Update energy with X kWh'
+
 #### 1.2.0
 
 - Added action card 'Update energy with X kWh' to update with energy (kWh) instead of power (W)

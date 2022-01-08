@@ -115,7 +115,9 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             }
             const localTime = moment();
             await this._dh.gridPriceCalculation(localTime);
-            await this._dh.updateConsumption(undefined, localTime);
+            if (this.getStoreValue('consumptionMinute')) {
+                await this._dh.updateConsumption(undefined, localTime);
+            }
         } catch (err) {
             this.logger.error(err);
         } finally {
@@ -172,11 +174,13 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
 
     async onUpdateConsumption(consumption: number) {
         this.logger.debug(`New consumption: ${consumption}`);
+        this.setStoreValue('consumptionMinute', true);
         await this._dh.updateConsumption(consumption, moment());
     }
 
     async onUpdateEnergy(energy: number) {
         this.logger.debug(`New energy: ${energy}`);
+        this.setStoreValue('consumptionMinute', false);
         await this._dh.updateEnergy(energy, moment());
     }
 
