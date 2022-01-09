@@ -397,31 +397,23 @@ export class DeviceHandler {
 
             const sumCostToday = this.device.getCapabilityValue(`meter_grid_today`) || 0;
             const newCostToday = newDay ? costToday : costToday + sumCostToday;
-            if (newCostToday !== undefined) {
-                await this.device.setCapabilityValue(`meter_grid_today`, newCostToday);
-            }
+            await this.device.setCapabilityValue(`meter_grid_today`, newCostToday);
 
-            const newCostYesterday = newDay ? sumCostToday + costYesterday : undefined;
-            if (newCostYesterday !== undefined) {
-                await this.device.setCapabilityValue(`meter_grid_yesterday`, newCostYesterday);
+            if (newDay) {
+                await this.device.setCapabilityValue(`meter_grid_yesterday`, sumCostToday + costYesterday);
             }
 
             const sumCostMonth = this.device.getCapabilityValue(`meter_grid_month`) || 0;
             const newCostMonth = newMonth ? costToday : costToday + sumCostMonth;
-            if (newCostMonth !== undefined) {
-                await this.device.setCapabilityValue(`meter_grid_month`, newCostMonth);
-            }
+            await this.device.setCapabilityValue(`meter_grid_month`, newCostMonth);
 
-            const newCostLastMonth = newMonth ? sumCostMonth + costYesterday : undefined;
-            if (newCostLastMonth !== undefined) {
-                await this.device.setCapabilityValue(`meter_grid_lastmonth`, newCostLastMonth);
+            if (newMonth) {
+                await this.device.setCapabilityValue(`meter_grid_lastmonth`, sumCostMonth + costYesterday);
             }
 
             const sumCostYear = this.device.getCapabilityValue(`meter_grid_year`) || 0;
             const newCostYear = newYear ? costToday : costToday + sumCostYear;
-            if (newCostYear !== undefined) {
-                await this.device.setCapabilityValue(`meter_grid_year`, newCostYear);
-            }
+            await this.device.setCapabilityValue(`meter_grid_year`, newCostYear);
 
             this.device.logger.debug(`Grid calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday}`);
         } catch (err) {
