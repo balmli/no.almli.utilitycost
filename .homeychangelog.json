@@ -1,4 +1,8 @@
 {
+  "1.2.2": {
+    "en": "Avoid concurrency issues. Ignore extreme power values. ",
+    "no": "Unngå feil ved samtidige hendelser. Unngå feil ved ekstreme verdier for effekt. "
+  },
   "1.2.1": {
     "en": "Added action card 'Update energy with X kWh' to update with energy (kWh) instead of power (W). ",
     "no": "La inn kort 'Oppdatér energi med X kWh' for å oppdatere med energi (kWh) i stedet for effekt (W). "

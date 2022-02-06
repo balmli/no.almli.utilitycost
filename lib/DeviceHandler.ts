@@ -1,6 +1,7 @@
 import moment from "./moment-timezone-with-data";
 
 const Formula = require('fparser');
+const { default: PQueue } = require('p-queue');
 
 export class DeviceSettings {
     priceCalcMethod!: string;
@@ -55,17 +56,22 @@ const defaultOptions: DeviceHandlerOptions = {
     addCapabilityCosts: true,
 }
 
+const MAX_VALID_POWER = 100_000;
+
 export class DeviceHandler {
 
     private device: any;
     private options: DeviceHandlerOptions;
     private settings!: DeviceSettings;
     private debug: boolean;
+    private commandQueue: any;
+
 
     constructor(homeyDevice: any, options?: DeviceHandlerOptions) {
         this.debug = false;
         this.device = homeyDevice;
         this.options = options ? options : defaultOptions;
+        this.commandQueue = new PQueue({ concurrency: 1 });
         const settings = this.device.getSettings();
         const ds: DeviceSettings = {
             ...settings
@@ -260,37 +266,44 @@ export class DeviceHandler {
     }
 
     async updateConsumption(consumption: number | undefined, aDate: any) {
-        const momentNow = moment(aDate);
-        const startOfValues = await this.startOfValues(momentNow);
-        if (consumption === undefined) {
-            consumption = this.device.getCapabilityValue('meter_consumption');
-        } else {
-            await this.device.setCapabilityValue('meter_consumption', consumption);
-        }
-        if (consumption !== undefined && consumption !== null && startOfValues.lastUpdate) {
-            await this.calculateEnergy(consumption, startOfValues);
-            await this.calculateUtilityCost(consumption, startOfValues);
-            await this.calculateGridCost(consumption, startOfValues);
-            await this.calculateMaxConsumptionHour(consumption, startOfValues);
-            await this.calculateSumCost(consumption);
-        }
+        return this.commandQueue.add(async () => {
+            if (!!consumption && consumption > MAX_VALID_POWER) {
+                return;
+            }
+            const momentNow = moment(aDate);
+            const startOfValues = await this.startOfValues(momentNow);
+            if (consumption === undefined) {
+                consumption = this.device.getCapabilityValue('meter_consumption');
+            } else {
+                await this.device.setCapabilityValue('meter_consumption', consumption);
+            }
+            if (consumption !== undefined && consumption !== null && startOfValues.lastUpdate) {
+                await this.calculateEnergy(consumption, startOfValues);
+                await this.calculateUtilityCost(consumption, startOfValues);
+                await this.calculateGridCost(consumption, startOfValues);
+                await this.calculateMaxConsumptionHour(consumption, startOfValues);
+                await this.calculateSumCost(consumption);
+            }
+        });
     }
 
     async updateEnergy(energy: number, aDate: any) {
-        const momentNow = moment(aDate);
-        const thisUpdate = momentNow.valueOf();
+        return this.commandQueue.add(async () => {
+            const momentNow = moment(aDate);
+            const thisUpdate = momentNow.valueOf();
 
-        const lastUpdate = this.device.getStoreValue('lastConsumptionUpdate');
-        const lastEnergy = this.device.getCapabilityValue('meter_energy');
-        await this.device.setCapabilityValue('meter_energy', energy);
+            const lastUpdate = this.device.getStoreValue('lastConsumptionUpdate');
+            const lastEnergy = this.device.getCapabilityValue('meter_energy');
+            await this.device.setCapabilityValue('meter_energy', energy);
 
-        if (lastEnergy === undefined || lastEnergy === null || !lastUpdate) {
-            await this.device.setStoreValue('lastConsumptionUpdate', thisUpdate);
-            return;
-        }
+            if (lastEnergy === undefined || lastEnergy === null || !lastUpdate) {
+                await this.device.setStoreValue('lastConsumptionUpdate', thisUpdate);
+                return;
+            }
 
-        const consumption = (energy - lastEnergy) * 1000 * 3600000 / (thisUpdate - lastUpdate);
-        await this.updateConsumption(consumption, aDate);
+            const consumption = (energy - lastEnergy) * 1000 * 3600000 / (thisUpdate - lastUpdate);
+            await this.updateConsumption(consumption, aDate);
+        });
     }
 
     async calculateEnergy(consumption: number, startValues: StartValues): Promise<void> {

@@ -15,6 +15,11 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.2.2
+
+- Avoid concurrency issues
+- Ignore extreme power values
+
 #### 1.2.1
 
 - Small fix for action card 'Update energy with X kWh'
