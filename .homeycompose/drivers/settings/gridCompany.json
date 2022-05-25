@@ -1,0 +1,50 @@
+{
+  "id": "gridCompany",
+  "type": "dropdown",
+  "label": {
+    "en": "Grid company",
+    "no": "Nettselskap"
+  },
+  "value": "not_set",
+  "hint": {
+    "en": "Select grid company for simpler registration of grid capacity and grid energy settings.",
+    "no": "Velg nettselskap for enklere registering av verdier for kapasitetsledd og energiledd."
+  },
+  "values": [
+    {
+      "id": "not_set",
+      "label": {
+        "en": "-",
+        "no": "-"
+      }
+    },
+    {
+      "id": "aenett",
+      "label": {
+        "en": "Agder Energi Nett",
+        "no": "Agder Energi Nett"
+      }
+    },
+    {
+      "id": "bkk",
+      "label": {
+        "en": "BKK Nett AS",
+        "no": "BKK Nett AS"
+      }
+    },
+    {
+      "id": "elvia",
+      "label": {
+        "en": "Elvia",
+        "no": "Elvia"
+      }
+    },
+    {
+      "id": "lnett",
+      "label": {
+        "en": "Lnett",
+        "no": "Lnett"
+      }
+    }
+  ]
+}

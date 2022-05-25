@@ -9,7 +9,7 @@
     "en": "Grid consumption based part per kWh incl. taxes.",
     "no": "Forbruksavhengig del pr. kWh inkl. mva og avgifter."
   },
-  "value": 0.4261,
+  "value": 0.43,
   "min": 0,
   "max": 5,
   "units": {

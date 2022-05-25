@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "no.almli.utilitycost",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -78,27 +78,27 @@
         "highlight": true,
         "title": {
           "en": "New level for grid capacity",
-          "no": "Nytt nivå for kapasitetsledd for nettleie"
+          "no": "Nytt trinn for kapasitetsledd for nettleie"
         },
         "hint": {
           "en": "Triggers when a new level for grid capacity has been reached.",
-          "no": "Dette kortet trigges når man har nådd et nytt nivå for kapasitetsledd for nettleie."
+          "no": "Dette kortet trigges når man har nådd et nytt trinn for kapasitetsledd for nettleie."
         },
         "tokens": [
           {
             "name": "meter_consumption_maxmonth",
             "type": "number",
             "title": {
-              "en": "Max. hourly consumption",
-              "no": "Maks. forbruk for time"
+              "en": "Basis for grid capacity",
+              "no": "Grunnlag for kapasitetsledd"
             }
           },
           {
             "name": "grid_capacity_level",
             "type": "number",
             "title": {
-              "en": "Grid capacity level",
-              "no": "Nivå for kapasitetsledd"
+              "en": "Level for grid capacity",
+              "no": "Trinn for kapasitetsledd"
             }
           }
         ],
@@ -552,8 +552,8 @@
           "no": "Oppdatér innstillinger for nettleie energiledd"
         },
         "titleFormatted": {
-          "en": "Update grid energy settings to [[gridEnergyDay]], [[gridEnergyNight]], [[gridEnergyDaySummer]], [[gridEnergyNightSummer]], [[gridEnergyWinterStart]], [[gridEnergySummerStart]], [[gridEnergyLowWeekends]]",
-          "no": "Oppdatér innstillinger for nettleie energiledd til [[gridEnergyDay]], [[gridEnergyNight]], [[gridEnergyDaySummer]], [[gridEnergyNightSummer]], [[gridEnergyWinterStart]], [[gridEnergySummerStart]], [[gridEnergyLowWeekends]]"
+          "en": "Update grid energy settings to [[gridEnergyDay]], [[gridEnergyNight]], [[gridEnergyLowWeekends]]",
+          "no": "Oppdatér innstillinger for nettleie energiledd til [[gridEnergyDay]], [[gridEnergyNight]], [[gridEnergyLowWeekends]]"
         },
         "hint": {
           "en": "Update grid energy settings.",
@@ -572,8 +572,8 @@
             "min": 0,
             "max": 5,
             "title": {
-              "en": "Day winter",
-              "no": "Dagtid vinter"
+              "en": "Day",
+              "no": "Dagtid"
             },
             "placeholder": {
               "en": "kr/kWh",
@@ -587,233 +587,13 @@
             "min": 0,
             "max": 5,
             "title": {
-              "en": "Night winter",
-              "no": "Natt vinter"
+              "en": "Night and weekends",
+              "no": "Natt og helg"
             },
             "placeholder": {
               "en": "kr/kWh",
               "no": "kr/kWh"
             }
-          },
-          {
-            "name": "gridEnergyDaySummer",
-            "type": "number",
-            "required": false,
-            "min": 0,
-            "max": 5,
-            "title": {
-              "en": "Day summer",
-              "no": "Dagtid sommer"
-            },
-            "placeholder": {
-              "en": "kr/kWh",
-              "no": "kr/kWh"
-            }
-          },
-          {
-            "name": "gridEnergyNightSummer",
-            "type": "number",
-            "required": false,
-            "min": 0,
-            "max": 5,
-            "title": {
-              "en": "Night summer",
-              "no": "Natt sommer"
-            },
-            "placeholder": {
-              "en": "kr/kWh",
-              "no": "kr/kWh"
-            }
-          },
-          {
-            "name": "gridEnergyWinterStart",
-            "type": "dropdown",
-            "required": false,
-            "title": {
-              "en": "Winter period starts",
-              "no": "Vinterperiode starter"
-            },
-            "values": [
-              {
-                "id": "0",
-                "label": {
-                  "en": "January",
-                  "no": "Januar"
-                }
-              },
-              {
-                "id": "1",
-                "label": {
-                  "en": "February",
-                  "no": "Februar"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "March",
-                  "no": "Mars"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "April",
-                  "no": "April"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "May",
-                  "no": "Mai"
-                }
-              },
-              {
-                "id": "5",
-                "label": {
-                  "en": "June",
-                  "no": "Juni"
-                }
-              },
-              {
-                "id": "6",
-                "label": {
-                  "en": "July",
-                  "no": "Juli"
-                }
-              },
-              {
-                "id": "7",
-                "label": {
-                  "en": "August",
-                  "no": "August"
-                }
-              },
-              {
-                "id": "8",
-                "label": {
-                  "en": "September",
-                  "no": "September"
-                }
-              },
-              {
-                "id": "9",
-                "label": {
-                  "en": "October",
-                  "no": "Oktober"
-                }
-              },
-              {
-                "id": "10",
-                "label": {
-                  "en": "November",
-                  "no": "November"
-                }
-              },
-              {
-                "id": "11",
-                "label": {
-                  "en": "December",
-                  "no": "Desember"
-                }
-              }
-            ]
-          },
-          {
-            "name": "gridEnergySummerStart",
-            "type": "dropdown",
-            "required": false,
-            "title": {
-              "en": "Summer period starts",
-              "no": "Sommerperiode starter"
-            },
-            "values": [
-              {
-                "id": "0",
-                "label": {
-                  "en": "January",
-                  "no": "Januar"
-                }
-              },
-              {
-                "id": "1",
-                "label": {
-                  "en": "February",
-                  "no": "Februar"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "March",
-                  "no": "Mars"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "April",
-                  "no": "April"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "May",
-                  "no": "Mai"
-                }
-              },
-              {
-                "id": "5",
-                "label": {
-                  "en": "June",
-                  "no": "Juni"
-                }
-              },
-              {
-                "id": "6",
-                "label": {
-                  "en": "July",
-                  "no": "Juli"
-                }
-              },
-              {
-                "id": "7",
-                "label": {
-                  "en": "August",
-                  "no": "August"
-                }
-              },
-              {
-                "id": "8",
-                "label": {
-                  "en": "September",
-                  "no": "September"
-                }
-              },
-              {
-                "id": "9",
-                "label": {
-                  "en": "October",
-                  "no": "Oktober"
-                }
-              },
-              {
-                "id": "10",
-                "label": {
-                  "en": "November",
-                  "no": "November"
-                }
-              },
-              {
-                "id": "11",
-                "label": {
-                  "en": "December",
-                  "no": "Desember"
-                }
-              }
-            ]
           },
           {
             "name": "gridEnergyLowWeekends",
@@ -839,6 +619,46 @@
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "set_utility_costs_settings",
+        "title": {
+          "en": "Update utility costs settings",
+          "no": "Oppdatér innstillinger for strømkostnader"
+        },
+        "titleFormatted": {
+          "en": "Update utility costs settings to [[costFormula]], [[costFormulaFixedAmount]]",
+          "no": "Oppdatér innstillinger for strømkostnader til [[costFormula]], [[costFormulaFixedAmount]]"
+        },
+        "hint": {
+          "en": "Update utility costs settings.",
+          "no": "Oppdatér innstillinger for strømkostnader."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          },
+          {
+            "name": "costFormula",
+            "type": "text",
+            "required": false,
+            "title": {
+              "en": "Formula for utility price",
+              "no": "Formel for strømpris"
+            }
+          },
+          {
+            "name": "costFormulaFixedAmount",
+            "type": "text",
+            "required": false,
+            "title": {
+              "en": "Fixed monthly utility cost",
+              "no": "Månedlig fastbeløp for strøm"
+            }
           }
         ]
       },
@@ -1146,6 +966,65 @@
         {
           "type": "group",
           "label": {
+            "en": "Grid company",
+            "no": "Nettselskap"
+          },
+          "children": [
+            {
+              "id": "gridCompany",
+              "type": "dropdown",
+              "label": {
+                "en": "Grid company",
+                "no": "Nettselskap"
+              },
+              "value": "not_set",
+              "hint": {
+                "en": "Select grid company for simpler registration of grid capacity and grid energy settings.",
+                "no": "Velg nettselskap for enklere registering av verdier for kapasitetsledd og energiledd."
+              },
+              "values": [
+                {
+                  "id": "not_set",
+                  "label": {
+                    "en": "-",
+                    "no": "-"
+                  }
+                },
+                {
+                  "id": "aenett",
+                  "label": {
+                    "en": "Agder Energi Nett",
+                    "no": "Agder Energi Nett"
+                  }
+                },
+                {
+                  "id": "bkk",
+                  "label": {
+                    "en": "BKK Nett AS",
+                    "no": "BKK Nett AS"
+                  }
+                },
+                {
+                  "id": "elvia",
+                  "label": {
+                    "en": "Elvia",
+                    "no": "Elvia"
+                  }
+                },
+                {
+                  "id": "lnett",
+                  "label": {
+                    "en": "Lnett",
+                    "no": "Lnett"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
             "en": "Grid costs old regime",
             "no": "Nettleie gammelt regime"
           },
@@ -1161,7 +1040,7 @@
                 "en": "Yearly fixed amount existing regime incl. taxes.",
                 "no": "Årlig fastbeløp for nettleie for eksisterende regime inkl. mva og avgifter."
               },
-              "value": 2050,
+              "value": 2875,
               "min": 0,
               "max": 9999,
               "units": {
@@ -1180,7 +1059,7 @@
                 "en": "Grid consumption based part per kWh incl. taxes.",
                 "no": "Forbruksavhengig del pr. kWh inkl. mva og avgifter."
               },
-              "value": 0.4261,
+              "value": 0.43,
               "min": 0,
               "max": 5,
               "units": {
@@ -1221,7 +1100,7 @@
                 "en": "Grid capacity 0 - 2 kW incl. taxes.",
                 "no": "Kapasitetsledd for nettleie 0 - 2 kW inkl. mva og avgifter."
               },
-              "value": 175,
+              "value": 125,
               "min": 0,
               "max": 9999,
               "units": {
@@ -1240,7 +1119,7 @@
                 "en": "Grid capacity 2 - 5 kW incl. taxes.",
                 "no": "Kapasitetsledd for nettleie 2 - 5 kW inkl. mva og avgifter."
               },
-              "value": 175,
+              "value": 206,
               "min": 0,
               "max": 9999,
               "units": {
@@ -1259,7 +1138,7 @@
                 "en": "Grid capacity 5 - 10 kW incl. taxes.",
                 "no": "Kapasitetsledd for nettleie 5 - 10 kW inkl. mva og avgifter."
               },
-              "value": 290,
+              "value": 350,
               "min": 0,
               "max": 9999,
               "units": {
@@ -1278,7 +1157,7 @@
                 "en": "Grid capacity 10 - 15 kW incl. taxes.",
                 "no": "Kapasitetsledd for nettleie 10 - 15 kW inkl. mva og avgifter."
               },
-              "value": 405,
+              "value": 494,
               "min": 0,
               "max": 9999,
               "units": {
@@ -1297,7 +1176,7 @@
                 "en": "Grid capacity 15 - 20 kW incl. taxes.",
                 "no": "Kapasitetsledd for nettleie 15 - 20 kW inkl. mva og avgifter."
               },
-              "value": 520,
+              "value": 638,
               "min": 0,
               "max": 9999,
               "units": {
@@ -1316,13 +1195,42 @@
                 "en": "Grid capacity 20 - 25 kW incl. taxes.",
                 "no": "Kapasitetsledd for nettleie 20 - 25 kW inkl. mva og avgifter."
               },
-              "value": 635,
+              "value": 781,
               "min": 0,
               "max": 9999,
               "units": {
                 "en": "kr/month",
                 "no": "kr/mnd"
               }
+            },
+            {
+              "id": "gridCapacityAverage",
+              "type": "dropdown",
+              "label": {
+                "en": "Number of hours for average",
+                "no": "Antall timer for gjennomsnitt"
+              },
+              "value": "1",
+              "hint": {
+                "en": "If grid capacity is calculated based on the average of the hours with highest consumption from different days within a month, then select the number of hours for the average.",
+                "no": "Hvis kapasitetsledd beregnes basert på gjennomsnittet av timene med høyest forbruk fra ulike døgn innenfor en måned, så velg antall timer for gjennomsnitt."
+              },
+              "values": [
+                {
+                  "id": "1",
+                  "label": {
+                    "en": "Highest hour",
+                    "no": "Høyeste time"
+                  }
+                },
+                {
+                  "id": "3",
+                  "label": {
+                    "en": "Avg. 3 highest hours",
+                    "no": "Gj.snitt 3 høyeste timer"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -1337,14 +1245,14 @@
               "id": "gridEnergyDay",
               "type": "number",
               "label": {
-                "en": "Day winter",
-                "no": "Dagtid vinter"
+                "en": "Day",
+                "no": "Dagtid"
               },
               "hint": {
-                "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes winter period.",
-                "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter vinteren."
+                "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes.",
+                "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter."
               },
-              "value": 0.3489,
+              "value": 0.499,
               "min": 0,
               "max": 5,
               "units": {
@@ -1356,256 +1264,20 @@
               "id": "gridEnergyNight",
               "type": "number",
               "label": {
-                "en": "Night winter",
-                "no": "Natt vinter"
+                "en": "Night and weekends",
+                "no": "Natt og helg"
               },
               "hint": {
-                "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes winter period.",
-                "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter vinteren."
+                "en": "Grid energy price 22:00 - 06:00 and weekends per kWh incl. taxes.",
+                "no": "Energiledd 22:00 - 06:00 og helg pr. kWh inkl. mva og avgifter."
               },
-              "value": 0.2489,
+              "value": 0.399,
               "min": 0,
               "max": 5,
               "units": {
                 "en": "kr/kWh",
                 "no": "kr/kWh"
               }
-            },
-            {
-              "id": "gridEnergyDaySummer",
-              "type": "number",
-              "label": {
-                "en": "Day summer",
-                "no": "Dagtid sommer"
-              },
-              "hint": {
-                "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes summer period.",
-                "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter sommeren."
-              },
-              "value": 0.4301,
-              "min": 0,
-              "max": 5,
-              "units": {
-                "en": "kr/kWh",
-                "no": "kr/kWh"
-              }
-            },
-            {
-              "id": "gridEnergyNightSummer",
-              "type": "number",
-              "label": {
-                "en": "Night summer",
-                "no": "Natt sommer"
-              },
-              "hint": {
-                "en": "Grid energy price 22:00 - 06:00 per kWh incl. taxes summer period.",
-                "no": "Energiledd 22:00 - 06:00 pr. kWh inkl. mva og avgifter sommeren."
-              },
-              "value": 0.3301,
-              "min": 0,
-              "max": 5,
-              "units": {
-                "en": "kr/kWh",
-                "no": "kr/kWh"
-              }
-            },
-            {
-              "id": "gridEnergyWinterStart",
-              "type": "dropdown",
-              "label": {
-                "en": "Winter period starts",
-                "no": "Vinterperiode starter"
-              },
-              "value": "0",
-              "hint": {
-                "en": "Select the correct month for the low grid enery price.",
-                "no": "Velg måned for når lav pris for energiledd starter."
-              },
-              "values": [
-                {
-                  "id": "0",
-                  "label": {
-                    "en": "January",
-                    "no": "Januar"
-                  }
-                },
-                {
-                  "id": "1",
-                  "label": {
-                    "en": "February",
-                    "no": "Februar"
-                  }
-                },
-                {
-                  "id": "2",
-                  "label": {
-                    "en": "March",
-                    "no": "Mars"
-                  }
-                },
-                {
-                  "id": "3",
-                  "label": {
-                    "en": "April",
-                    "no": "April"
-                  }
-                },
-                {
-                  "id": "4",
-                  "label": {
-                    "en": "May",
-                    "no": "Mai"
-                  }
-                },
-                {
-                  "id": "5",
-                  "label": {
-                    "en": "June",
-                    "no": "Juni"
-                  }
-                },
-                {
-                  "id": "6",
-                  "label": {
-                    "en": "July",
-                    "no": "Juli"
-                  }
-                },
-                {
-                  "id": "7",
-                  "label": {
-                    "en": "August",
-                    "no": "August"
-                  }
-                },
-                {
-                  "id": "8",
-                  "label": {
-                    "en": "September",
-                    "no": "September"
-                  }
-                },
-                {
-                  "id": "9",
-                  "label": {
-                    "en": "October",
-                    "no": "Oktober"
-                  }
-                },
-                {
-                  "id": "10",
-                  "label": {
-                    "en": "November",
-                    "no": "November"
-                  }
-                },
-                {
-                  "id": "11",
-                  "label": {
-                    "en": "December",
-                    "no": "Desember"
-                  }
-                }
-              ]
-            },
-            {
-              "id": "gridEnergySummerStart",
-              "type": "dropdown",
-              "label": {
-                "en": "Summer period starts",
-                "no": "Sommerperiode starter"
-              },
-              "value": "3",
-              "hint": {
-                "en": "Select the correct month for the high grid enery price.",
-                "no": "Velg måned for når høy pris for energiledd starter."
-              },
-              "values": [
-                {
-                  "id": "0",
-                  "label": {
-                    "en": "January",
-                    "no": "Januar"
-                  }
-                },
-                {
-                  "id": "1",
-                  "label": {
-                    "en": "February",
-                    "no": "Februar"
-                  }
-                },
-                {
-                  "id": "2",
-                  "label": {
-                    "en": "March",
-                    "no": "Mars"
-                  }
-                },
-                {
-                  "id": "3",
-                  "label": {
-                    "en": "April",
-                    "no": "April"
-                  }
-                },
-                {
-                  "id": "4",
-                  "label": {
-                    "en": "May",
-                    "no": "Mai"
-                  }
-                },
-                {
-                  "id": "5",
-                  "label": {
-                    "en": "June",
-                    "no": "Juni"
-                  }
-                },
-                {
-                  "id": "6",
-                  "label": {
-                    "en": "July",
-                    "no": "Juli"
-                  }
-                },
-                {
-                  "id": "7",
-                  "label": {
-                    "en": "August",
-                    "no": "August"
-                  }
-                },
-                {
-                  "id": "8",
-                  "label": {
-                    "en": "September",
-                    "no": "September"
-                  }
-                },
-                {
-                  "id": "9",
-                  "label": {
-                    "en": "October",
-                    "no": "Oktober"
-                  }
-                },
-                {
-                  "id": "10",
-                  "label": {
-                    "en": "November",
-                    "no": "November"
-                  }
-                },
-                {
-                  "id": "11",
-                  "label": {
-                    "en": "December",
-                    "no": "Desember"
-                  }
-                }
-              ]
             },
             {
               "id": "gridEnergyLowWeekends",
@@ -1709,28 +1381,14 @@
         "meter_energy"
       ],
       "capabilitiesOptions": {
-        "meter_price_incl": {
-          "decimals": 5
-        },
-        "meter_gridprice_incl": {
-          "decimals": 5
-        },
-        "meter_price_excl": {
-          "decimals": 5
-        },
-        "meter_price_sum": {
-          "decimals": 5
-        },
-        "meter_power.acc": {
+        "meter_consumption_maxmonth": {
           "title": {
-            "en": "Energy",
-            "no": "Energi"
-          }
-        },
-        "meter_power.year": {
-          "title": {
-            "en": "Energy this year",
-            "no": "Energi dette året"
+            "en": "Max. hourly consumption",
+            "no": "Maks. forbruk for time"
+          },
+          "desc": {
+            "en": "Maximum consumption for an hour this month.",
+            "no": "Maksimum forbruk for en time i gjeldende måned."
           }
         }
       },
@@ -1848,12 +1506,12 @@
     "meter_consumption_maxmonth": {
       "type": "number",
       "title": {
-        "en": "Max. hourly consumption",
-        "no": "Maks. forbruk for time"
+        "en": "Level for grid capacity",
+        "no": "Trinn for kapasitetsledd"
       },
       "desc": {
-        "en": "Maximum consumption for an hour this month.",
-        "no": "Maksimum forbruk for en time i gjeldende måned."
+        "en": "Calculated level for grid capacity.",
+        "no": "Beregnet trinn for kapasitetsledd."
       },
       "min": 0,
       "decimals": 0,

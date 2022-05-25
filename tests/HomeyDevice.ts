@@ -1,6 +1,6 @@
 export class HomeyDevice {
 
-    logging?: boolean;
+    private logging?: boolean;
     capabilities: Map<string, any>;
     settings: any;
     store: Map<string, any>;
@@ -8,7 +8,6 @@ export class HomeyDevice {
     logger: any;
 
     constructor() {
-        this.logging = false;
         this.capabilities = new Map<string, any>();
         this.settings = {};
         this.store = new Map<string, any>();
@@ -16,13 +15,13 @@ export class HomeyDevice {
             "__": (key: string, obj: any) => key
         }
         this.logger = {
-            log: this.log,
-            silly: this.log,
-            debug: this.log,
-            verbose: this.log,
-            info: this.log,
-            warn: this.log,
-            error: this.error,
+            log: this.log.bind(this),
+            silly: this.log.bind(this),
+            debug: this.log.bind(this),
+            verbose: this.log.bind(this),
+            info: this.log.bind(this),
+            warn: this.log.bind(this),
+            error: this.error.bind(this),
         }
     }
 

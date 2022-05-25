@@ -1,0 +1,40 @@
+{
+  "id": "set_utility_costs_settings",
+  "title": {
+    "en": "Update utility costs settings",
+    "no": "Oppdatér innstillinger for strømkostnader"
+  },
+  "titleFormatted": {
+    "en": "Update utility costs settings to [[costFormula]], [[costFormulaFixedAmount]]",
+    "no": "Oppdatér innstillinger for strømkostnader til [[costFormula]], [[costFormulaFixedAmount]]"
+  },
+  "hint": {
+    "en": "Update utility costs settings.",
+    "no": "Oppdatér innstillinger for strømkostnader."
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    },
+    {
+      "name": "costFormula",
+      "type": "text",
+      "required": false,
+      "title": {
+        "en": "Formula for utility price",
+        "no": "Formel for strømpris"
+      }
+    },
+    {
+      "name": "costFormulaFixedAmount",
+      "type": "text",
+      "required": false,
+      "title": {
+        "en": "Fixed monthly utility cost",
+        "no": "Månedlig fastbeløp for strøm"
+      }
+    }
+  ]
+}

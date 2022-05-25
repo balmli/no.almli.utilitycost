@@ -15,6 +15,13 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.3.0
+
+- Added an option to calculate 'Level for grid capacity' as an average of highest consumption hours
+- Added an option to select grid company for grid capacity and energy settings
+- Fixed 'New level for grid capacity' trigger
+- Added action cards to update utility cost settings
+
 #### 1.2.2
 
 - Avoid concurrency issues

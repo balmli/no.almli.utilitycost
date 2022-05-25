@@ -9,7 +9,7 @@
     "en": "Yearly fixed amount existing regime incl. taxes.",
     "no": "Årlig fastbeløp for nettleie for eksisterende regime inkl. mva og avgifter."
   },
-  "value": 2050,
+  "value": 2875,
   "min": 0,
   "max": 9999,
   "units": {

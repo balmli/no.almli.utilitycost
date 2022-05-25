@@ -29,6 +29,9 @@ class UtilityCostsApp extends Homey.App {
         this.homey.flow.getActionCard('update_price')
             .registerRunListener((args, state) => args.device.onUpdatePrice(args.price));
 
+        this.homey.flow.getActionCard('set_utility_costs_settings')
+            .registerRunListener((args, state) => args.device.onSetUtilityCostsSettings(args));
+
         this.homey.flow.getActionCard('set_grid_costs_settings')
             .registerRunListener((args, state) => args.device.onSetGridCostsSettings(args));
 

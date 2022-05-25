@@ -1,60 +1,7 @@
 import moment from "./moment-timezone-with-data";
+import {DEFAULT_DEVICE_HANDLER_OPTIONS, DeviceHandlerOptions, DeviceSettings, StartValues, StoreValues} from "./types";
 
 const Formula = require('fparser');
-const { default: PQueue } = require('p-queue');
-
-export class DeviceSettings {
-    priceCalcMethod!: string;
-    priceArea!: string;
-    costFormula!: string;
-    costFormulaFixedAmount!: string;
-
-    gridFixedAmount!: number;
-    gridConsumption!: number;
-    gridNewRegime!: boolean;
-
-    gridCapacity0_2!: number;
-    gridCapacity2_5!: number;
-    gridCapacity5_10!: number;
-    gridCapacity10_15!: number;
-    gridCapacity15_20!: number;
-    gridCapacity20_25!: number;
-
-    gridEnergyDay!: number;
-    gridEnergyNight!: number;
-    gridEnergyDaySummer!: number;
-    gridEnergyNightSummer!: number;
-    gridEnergyWinterStart!: string;
-    gridEnergySummerStart!: string;
-    gridEnergyLowWeekends!: boolean;
-
-    priceDecimals!: number;
-    resetEnergyDaily!: boolean;
-}
-
-export class StartValues {
-    now!: any;
-    thisUpdate!: number;
-    lastUpdate?: number;
-    startOfHour!: number;
-    startOfDay!: number;
-    startOfMonth!: number;
-    startOfYear!: number;
-    newHour!: boolean;
-    newDay!: boolean;
-    newMonth!: boolean;
-    newYear!: boolean;
-}
-
-export class DeviceHandlerOptions {
-    addFixedUtilityCosts?: boolean;
-    addCapabilityCosts?: boolean;
-}
-
-const defaultOptions: DeviceHandlerOptions = {
-    addFixedUtilityCosts: true,
-    addCapabilityCosts: true,
-}
 
 const MAX_VALID_POWER = 100_000;
 
@@ -64,14 +11,14 @@ export class DeviceHandler {
     private options: DeviceHandlerOptions;
     private settings!: DeviceSettings;
     private debug: boolean;
-    private commandQueue: any;
-
+    private storeValues: StoreValues;
 
     constructor(homeyDevice: any, options?: DeviceHandlerOptions) {
         this.debug = false;
         this.device = homeyDevice;
-        this.options = options ? options : defaultOptions;
-        this.commandQueue = new PQueue({ concurrency: 1 });
+        this.options = options ? options : DEFAULT_DEVICE_HANDLER_OPTIONS;
+        this.storeValues = new StoreValues();
+        this.restoreStoreValues();
         const settings = this.device.getSettings();
         const ds: DeviceSettings = {
             ...settings
@@ -94,6 +41,27 @@ export class DeviceHandler {
     setSettings(settings: DeviceSettings) {
         this.device.logger.debug('Set settings:', settings);
         this.settings = settings;
+    }
+
+    getStoreValues(): StoreValues {
+        return this.storeValues;
+    }
+
+    restoreStoreValues(): void {
+        const storeValues = this.device.getStoreValue('storeValues');
+        if (storeValues !== undefined && storeValues !== null) {
+            this.storeValues = storeValues;
+        }
+        this.device.logger.info(`Store values restored: ${JSON.stringify(this.storeValues)}`);
+    }
+
+    async storeStoreValues(): Promise<void> {
+        try {
+            await this.device.setStoreValue('storeValues', this.storeValues);
+            this.device.logger.debug(`Store values stored: ${JSON.stringify(this.storeValues)}`);
+        } catch (err) {
+            this.device.logger.error(`Storing values failed:`, err);
+        }
     }
 
     evaluatePrice(str: string, price?: number, aDate?: any) {
@@ -194,16 +162,9 @@ export class DeviceHandler {
                 const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
                 const lowPrice = !daytime || this.settings.gridEnergyLowWeekends && isWeekend;
 
-                const winterStart = parseInt(this.settings.gridEnergyWinterStart);
-                const summerStart = parseInt(this.settings.gridEnergySummerStart);
-                const isSummerPeriod = winterStart < summerStart && momentNow.month() >= summerStart
-                    || winterStart > summerStart && momentNow.month() >= summerStart && momentNow.month() < winterStart;
+                const price = (lowPrice ? this.settings.gridEnergyNight : this.settings.gridEnergyDay);
 
-                const price = isSummerPeriod ?
-                    (lowPrice ? this.settings.gridEnergyNightSummer : this.settings.gridEnergyDaySummer) :
-                    (lowPrice ? this.settings.gridEnergyNight : this.settings.gridEnergyDay);
-
-                this.device.logger.debug(`Get grid energy price (new regime): Weekend: ${isWeekend}, Low Price: ${lowPrice}, winterStart: ${winterStart}, summerStart: ${summerStart}, isSummerPeriod: ${isSummerPeriod}, price: ${price}`);
+                this.device.logger.debug(`Get grid energy price (new regime): Weekend: ${isWeekend}, Low Price: ${lowPrice}, price: ${price}`);
                 const gridConsumptionPrice = this.roundPrice(price);
                 await this.device.setCapabilityValue('meter_gridprice_incl', gridConsumptionPrice);
                 const utilityPrice = this.device.getCapabilityValue(`meter_price_incl`) || 0;
@@ -242,13 +203,13 @@ export class DeviceHandler {
         const startOfMonth = moment(thisUpdate).startOf('month').valueOf();
         const startOfYear = moment(thisUpdate).startOf('year').valueOf();
 
-        const lastUpdate = this.device.getStoreValue('lastConsumptionUpdate');
-        await this.device.setStoreValue('lastConsumptionUpdate', thisUpdate);
+        const lastUpdate = this.storeValues.lastConsumptionUpdate;
+        this.storeValues.lastConsumptionUpdate = thisUpdate;
 
-        const newHour = (lastUpdate < startOfHour) && (thisUpdate >= startOfHour);
-        const newDay = (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
-        const newMonth = (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
-        const newYear = (lastUpdate < startOfYear) && (thisUpdate >= startOfYear);
+        const newHour = !!lastUpdate && (lastUpdate < startOfHour) && (thisUpdate >= startOfHour);
+        const newDay = !!lastUpdate && (lastUpdate < startOfDay) && (thisUpdate >= startOfDay);
+        const newMonth = !!lastUpdate && (lastUpdate < startOfMonth) && (thisUpdate >= startOfMonth);
+        const newYear = !!lastUpdate && (lastUpdate < startOfYear) && (thisUpdate >= startOfYear);
 
         return {
             now,
@@ -266,44 +227,40 @@ export class DeviceHandler {
     }
 
     async updateConsumption(consumption: number | undefined, aDate: any) {
-        return this.commandQueue.add(async () => {
-            if (!!consumption && consumption > MAX_VALID_POWER) {
-                return;
-            }
-            const momentNow = moment(aDate);
-            const startOfValues = await this.startOfValues(momentNow);
-            if (consumption === undefined) {
-                consumption = this.device.getCapabilityValue('meter_consumption');
-            } else {
-                await this.device.setCapabilityValue('meter_consumption', consumption);
-            }
-            if (consumption !== undefined && consumption !== null && startOfValues.lastUpdate) {
-                await this.calculateEnergy(consumption, startOfValues);
-                await this.calculateUtilityCost(consumption, startOfValues);
-                await this.calculateGridCost(consumption, startOfValues);
-                await this.calculateMaxConsumptionHour(consumption, startOfValues);
-                await this.calculateSumCost(consumption);
-            }
-        });
+        if (!!consumption && consumption > MAX_VALID_POWER) {
+            return;
+        }
+        const momentNow = moment(aDate);
+        const startOfValues = await this.startOfValues(momentNow);
+        if (consumption === undefined) {
+            consumption = this.device.getCapabilityValue('meter_consumption');
+        } else {
+            await this.device.setCapabilityValue('meter_consumption', consumption);
+        }
+        if (consumption !== undefined && consumption !== null && startOfValues.lastUpdate) {
+            await this.calculateEnergy(consumption, startOfValues);
+            await this.calculateUtilityCost(consumption, startOfValues);
+            await this.calculateGridCost(consumption, startOfValues);
+            await this.calculateMaxConsumptionHour(consumption, startOfValues);
+            await this.calculateSumCost(consumption);
+        }
     }
 
     async updateEnergy(energy: number, aDate: any) {
-        return this.commandQueue.add(async () => {
-            const momentNow = moment(aDate);
-            const thisUpdate = momentNow.valueOf();
+        const momentNow = moment(aDate);
+        const thisUpdate = momentNow.valueOf();
 
-            const lastUpdate = this.device.getStoreValue('lastConsumptionUpdate');
-            const lastEnergy = this.device.getCapabilityValue('meter_energy');
-            await this.device.setCapabilityValue('meter_energy', energy);
+        const lastUpdate = this.storeValues.lastConsumptionUpdate;
+        const lastEnergy = this.device.getCapabilityValue('meter_energy');
+        await this.device.setCapabilityValue('meter_energy', energy);
 
-            if (lastEnergy === undefined || lastEnergy === null || !lastUpdate) {
-                await this.device.setStoreValue('lastConsumptionUpdate', thisUpdate);
-                return;
-            }
+        if (lastEnergy === undefined || lastEnergy === null || !lastUpdate) {
+            this.storeValues.lastConsumptionUpdate = thisUpdate;
+            return;
+        }
 
-            const consumption = (energy - lastEnergy) * 1000 * 3600000 / (thisUpdate - lastUpdate);
-            await this.updateConsumption(consumption, aDate);
-        });
+        const consumption = (energy - lastEnergy) * 1000 * 3600000 / (thisUpdate - lastUpdate);
+        await this.updateConsumption(consumption, aDate);
     }
 
     async calculateEnergy(consumption: number, startValues: StartValues): Promise<void> {
@@ -435,7 +392,7 @@ export class DeviceHandler {
     }
 
     calculateConsumptionHour(consumption: number, startValues: StartValues): any {
-        const {thisUpdate, lastUpdate, newHour, newMonth} = startValues;
+        const {thisUpdate, lastUpdate, startOfDay, newHour, newMonth} = startValues;
         if (!lastUpdate) {
             return;
         }
@@ -444,8 +401,51 @@ export class DeviceHandler {
         const newConsumptionWh = newHour ? consumptionWh : consumptionWh + sumConsumptionHour;
 
         const sumConsumptionMaxHour = this.device.getCapabilityValue(`meter_consumption_maxmonth`) || 0;
-        const newConsumptionMaxMonthWh = newMonth ? consumptionWh : (newConsumptionWh > sumConsumptionMaxHour ? newConsumptionWh : undefined);
+        let newConsumptionMaxMonthWh = undefined;
 
+        if (this.options.addCapabilityCosts) {
+            if (newMonth) {
+                this.storeValues.highest_10_hours = [];
+                newConsumptionMaxMonthWh = consumptionWh;
+            } else {
+                let aDay = 0;
+
+                this.storeValues.highest_10_hours = (this.storeValues.highest_10_hours ? this.storeValues.highest_10_hours : [])
+                    .concat({
+                        startOfDay,
+                        consumption: newConsumptionWh,
+                    })
+                    .sort((a, b) => a.startOfDay === b.startOfDay ? b.consumption - a.consumption : a.startOfDay - b.startOfDay)
+                    .filter(a => {
+                        if (aDay !== a.startOfDay) {
+                            aDay = a.startOfDay;
+                            return true;
+                        }
+                        return false;
+                    })
+                    .sort((a, b) => b.consumption - a.consumption)
+                    .slice(0, 10);
+
+                let avgNumHours = this.settings.gridCapacityAverage ? Number(this.settings.gridCapacityAverage) : 1;
+                if (avgNumHours > this.storeValues.highest_10_hours.length) {
+                    avgNumHours = this.storeValues.highest_10_hours.length;
+                }
+                const avgConsumption = this.storeValues.highest_10_hours
+                    .concat()
+                    .map(a => a.consumption)
+                    .slice(0, avgNumHours)
+                    .reduce((a, b) => a + b, 0) / avgNumHours;
+
+                if (avgConsumption !== sumConsumptionMaxHour) {
+                    newConsumptionMaxMonthWh = avgConsumption;
+                    this.device.logger.info(`Average highest ${avgNumHours} hours: ${avgConsumption}`, { highest_10_hours: this.storeValues.highest_10_hours });
+                }
+            }
+        } else {
+            newConsumptionMaxMonthWh = newMonth ? consumptionWh : (newConsumptionWh > sumConsumptionMaxHour ? newConsumptionWh : undefined);
+        }
+
+        this.device.logger.debug(`calculateConsumptionHour:`, { newConsumptionWh, sumConsumptionMaxHour, newConsumptionMaxMonthWh });
         return {newConsumptionWh, sumConsumptionMaxHour, newConsumptionMaxMonthWh};
     }
 
@@ -464,9 +464,9 @@ export class DeviceHandler {
 
                 const prevLevel = newMonth ? 0 : this.getGridCapacityLevel(sumConsumptionMaxHour);
                 const newLevel = this.getGridCapacityLevel(newConsumptionMaxMonthWh);
-                if (newLevel > prevLevel) {
+                if (prevLevel > 0 && newLevel !== prevLevel) {
                     await this.device.homey?.flow?.getDeviceTriggerCard('grid_capacity_level')
-                        .trigger(this, {
+                        .trigger(this.device, {
                             meter_consumption_maxmonth: Math.round(newConsumptionMaxMonthWh),
                             grid_capacity_level: newLevel
                         }, {})

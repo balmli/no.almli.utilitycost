@@ -9,7 +9,7 @@
     "en": "Grid capacity 0 - 2 kW incl. taxes.",
     "no": "Kapasitetsledd for nettleie 0 - 2 kW inkl. mva og avgifter."
   },
-  "value": 175,
+  "value": 125,
   "min": 0,
   "max": 9999,
   "units": {

@@ -28,6 +28,22 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             if (!this.hasCapability('meter_energy')) {
                 await this.addCapability('meter_energy');
             }
+            const migVersion = this.getStoreValue('version');
+            if (!migVersion || migVersion < 2) {
+                const consumptionMinute = this.getStoreValue('consumptionMinute');
+                if (consumptionMinute !== undefined && consumptionMinute !== null) {
+                    this._dh.getStoreValues().consumptionMinute = consumptionMinute;
+                    this.unsetStoreValue('consumptionMinute').catch((err: any) => this.logger.error(err));
+                }
+                const lastConsumptionUpdate = this.getStoreValue('lastConsumptionUpdate');
+                if (lastConsumptionUpdate !== undefined && lastConsumptionUpdate !== null) {
+                    this._dh.getStoreValues().lastConsumptionUpdate = lastConsumptionUpdate;
+                    this.unsetStoreValue('lastConsumptionUpdate').catch((err: any) => this.logger.error(err));
+                }
+                this._dh.getStoreValues().highest_10_hours = [];
+                await this._dh.storeStoreValues();
+            }
+            await this.setStoreValue('version', 2);
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);
@@ -63,8 +79,10 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
 
                 const localTime = moment();
                 await this._dh.gridPriceCalculation(localTime);
-                if (this.getStoreValue('consumptionMinute')) {
-                    await this._dh.updateConsumption(undefined, localTime);
+                if (this._dh.getStoreValues().consumptionMinute) {
+                    this.commandQueue.add(async () => {
+                        await this._dh.updateConsumption(undefined, localTime);
+                    });
                 }
             } else {
                 this.logger.warn(`Unable to calculate: no master device`);
@@ -72,22 +90,27 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         } catch (err) {
             this.logger.error(err);
         } finally {
+            await this._dh.storeStoreValues();
             this.scheduleCheckTime();
         }
     }
 
     async onUpdateConsumption(consumption: number) {
         this.logger.debug(`New consumption: ${consumption}`);
-        this.updateSettings();
-        this.setStoreValue('consumptionMinute', true);
-        await this._dh.updateConsumption(consumption, moment());
+        this.commandQueue.add(async () => {
+            this.updateSettings();
+            this._dh.getStoreValues().consumptionMinute = true;
+            await this._dh.updateConsumption(consumption, moment());
+        });
     }
 
     async onUpdateEnergy(energy: number) {
         this.logger.debug(`New energy: ${energy}`);
-        this.updateSettings();
-        this.setStoreValue('consumptionMinute', false);
-        await this._dh.updateEnergy(energy, moment());
+        this.commandQueue.add(async () => {
+            this.updateSettings();
+            this._dh.getStoreValues().consumptionMinute = false;
+            await this._dh.updateEnergy(energy, moment());
+        });
     }
 
     updateSettings(): void {

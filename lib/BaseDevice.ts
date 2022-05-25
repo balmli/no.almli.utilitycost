@@ -1,5 +1,6 @@
 import Homey from 'homey';
 import {DeviceHandler} from "./DeviceHandler";
+const { default: PQueue } = require('p-queue');
 
 const Logger = require('./Logger');
 
@@ -9,12 +10,14 @@ export class BaseDevice extends Homey.Device {
     _dh!: DeviceHandler;
     _deleted?: boolean;
     curTimeout?: NodeJS.Timeout;
+    commandQueue: any;
 
     async onInit(): Promise<void> {
         this.logger = new Logger({
             logFunc: this.log,
             errorFunc: this.error,
         });
+        this.commandQueue = new PQueue({ concurrency: 1 });
         this._dh = new DeviceHandler(this);
     }
 

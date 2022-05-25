@@ -1,0 +1,29 @@
+{
+  "id": "gridCapacityAverage",
+  "type": "dropdown",
+  "label": {
+    "en": "Number of hours for average",
+    "no": "Antall timer for gjennomsnitt"
+  },
+  "value": "1",
+  "hint": {
+    "en": "If grid capacity is calculated based on the average of the hours with highest consumption from different days within a month, then select the number of hours for the average.",
+    "no": "Hvis kapasitetsledd beregnes basert på gjennomsnittet av timene med høyest forbruk fra ulike døgn innenfor en måned, så velg antall timer for gjennomsnitt."
+  },
+  "values": [
+    {
+      "id": "1",
+      "label": {
+        "en": "Highest hour",
+        "no": "Høyeste time"
+      }
+    },
+    {
+      "id": "3",
+      "label": {
+        "en": "Avg. 3 highest hours",
+        "no": "Gj.snitt 3 høyeste timer"
+      }
+    }
+  ]
+}

@@ -8,10 +8,6 @@ const getSettings = () => {
         gridNewRegime: true,
         gridEnergyDay: 0.3489,
         gridEnergyNight: 0.2489,
-        gridEnergyDaySummer: 0.4301,
-        gridEnergyNightSummer: 0.3301,
-        gridEnergyWinterStart: '0',
-        gridEnergySummerStart: '3',
         gridEnergyLowWeekends: true
     };
 };
@@ -226,16 +222,16 @@ describe('Devices', function () {
             device.setSettings(getSettings());
             const dh = new DeviceHandler(device);
             await dh.gridPriceCalculation('2022-04-01T10:00:00.000Z');
-            expect(device.getCapabilityValue('meter_gridprice_incl')).eq(0.4301);
-            expect(device.getCapabilityValue('meter_price_sum')).eq(0.4301);
+            expect(device.getCapabilityValue('meter_gridprice_incl')).eq(0.3489);
+            expect(device.getCapabilityValue('meter_price_sum')).eq(0.3489);
         });
         it('Check gridPriceCalculation 5', async function () {
             const device = new HomeyDevice();
             device.setSettings(getSettings());
             const dh = new DeviceHandler(device);
             await dh.gridPriceCalculation('2022-04-01T00:00:00.000Z');
-            expect(device.getCapabilityValue('meter_gridprice_incl')).eq(0.3301);
-            expect(device.getCapabilityValue('meter_price_sum')).eq(0.3301);
+            expect(device.getCapabilityValue('meter_gridprice_incl')).eq(0.2489);
+            expect(device.getCapabilityValue('meter_price_sum')).eq(0.2489);
         });
     });
 
@@ -586,6 +582,51 @@ describe('Devices', function () {
             //console.log(sv3, device.getCapabilityValues());
             expect(device.getCapabilityValue('meter_consumption_hour')).to.be.closeTo(11800, 0.000001);
             expect(device.getCapabilityValue('meter_consumption_maxmonth')).to.be.closeTo(11800, 0.000001);
+        });
+        it('Check calculateMaxConsumptionHour 2', async function () {
+            const device = new HomeyDevice();
+            //device.enableLogging(true);
+            const dh = new DeviceHandler(device);
+            const sv0 = await dh.startOfValues('2022-04-01T00:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(0, sv0);
+            const sv1 = await dh.startOfValues('2022-04-01T01:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(1000, sv1);
+            const sv2 = await dh.startOfValues('2022-04-01T02:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(2000, sv2);
+            //console.log(sv2, device.getCapabilityValues());
+            expect(device.getCapabilityValue('meter_consumption_hour')).to.be.closeTo(2000, 0.000001);
+            expect(device.getCapabilityValue('meter_consumption_maxmonth')).to.be.closeTo(2000, 0.000001);
+        });
+        it('Check calculateMaxConsumptionHour 3', async function () {
+            const device = new HomeyDevice();
+            device.setSettings({
+                gridCapacityAverage: "3",
+            });
+            //device.enableLogging(true);
+            const dh = new DeviceHandler(device);
+            const sv0 = await dh.startOfValues('2022-03-31T23:59:59+02:00');
+            await dh.calculateMaxConsumptionHour(0, sv0);
+            const sv1 = await dh.startOfValues('2022-04-01T00:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(1000, sv1);
+
+            const sv2 = await dh.startOfValues('2022-04-02T00:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(2000, sv2);
+            //console.log(sv2, device.getCapabilityValues());
+
+            const sv3 = await dh.startOfValues('2022-04-03T00:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(3000, sv3);
+            //console.log(sv3, device.getCapabilityValues());
+
+            const sv4 = await dh.startOfValues('2022-04-04T00:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(4000, sv4);
+            //console.log(sv4, device.getCapabilityValues());
+
+            const sv5 = await dh.startOfValues('2022-04-05T00:00:00+02:00');
+            await dh.calculateMaxConsumptionHour(1000, sv5);
+            //console.log(sv5, device.getCapabilityValues());
+
+            expect(device.getCapabilityValue('meter_consumption_hour')).to.be.closeTo(1000, 0.000001);
+            expect(device.getCapabilityValue('meter_consumption_maxmonth')).to.be.closeTo(3000, 0.000001);
         });
     });
 

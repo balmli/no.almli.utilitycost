@@ -27,6 +27,19 @@
   {
     "type": "group",
     "label": {
+      "en": "Grid company",
+      "no": "Nettselskap"
+    },
+    "children": [
+      {
+        "id": "gridCompany",
+        "$extends": "gridCompany"
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
       "en": "Grid costs old regime",
       "no": "Nettleie gammelt regime"
     },
@@ -75,6 +88,10 @@
       {
         "id": "gridCapacity20_25",
         "$extends": "gridCapacity20_25"
+      },
+      {
+        "id": "gridCapacityAverage",
+        "$extends": "gridCapacityAverage"
       }
     ]
   },
@@ -92,22 +109,6 @@
       {
         "id": "gridEnergyNight",
         "$extends": "gridEnergyNight"
-      },
-      {
-        "id": "gridEnergyDaySummer",
-        "$extends": "gridEnergyDaySummer"
-      },
-      {
-        "id": "gridEnergyNightSummer",
-        "$extends": "gridEnergyNightSummer"
-      },
-      {
-        "id": "gridEnergyWinterStart",
-        "$extends": "gridEnergyWinterStart"
-      },
-      {
-        "id": "gridEnergySummerStart",
-        "$extends": "gridEnergySummerStart"
       },
       {
         "id": "gridEnergyLowWeekends",

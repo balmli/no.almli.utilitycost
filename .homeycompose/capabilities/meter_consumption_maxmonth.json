@@ -1,12 +1,12 @@
 {
   "type": "number",
   "title": {
-    "en": "Max. hourly consumption",
-    "no": "Maks. forbruk for time"
+    "en": "Level for grid capacity",
+    "no": "Trinn for kapasitetsledd"
   },
   "desc": {
-    "en": "Maximum consumption for an hour this month.",
-    "no": "Maksimum forbruk for en time i gjeldende måned."
+    "en": "Calculated level for grid capacity.",
+    "no": "Beregnet trinn for kapasitetsledd."
   },
   "min": 0,
   "decimals": 0,

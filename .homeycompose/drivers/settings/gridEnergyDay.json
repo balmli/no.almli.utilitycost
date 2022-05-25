@@ -2,14 +2,14 @@
   "id": "gridEnergyDay",
   "type": "number",
   "label": {
-    "en": "Day winter",
-    "no": "Dagtid vinter"
+    "en": "Day",
+    "no": "Dagtid"
   },
   "hint": {
-    "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes winter period.",
-    "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter vinteren."
+    "en": "Grid energy price 06:00 - 22:00 per kWh incl. taxes.",
+    "no": "Energiledd 06:00 - 22:00 pr. kWh inkl. mva og avgifter."
   },
-  "value": 0.3489,
+  "value": 0.4990,
   "min": 0,
   "max": 5,
   "units": {

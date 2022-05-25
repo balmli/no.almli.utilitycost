@@ -5,7 +5,8 @@ import {BaseDevice} from '../../lib/BaseDevice';
 const moment = require('../../lib/moment-timezone-with-data');
 const pricesLib = require('../../lib/prices');
 const nordpool = require('../../lib/nordpool');
-import {DeviceSettings} from '../../lib/DeviceHandler';
+import {DeviceSettings} from '../../lib/types';
+import {GridCosts} from "../../lib/constants";
 
 module.exports = class UtilityCostsDevice extends BaseDevice {
 
@@ -65,6 +66,29 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             if (!this.hasCapability('meter_energy')) {
                 await this.addCapability('meter_energy');
             }
+            const migVersion = this.getStoreValue('version');
+            if (!migVersion || migVersion < 2) {
+                const consumptionMinute = this.getStoreValue('consumptionMinute');
+                if (consumptionMinute !== undefined && consumptionMinute !== null) {
+                    this._dh.getStoreValues().consumptionMinute = consumptionMinute;
+                    this.unsetStoreValue('consumptionMinute').catch((err: any) => this.logger.error(err));
+                }
+                const lastConsumptionUpdate = this.getStoreValue('lastConsumptionUpdate');
+                if (lastConsumptionUpdate !== undefined && lastConsumptionUpdate !== null) {
+                    this._dh.getStoreValues().lastConsumptionUpdate = lastConsumptionUpdate;
+                    this.unsetStoreValue('lastConsumptionUpdate').catch((err: any) => this.logger.error(err));
+                }
+                this._dh.getStoreValues().highest_10_hours = [];
+                if (!!this.getCapabilityValue(`meter_consumption_maxmonth`)) {
+                    const startOfDay = moment().startOf('day').valueOf();
+                    this._dh.getStoreValues().highest_10_hours!.push({
+                        startOfDay,
+                        consumption: this.getCapabilityValue(`meter_consumption_maxmonth`)
+                    });
+                }
+                await this._dh.storeStoreValues();
+            }
+            await this.setStoreValue('version', 2);
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);
@@ -88,10 +112,25 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         if (changedKeys.includes('priceDecimals')) {
             await this.updatePriceDecimals(newSettings.priceDecimals);
         }
+        if (changedKeys.includes('gridCompany') && newSettings.gridCompany !== 'not_set') {
+            const gc = newSettings.gridCompany;
+            const gcSettings = GridCosts[gc];
+            this.logger.info(`Settings: Grid company: ${newSettings.gridCompany}`, gcSettings);
+            newSettings = {
+                ...newSettings,
+                ...gcSettings.gridSettings
+            }
+            this.homey.setTimeout(() => {
+                this.setSettings({
+                    ...gcSettings.gridSettings
+                });
+            }, 500);
+        }
         this._lastPrice = undefined;
         const ds: DeviceSettings = {
             ...newSettings
         };
+        this.logger.debug(`Settings: DeviceSettings:`, ds);
         this._dh.setSettings(ds);
         this.scheduleCheckTime(2);
     }
@@ -102,7 +141,21 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         }
         try {
             this.clearCheckTime();
+            const localTime = moment();
             const settings = this.getSettings();
+            if (settings.gridCompany !== 'not_set' && !settings.gridNewRegime) {
+                const gcSettings = GridCosts[settings.gridCompany];
+                const gridNewRegimeStart = moment(gcSettings.gridNewRegimeStart);
+                if (localTime.isAfter(gridNewRegimeStart)) {
+                    let ds: DeviceSettings = {
+                        ...this.getSettings()
+                    };
+                    ds.gridNewRegime = true;
+                    await this.setSettings(ds);
+                    this._dh.setSettings(ds);
+                    this.logger.info(`Automatically switched to new grid regime.`);
+                }
+            }
             if (settings.priceCalcMethod === 'nordpool_spot') {
                 if (this.shallFetchSpotPrices()) {
                     await this.fetchSpotPrices();
@@ -113,14 +166,16 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             } else if (settings.priceCalcMethod === 'fixed') {
                 await this._dh.fixedPriceCalculation();
             }
-            const localTime = moment();
             await this._dh.gridPriceCalculation(localTime);
-            if (this.getStoreValue('consumptionMinute')) {
-                await this._dh.updateConsumption(undefined, localTime);
+            if (this._dh.getStoreValues().consumptionMinute) {
+                this.commandQueue.add(async () => {
+                    await this._dh.updateConsumption(undefined, localTime);
+                });
             }
         } catch (err) {
             this.logger.error(err);
         } finally {
+            await this._dh.storeStoreValues();
             this.scheduleCheckTime();
         }
     }
@@ -174,14 +229,33 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
 
     async onUpdateConsumption(consumption: number) {
         this.logger.debug(`New consumption: ${consumption}`);
-        this.setStoreValue('consumptionMinute', true);
-        await this._dh.updateConsumption(consumption, moment());
+        this.commandQueue.add(async () => {
+            this._dh.getStoreValues().consumptionMinute = true;
+            await this._dh.updateConsumption(consumption, moment());
+        });
     }
 
     async onUpdateEnergy(energy: number) {
         this.logger.debug(`New energy: ${energy}`);
-        this.setStoreValue('consumptionMinute', false);
-        await this._dh.updateEnergy(energy, moment());
+        this.commandQueue.add(async () => {
+            this._dh.getStoreValues().consumptionMinute = false;
+            await this._dh.updateEnergy(energy, moment());
+        });
+    }
+
+    async onSetUtilityCostsSettings(args: any) {
+        try {
+            let ds: DeviceSettings = {
+                ...this.getSettings()
+            };
+            if (args.costFormula !== undefined) ds.costFormula = args.costFormula;
+            if (args.costFormulaFixedAmount !== undefined) ds.costFormulaFixedAmount = args.costFormulaFixedAmount;
+            await this.setSettings(ds);
+            this._dh.setSettings(ds);
+            this.scheduleCheckTime(2);
+        } catch (err) {
+            this.logger.error('onSetUtilityCostsSettings', err);
+        }
     }
 
     async onSetGridCostsSettings(args: any) {
@@ -226,10 +300,6 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             };
             if (args.gridEnergyDay !== undefined) ds.gridEnergyDay = args.gridEnergyDay;
             if (args.gridEnergyNight !== undefined) ds.gridEnergyNight = args.gridEnergyNight;
-            if (args.gridEnergyDaySummer !== undefined) ds.gridEnergyDaySummer = args.gridEnergyDaySummer;
-            if (args.gridEnergyNightSummer !== undefined) ds.gridEnergyNightSummer = args.gridEnergyNightSummer;
-            if (args.gridEnergyWinterStart !== undefined) ds.gridEnergyWinterStart = args.gridEnergyWinterStart;
-            if (args.gridEnergySummerStart !== undefined) ds.gridEnergySummerStart = args.gridEnergySummerStart;
             if (args.gridEnergyLowWeekends !== undefined) ds.gridEnergyLowWeekends = args.gridEnergyLowWeekends === 'true';
             await this.setSettings(ds);
             this._dh.setSettings(ds);
