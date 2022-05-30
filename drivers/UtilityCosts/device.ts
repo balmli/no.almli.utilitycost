@@ -126,6 +126,10 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 });
             }, 500);
         }
+        if (changedKeys.includes('updateHeatingController') && !newSettings.updateHeatingController) {
+            // @ts-ignore
+            await this.homey.app.updatePrices([]);
+        }
         this._lastPrice = undefined;
         const ds: DeviceSettings = {
             ...newSettings
@@ -164,7 +168,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                     await this.onSpotPrices();
                 }
             } else if (settings.priceCalcMethod === 'fixed') {
-                await this._dh.fixedPriceCalculation();
+                await this.onFixedPrices();
             }
             await this._dh.gridPriceCalculation(localTime);
             if (this._dh.getStoreValues().consumptionMinute) {
@@ -216,6 +220,41 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                     this._lastPrice = currentPrice;
                     await this._dh.spotPriceCalculation(currentPrice.price);
                 }
+            }
+
+            if (this.getSetting('updateHeatingController')) {
+                const calculatedPrices = this._prices
+                    .map((p: { startsAt: any, time: number, price: number }) => {
+                        return {
+                            time: p.time,
+                            price: this._dh.calcSpotPrice(p.price) + this._dh.calcGridPrice(p.startsAt)
+                        };
+                    });
+
+                // @ts-ignore
+                await this.homey.app.updatePrices(calculatedPrices);
+            }
+        } catch (err) {
+            this.logger.error(err);
+        }
+    }
+
+    async onFixedPrices() {
+        try {
+            await this._dh.fixedPriceCalculation();
+            if (this.getSetting('updateHeatingController')) {
+                const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
+                const dayStart = moment().startOf('day');
+                const calculatedPrices = [...Array(24).keys()]
+                    .map((_, i) => {
+                        const time = dayStart.unix() + i * 3600;
+                        const startsAt = moment(time * 1000);
+                        const price = utilityPrice + this._dh.calcGridPrice(startsAt);
+                        return {time, price};
+                    });
+
+                // @ts-ignore
+                await this.homey.app.updatePrices(calculatedPrices);
             }
         } catch (err) {
             this.logger.error(err);

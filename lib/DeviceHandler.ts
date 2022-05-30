@@ -137,6 +137,16 @@ export class DeviceHandler {
         }
     }
 
+    calcSpotPrice(price: number): number {
+        const costFormula = this.settings.costFormula;
+        try {
+            return this.roundPrice(this.evaluatePrice(costFormula, price));
+        } catch (err) {
+            this.device.logger.error(`Spot price formula failed: "${costFormula}"`, err);
+        }
+        return 0;
+    }
+
     async fixedPriceCalculation() {
         const costFormula = this.settings.costFormula;
         try {
@@ -179,6 +189,28 @@ export class DeviceHandler {
         } catch (err) {
             this.device.logger.error(`Grid price formula failed: `, err);
         }
+    }
+
+    calcGridPrice(aDate: any): number {
+        try {
+            if (this.settings.gridNewRegime) {
+                const momentNow = moment(aDate);
+
+                const dayStart = moment(aDate).startOf('day').add(6, 'hour');
+                const dayEnd = moment(aDate).startOf('day').add(22, 'hour');
+                const daytime = momentNow.isSameOrAfter(dayStart) && momentNow.isBefore(dayEnd);
+                const isWeekend = momentNow.day() === 0 || momentNow.day() === 6;
+                const lowPrice = !daytime || this.settings.gridEnergyLowWeekends && isWeekend;
+
+                const price = (lowPrice ? this.settings.gridEnergyNight : this.settings.gridEnergyDay);
+                return this.roundPrice(price);
+            } else {
+                return this.settings.gridConsumption;
+            }
+        } catch (err) {
+            this.device.logger.error(`Grid price formula failed: `, err);
+        }
+        return 0;
     }
 
     async updatePrice(price: number) {

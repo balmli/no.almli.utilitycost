@@ -1,4 +1,8 @@
 {
+  "1.4.0": {
+    "en": "Function to update Heating Controller with prices.",
+    "no": "Støtte for å oppdatere Heating Controller med priser."
+  },
   "1.3.0": {
     "en": "Added an option to calculate 'Level for grid capacity' as an average of highest consumption hours. Added an option to select grid company for grid capacity and energy settings. Fixed 'New level for grid capacity' trigger. Added action cards to update utility cost settings. ",
     "no": "La inn valg for å beregne 'Trinn for kapasitetsledd' som gjennomsnitt av timer med høyeste forbruk. La in valg for å velge nettselskap. Rettelse for 'Nytt trinn for kapasitetsledd for nettleie' trigger. La inn kort for å sette strømkostnader. "

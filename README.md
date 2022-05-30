@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.4.0
+
+- Function to update Heating Controller with prices
+
 #### 1.3.0
 
 - Added an option to calculate 'Level for grid capacity' as an average of highest consumption hours

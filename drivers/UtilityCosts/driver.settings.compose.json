@@ -130,6 +130,10 @@
       {
         "id": "resetEnergyDaily",
         "$extends": "resetEnergyDaily"
+      },
+      {
+        "id": "updateHeatingController",
+        "$extends": "updateHeatingController"
       }
     ]
   }
