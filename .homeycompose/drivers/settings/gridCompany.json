@@ -40,10 +40,31 @@
       }
     },
     {
+      "id": "glitre",
+      "label": {
+        "en": "Glitre Energi",
+        "no": "Glitre Energi"
+      }
+    },
+    {
       "id": "lnett",
       "label": {
         "en": "Lnett",
         "no": "Lnett"
+      }
+    },
+    {
+      "id": "norgesnett",
+      "label": {
+        "en": "Norgesnett",
+        "no": "Norgesnett"
+      }
+    },
+    {
+      "id": "tensio",
+      "label": {
+        "en": "Tensio",
+        "no": "Tensio"
       }
     }
   ]

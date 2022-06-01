@@ -53,6 +53,23 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: true
         }
     },
+    "glitre": {
+        id: "glitre",
+        description: "Glitre Energi",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 150,
+            gridCapacity2_5: 250,
+            gridCapacity5_10: 410,
+            gridCapacity10_15: 735,
+            gridCapacity15_20: 975,
+            gridCapacity20_25: 1210,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4725,
+            gridEnergyNight: 0.3525,
+            gridEnergyLowWeekends: false,
+        }
+    },
     "lnett": {
         id: "lnett",
         description: "Lnett",
@@ -69,5 +86,39 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyNight: 0.4060,
             gridEnergyLowWeekends: true
         }
-    }
+    },
+    "norgesnett": {
+        id: "norgesnett",
+        description: "Norgesnett",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 168.75,
+            gridCapacity2_5: 281.25,
+            gridCapacity5_10: 462.5,
+            gridCapacity10_15: 822.5,
+            gridCapacity15_20: 1092.5,
+            gridCapacity20_25: 1355,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.5676,
+            gridEnergyNight: 0.4426,
+            gridEnergyLowWeekends: false
+        }
+    },
+    "tensio": {
+        id: "tensio",
+        description: "Tensio",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 73,
+            gridCapacity2_5: 128,
+            gridCapacity5_10: 219,
+            gridCapacity10_15: 323,
+            gridCapacity15_20: 426,
+            gridCapacity20_25: 530,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.3626,
+            gridEnergyNight: 0.2839,
+            gridEnergyLowWeekends: false,
+        }
+    },
 };
