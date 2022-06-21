@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "no.almli.utilitycost",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -36,9 +36,13 @@
       "nordpool"
     ]
   },
-  "permissions": [
-    "homey:app:no.almli.heatingcontroller"
-  ],
+  "permissions": [],
+  "api": {
+    "fetchPrices": {
+      "method": "GET",
+      "path": "/prices"
+    }
+  },
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -1365,19 +1369,6 @@
                 "no": "Kryss av hvis energimåler (Energi) skal nullstilles daglig."
               },
               "value": true
-            },
-            {
-              "id": "updateHeatingController",
-              "type": "checkbox",
-              "label": {
-                "en": "Update Heating Controller",
-                "no": "Oppdatér Heating Controller"
-              },
-              "hint": {
-                "en": "Check if Heating Controller shall be updated with prices. Heating Controller will then take the sum of utility price and grid price incl. taxes into consideration. Supported if 'Price calculation' is set to 'Spot' or 'Fixed price'.",
-                "no": "Kryss av for å oppdatere Heating Controller med priser. Heating Controller vil da benytte sum av strømpris og nettleiepris inkl. avgifter. Støttet hvis 'Prisberegning' er satt til 'Spotpris' eller 'Fastpris'."
-              },
-              "value": false
             }
           ]
         }

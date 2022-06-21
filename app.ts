@@ -4,19 +4,8 @@ import {DeviceHandler} from "./lib/DeviceHandler";
 
 class UtilityCostsApp extends Homey.App {
 
-    heatingControllerApi: any;
-    heatingControllerApiOk?: boolean;
-
     async onInit() {
         moment.tz.setDefault(this.homey.clock.getTimezone());
-        this.heatingControllerApi = this.homey.api.getApiApp('no.almli.heatingcontroller');
-        this.heatingControllerApi.on('install', async () => {
-            await this._checkApi();
-        });
-        this.heatingControllerApi.on('uninstall', async () => {
-            await this._checkApi();
-        });
-        await this._checkApi();
         await this._initFlows();
         this.log('UtilityCostsApp is running...');
     }
@@ -69,30 +58,12 @@ class UtilityCostsApp extends Homey.App {
         }
     }
 
-    async _checkApi(): Promise<void> {
-        try {
-            this.heatingControllerApiOk = false;
-            const isInstalled = await this.heatingControllerApi.getInstalled();
-            const version = await this.heatingControllerApi.getVersion();
-            if (isInstalled && !!version) {
-                const split = version.split('.');
-                this.heatingControllerApiOk = (Number(split[0]) >= 1 && Number(split[1]) >= 10);
-                this.log(`Heating Controller: ${version} installed${this.heatingControllerApiOk ? ' and ready' : ', but not ready'}`, split);
-            } else {
-                this.log(`Heating Controller: not installed`);
-            }
-        } catch (err: any) {
-            this.log(`Checking Heating Controller API: ${err.message}`);
-        }
-    }
-
-    async updatePrices(prices: any): Promise<void> {
-        if (!!prices && this.heatingControllerApiOk) {
-            try {
-                await this.heatingControllerApi.post('/prices', prices);
-            } catch (err) {
-                this.log('Posting prices to Heating Controller failed: ', err);
-            }
+    async getPrices(): Promise<void> {
+        const driver = this.homey.drivers.getDriver('UtilityCosts');
+        const devices = driver.getDevices();
+        if (devices.length > 0) {
+            // @ts-ignore
+            return devices[0].getPrices();
         }
     }
 

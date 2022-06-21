@@ -1,6 +1,6 @@
 {
   "id": "no.almli.utilitycost",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -35,9 +35,13 @@
       "nordpool"
     ]
   },
-  "permissions": [
-    "homey:app:no.almli.heatingcontroller"
-  ],
+  "permissions": [],
+  "api": {
+    "fetchPrices": {
+      "method": "GET",
+      "path": "/prices"
+    }
+  },
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
