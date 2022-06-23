@@ -21,7 +21,7 @@ To install the device:
 
 #### 1.4.1
 
-- Function to update Heating Controller with prices
+- Function to update other apps with prices
 - Prices for more grid companies
 
 #### 1.3.0
