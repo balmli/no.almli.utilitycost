@@ -40,10 +40,24 @@
       }
     },
     {
+      "id": "fagne",
+      "label": {
+        "en": "Fagne",
+        "no": "Fagne"
+      }
+    },
+    {
       "id": "glitre",
       "label": {
         "en": "Glitre Energi",
         "no": "Glitre Energi"
+      }
+    },
+    {
+      "id": "lede",
+      "label": {
+        "en": "Lede",
+        "no": "Lede"
       }
     },
     {

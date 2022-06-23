@@ -1,4 +1,8 @@
 {
+  "1.4.2": {
+    "en": "Prices for more grid companies. ",
+    "no": "Priser for flere nettselskap. "
+  },
   "1.4.1": {
     "en": "Function to update other apps with prices. Prices for more grid companies. ",
     "no": "Støtte for å oppdatere andre apper med priser. Priser for flere nettselskap. "

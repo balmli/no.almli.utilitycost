@@ -53,6 +53,23 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: true
         }
     },
+    "fagne": {
+        id: "fagne",
+        description: "Fagne",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 310,
+            gridCapacity2_5: 310,
+            gridCapacity5_10: 410,
+            gridCapacity10_15: 510,
+            gridCapacity15_20: 610,
+            gridCapacity20_25: 710,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.5151,
+            gridEnergyNight: 0.4151,
+            gridEnergyLowWeekends: true,
+        }
+    },
     "glitre": {
         id: "glitre",
         description: "Glitre Energi",
@@ -68,6 +85,23 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyDay: 0.4725,
             gridEnergyNight: 0.3525,
             gridEnergyLowWeekends: false,
+        }
+    },
+    "lede": {
+        id: "lede",
+        description: "Lede",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 205,
+            gridCapacity2_5: 205,
+            gridCapacity5_10: 350,
+            gridCapacity10_15: 493.75,
+            gridCapacity15_20: 638.75,
+            gridCapacity20_25: 783.75,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4176,
+            gridEnergyNight: 0.4176,
+            gridEnergyLowWeekends: false
         }
     },
     "lnett": {

@@ -15,7 +15,11 @@ To install the device:
 
 ### Release Notes:
 
-#### 1.4.0
+#### 1.4.2
+
+- Prices for more grid companies
+
+#### 1.4.1
 
 - Function to update Heating Controller with prices
 - Prices for more grid companies
