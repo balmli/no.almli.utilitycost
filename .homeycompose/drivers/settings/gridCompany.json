@@ -68,6 +68,13 @@
       }
     },
     {
+      "id": "mellom",
+      "label": {
+        "en": "Mellom",
+        "no": "Mellom"
+      }
+    },
+    {
       "id": "norgesnett",
       "label": {
         "en": "Norgesnett",

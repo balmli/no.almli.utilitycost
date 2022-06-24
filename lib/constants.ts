@@ -15,7 +15,8 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacityAverage: "3",
             gridEnergyDay: 0.5251,
             gridEnergyNight: 0.4251,
-            gridEnergyLowWeekends: true
+            gridEnergyLowWeekends: true,
+            gridEnergyLowHoliday: false,
         }
     },
     "bkk": {
@@ -30,9 +31,10 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacity15_20: 638,
             gridCapacity20_25: 781,
             gridCapacityAverage: "3",
-            gridEnergyDay: 0.4990,
-            gridEnergyNight: 0.3990,
-            gridEnergyLowWeekends: true
+            gridEnergyDay: 0.499,
+            gridEnergyNight: 0.399,
+            gridEnergyLowWeekends: true,
+            gridEnergyLowHoliday: false,
         }
     },
     "elvia": {
@@ -47,10 +49,10 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacity15_20: 575,
             gridCapacity20_25: 700,
             gridCapacityAverage: "3",
-            gridEnergyDay: 0.4310,
+            gridEnergyDay: 0.431,
             gridEnergyNight: 0.3685,
             gridEnergyLowWeekends: true,
-            gridEnergyLowHoliday: true
+            gridEnergyLowHoliday: true,
         }
     },
     "fagne": {
@@ -68,6 +70,7 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyDay: 0.5151,
             gridEnergyNight: 0.4151,
             gridEnergyLowWeekends: true,
+            gridEnergyLowHoliday: false,
         }
     },
     "glitre": {
@@ -85,6 +88,7 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyDay: 0.4725,
             gridEnergyNight: 0.3525,
             gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
         }
     },
     "lede": {
@@ -101,7 +105,8 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacityAverage: "3",
             gridEnergyDay: 0.4176,
             gridEnergyNight: 0.4176,
-            gridEnergyLowWeekends: false
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
         }
     },
     "lnett": {
@@ -116,9 +121,28 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacity15_20: 625,
             gridCapacity20_25: 750,
             gridCapacityAverage: "3",
-            gridEnergyDay: 0.4860,
-            gridEnergyNight: 0.4060,
-            gridEnergyLowWeekends: true
+            gridEnergyDay: 0.486,
+            gridEnergyNight: 0.406,
+            gridEnergyLowWeekends: true,
+            gridEnergyLowHoliday: false,
+        }
+    },
+    "mellom": {
+        id: "mellom",
+        description: "Mellom",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 186,
+            gridCapacity2_5: 279,
+            gridCapacity5_10: 419,
+            gridCapacity10_15: 559,
+            gridCapacity15_20: 708,
+            gridCapacity20_25: 885,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4465,
+            gridEnergyNight: 0.3715,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
         }
     },
     "norgesnett": {
@@ -135,7 +159,8 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacityAverage: "3",
             gridEnergyDay: 0.5676,
             gridEnergyNight: 0.4426,
-            gridEnergyLowWeekends: false
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
         }
     },
     "tensio": {
@@ -153,6 +178,7 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyDay: 0.3626,
             gridEnergyNight: 0.2839,
             gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
         }
     },
 };
