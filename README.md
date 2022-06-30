@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.4.4
+
+- Prices for more grid companies
+
 #### 1.4.3
 
 - Prices for more grid companies

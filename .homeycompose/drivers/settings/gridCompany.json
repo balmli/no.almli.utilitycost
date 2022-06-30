@@ -75,6 +75,13 @@
       }
     },
     {
+      "id": "morenett",
+      "label": {
+        "en": "Mørenett",
+        "no": "Mørenett"
+      }
+    },
+    {
       "id": "norgesnett",
       "label": {
         "en": "Norgesnett",
