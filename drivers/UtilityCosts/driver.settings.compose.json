@@ -40,27 +40,6 @@
   {
     "type": "group",
     "label": {
-      "en": "Grid costs old regime",
-      "no": "Nettleie gammelt regime"
-    },
-    "children": [
-      {
-        "id": "gridFixedAmount",
-        "$extends": "gridFixedAmount"
-      },
-      {
-        "id": "gridConsumption",
-        "$extends": "gridConsumption"
-      },
-      {
-        "id": "gridNewRegime",
-        "$extends": "gridNewRegime"
-      }
-    ]
-  },
-  {
-    "type": "group",
-    "label": {
       "en": "Grid Capacity",
       "no": "Nettleie kapasitetsledd"
     },

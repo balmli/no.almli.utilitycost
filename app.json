@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "no.almli.utilitycost",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -359,83 +359,6 @@
             "name": "device",
             "type": "device",
             "filter": "driver_id=UtilityCosts|UtilityCostsDevice"
-          }
-        ]
-      },
-      {
-        "id": "set_grid_costs_settings",
-        "title": {
-          "en": "Update grid costs (old regime) settings",
-          "no": "Oppdatér innstillinger for nettleie (gammelt regime)"
-        },
-        "titleFormatted": {
-          "en": "Update grid costs (old regime) settings to [[gridFixedAmount]], [[gridConsumption]], [[gridNewRegime]]",
-          "no": "Oppdatér innstillinger for nettleie (gammelt regime) til [[gridFixedAmount]], [[gridConsumption]], [[gridNewRegime]]"
-        },
-        "hint": {
-          "en": "Update grid costs (old regime) settings.",
-          "no": "Oppdatér innstillinger for nettleie (gammelt regime)."
-        },
-        "args": [
-          {
-            "name": "device",
-            "type": "device",
-            "filter": "driver_id=UtilityCosts"
-          },
-          {
-            "name": "gridFixedAmount",
-            "type": "number",
-            "required": false,
-            "min": 0,
-            "max": 9999,
-            "title": {
-              "en": "Yearly fixed amount",
-              "no": "Årlig fastbeløp"
-            },
-            "placeholder": {
-              "en": "kr/year",
-              "no": "kr/år"
-            }
-          },
-          {
-            "name": "gridConsumption",
-            "type": "number",
-            "required": false,
-            "min": 0,
-            "max": 5,
-            "title": {
-              "en": "Consumption based part",
-              "no": "Forbruksavhengig del"
-            },
-            "placeholder": {
-              "en": "kr/kWh",
-              "no": "kr/kWh"
-            }
-          },
-          {
-            "name": "gridNewRegime",
-            "type": "dropdown",
-            "required": false,
-            "title": {
-              "en": "New grid costs regime",
-              "no": "Nye regler for nettleie"
-            },
-            "values": [
-              {
-                "id": "false",
-                "label": {
-                  "en": "No",
-                  "no": "Nei"
-                }
-              },
-              {
-                "id": "true",
-                "label": {
-                  "en": "Yes",
-                  "no": "Ja"
-                }
-              }
-            ]
           }
         ]
       },
@@ -1053,6 +976,13 @@
                   }
                 },
                 {
+                  "id": "midtnett",
+                  "label": {
+                    "en": "Midtnett",
+                    "no": "Midtnett"
+                  }
+                },
+                {
                   "id": "morenett",
                   "label": {
                     "en": "Mørenett",
@@ -1074,66 +1004,6 @@
                   }
                 }
               ]
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "label": {
-            "en": "Grid costs old regime",
-            "no": "Nettleie gammelt regime"
-          },
-          "children": [
-            {
-              "id": "gridFixedAmount",
-              "type": "number",
-              "label": {
-                "en": "Yearly fixed amount",
-                "no": "Årlig fastbeløp"
-              },
-              "hint": {
-                "en": "Yearly fixed amount existing regime incl. taxes.",
-                "no": "Årlig fastbeløp for nettleie for eksisterende regime inkl. mva og avgifter."
-              },
-              "value": 2875,
-              "min": 0,
-              "max": 9999,
-              "units": {
-                "en": "kr/year",
-                "no": "kr/år"
-              }
-            },
-            {
-              "id": "gridConsumption",
-              "type": "number",
-              "label": {
-                "en": "Consumption based part",
-                "no": "Forbruksavhengig del"
-              },
-              "hint": {
-                "en": "Grid consumption based part per kWh incl. taxes.",
-                "no": "Forbruksavhengig del pr. kWh inkl. mva og avgifter."
-              },
-              "value": 0.43,
-              "min": 0,
-              "max": 5,
-              "units": {
-                "en": "kr/kWh",
-                "no": "kr/kWh"
-              }
-            },
-            {
-              "id": "gridNewRegime",
-              "type": "checkbox",
-              "label": {
-                "en": "New grid costs regime",
-                "no": "Nye regler for nettleie"
-              },
-              "hint": {
-                "en": "Check if the new regime for grid costs has started.",
-                "no": "Kryss av hvis nye regler for nettleie har startet."
-              },
-              "value": false
             }
           ]
         },

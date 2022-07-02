@@ -75,6 +75,13 @@
       }
     },
     {
+      "id": "midtnett",
+      "label": {
+        "en": "Midtnett",
+        "no": "Midtnett"
+      }
+    },
+    {
       "id": "morenett",
       "label": {
         "en": "Mørenett",

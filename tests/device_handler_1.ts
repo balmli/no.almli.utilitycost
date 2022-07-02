@@ -5,7 +5,6 @@ import {HomeyDevice} from './HomeyDevice';
 
 const getSettings = () => {
     return {
-        gridNewRegime: true,
         gridEnergyDay: 0.3489,
         gridEnergyNight: 0.2489,
         gridEnergyLowWeekends: true
@@ -190,17 +189,6 @@ describe('Devices', function () {
     });
 
     describe('Check fixedPriceCalculation', function () {
-        it('Check gridPriceCalculation 1', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridConsumption: 0.4012
-            });
-            const dh = new DeviceHandler(device);
-            await dh.gridPriceCalculation('2022-01-01T10:00:00.000Z');
-            expect(device.getCapabilityValue('meter_gridprice_incl')).eq(0.4012);
-            expect(device.getCapabilityValue('meter_price_sum')).eq(0.4012);
-        });
         it('Check gridPriceCalculation 2', async function () {
             const device = new HomeyDevice();
             device.setSettings(getSettings());
@@ -475,52 +463,6 @@ describe('Devices', function () {
             expect(device.getCapabilityValue('meter_grid_year')).to.be.closeTo(0.008333, 0.000001);
             expect(device.getCapabilityValue('meter_grid_yesterday')).to.be.closeTo(0.008333, 0.000001);
         });
-        it('Check calculateGridCost 3', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridFixedAmount: 2050
-            });
-            device.setCapabilityValue('meter_gridprice_incl', 0.5);
-            const dh = new DeviceHandler(device);
-            const sv0 = await dh.startOfValues('2021-12-31T23:58:00+01:00');
-            const sv1 = await dh.startOfValues('2021-12-31T23:59:00+01:00');
-            await dh.calculateGridCost(1000, sv1);
-            const sv2 = await dh.startOfValues('2022-01-01T00:00:00+01:00');
-            await dh.calculateGridCost(1000, sv2);
-            const sv3 = await dh.startOfValues('2022-01-01T00:01:00+01:00');
-            await dh.calculateGridCost(1000, sv3);
-            //console.log(sv3, device.getCapabilityValues());
-            expect(device.getCapabilityValue('meter_grid_today')).to.be.closeTo(5.624771, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_yesterday')).to.be.closeTo(0.016666, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_month')).to.be.closeTo(5.624771, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_lastmonth')).to.be.closeTo(0.016666, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_year')).to.be.closeTo(5.624771, 0.000001);
-        });
-        it('Check calculateGridCost 4', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridFixedAmount: 2050
-            });
-            device.setCapabilityValue('meter_gridprice_incl', 0.5);
-            const dh = new DeviceHandler(device, {
-                addCapabilityCosts: false
-            });
-            const sv0 = await dh.startOfValues('2021-12-31T23:58:00+01:00');
-            const sv1 = await dh.startOfValues('2021-12-31T23:59:00+01:00');
-            await dh.calculateGridCost(1000, sv1);
-            const sv2 = await dh.startOfValues('2022-01-01T00:00:00+01:00');
-            await dh.calculateGridCost(1000, sv2);
-            const sv3 = await dh.startOfValues('2022-01-01T00:01:00+01:00');
-            await dh.calculateGridCost(1000, sv3);
-            //console.log(sv3, device.getCapabilityValues());
-            expect(device.getCapabilityValue('meter_grid_today')).to.be.closeTo(0.008333, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_yesterday')).to.be.closeTo(0.016666, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_month')).to.be.closeTo(0.008333, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_lastmonth')).to.be.closeTo(0.016666, 0.000001);
-            expect(device.getCapabilityValue('meter_grid_year')).to.be.closeTo(0.008333, 0.000001);
-        });
     });
 
     describe('Check calculateConsumptionHour', function () {
@@ -673,178 +615,6 @@ describe('Devices', function () {
             const sv = await dh.startOfValues('2022-04-01T00:00:00+02:00');
 
             expect(dh.getUtilityFixedAmountPerDay(sv)).to.be.closeTo(0.48, 0.000001);
-        });
-    });
-
-    describe('Check getGridFixedAmountPerDay', function () {
-        it('Check getGridFixedAmountPerDay 1', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridFixedAmount: 2050
-            });
-            const dh = new DeviceHandler(device);
-            const sv = await dh.startOfValues('2022-04-01T00:00:00+02:00');
-
-            expect(dh.getGridFixedAmountPerDay(sv)).to.be.closeTo(5.616438, 0.000001);
-        });
-        it('Check getGridFixedAmountPerDay 2', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridFixedAmount: 3650
-            });
-            const dh = new DeviceHandler(device);
-            const sv = await dh.startOfValues('2022-04-01T00:00:00+02:00');
-            expect(dh.getGridFixedAmountPerDay(sv)).eq(10);
-        });
-        it('Check getGridFixedAmountPerDay 3', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridFixedAmount: 3660
-            });
-            const dh = new DeviceHandler(device);
-            const sv = await dh.startOfValues('2024-04-01T00:00:00+02:00');
-            expect(dh.getGridFixedAmountPerDay(sv)).eq(10);
-        });
-        it('Check getGridFixedAmountPerDay 4', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: true,
-                gridFixedAmount: 3660
-            });
-            const dh = new DeviceHandler(device);
-            const sv = await dh.startOfValues('2024-04-01T00:00:00+02:00');
-            expect(dh.getGridFixedAmountPerDay(sv)).eq(0);
-        });
-        it('Check getGridFixedAmountPerDay 5', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridFixedAmount: 3660
-            });
-            const dh = new DeviceHandler(device, {
-                addCapabilityCosts: false
-            });
-            const sv = await dh.startOfValues('2024-04-01T00:00:00+02:00');
-            expect(dh.getGridFixedAmountPerDay(sv)).eq(0);
-        });
-        it('Check getGridFixedAmountPerDay 6', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: false,
-                gridFixedAmount: 3660
-            });
-            const dh = new DeviceHandler(device);
-            dh.setOptions({
-                addCapabilityCosts: false
-            })
-            const sv = await dh.startOfValues('2024-04-01T00:00:00+02:00');
-            expect(dh.getGridFixedAmountPerDay(sv)).eq(0);
-        });
-    });
-
-    describe('Check getGridCapacityAddedCost', function () {
-        it('Check getGridCapacityAddedCost 1', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: true,
-                gridCapacity0_2: 100,
-                gridCapacity2_5: 200,
-                gridCapacity5_10: 300,
-                gridCapacity10_15: 400,
-                gridCapacity15_20: 500,
-                gridCapacity20_25: 600,
-            });
-            const dh = new DeviceHandler(device);
-            const sv1 = await dh.startOfValues('2022-04-01T00:00:00+02:00');
-            const cost1 = dh.getGridCapacityAddedCost(12000, sv1);
-            await dh.calculateMaxConsumptionHour(12000, sv1);
-            expect(cost1).eq(0);
-
-            const sv2 = await dh.startOfValues('2022-04-01T00:01:00+02:00');
-            const cost2 = dh.getGridCapacityAddedCost(12000, sv2);
-            await dh.calculateMaxConsumptionHour(12000, sv2);
-            expect(cost2).eq(0);
-            expect(device.getCapabilityValue('meter_consumption_hour')).eq(200);
-            expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(200);
-
-            const sv3 = await dh.startOfValues('2022-04-01T01:00:00+02:00');
-            const cost3 = dh.getGridCapacityAddedCost(12000, sv3);
-            await dh.calculateMaxConsumptionHour(12000, sv3);
-            expect(cost3).eq(300);
-            expect(device.getCapabilityValue('meter_consumption_hour')).eq(11800);
-            expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(11800);
-        });
-        it('Check getGridCapacityAddedCost 2', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: true,
-                gridCapacity0_2: 100,
-                gridCapacity2_5: 200,
-                gridCapacity5_10: 300,
-                gridCapacity10_15: 400,
-                gridCapacity15_20: 500,
-                gridCapacity20_25: 600,
-            });
-            const dh = new DeviceHandler(device);
-            dh.setOptions({
-                addCapabilityCosts: false
-            })
-            const sv1 = await dh.startOfValues('2022-04-01T00:00:00+02:00');
-            const cost1 = dh.getGridCapacityAddedCost(12000, sv1);
-            await dh.calculateMaxConsumptionHour(12000, sv1);
-            expect(cost1).eq(0);
-
-            const sv2 = await dh.startOfValues('2022-04-01T00:01:00+02:00');
-            const cost2 = dh.getGridCapacityAddedCost(12000, sv2);
-            await dh.calculateMaxConsumptionHour(12000, sv2);
-            expect(cost2).eq(0);
-            expect(device.getCapabilityValue('meter_consumption_hour')).eq(200);
-            expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(200);
-
-            const sv3 = await dh.startOfValues('2022-04-01T01:00:00+02:00');
-            const cost3 = dh.getGridCapacityAddedCost(12000, sv3);
-            await dh.calculateMaxConsumptionHour(12000, sv3);
-            expect(cost3).eq(0);
-            expect(device.getCapabilityValue('meter_consumption_hour')).eq(11800);
-            expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(11800);
-        });
-        it('Check getGridCapacityAddedCost 3', async function () {
-            const device = new HomeyDevice();
-            device.setSettings({
-                gridNewRegime: true,
-                gridCapacity0_2: 101,
-                gridCapacity2_5: 203,
-                gridCapacity5_10: 306,
-                gridCapacity10_15: 407,
-                gridCapacity15_20: 511,
-                gridCapacity20_25: 616,
-            });
-            const dh = new DeviceHandler(device);
-            const sv0 = await dh.startOfValues('2022-03-31T23:59:59+02:00');
-            const sv1 = await dh.startOfValues('2022-04-01T00:00:00+02:00');
-            expect(sv1.newMonth).eq(true);
-            const cost1 = dh.getGridCapacityAddedCost(12000, sv1);
-            await dh.calculateMaxConsumptionHour(12000, sv1);
-            expect(cost1).eq(101);
-            expect(device.getCapabilityValue('meter_consumption_hour')).to.be.closeTo( 3.333333, 0.00001);
-            expect(device.getCapabilityValue('meter_consumption_maxmonth')).to.be.closeTo( 3.333333, 0.00001);
-
-            const sv2 = await dh.startOfValues('2022-04-01T00:01:00+02:00');
-            const cost2 = dh.getGridCapacityAddedCost(12000, sv2);
-            await dh.calculateMaxConsumptionHour(12000, sv2);
-            expect(cost2).eq(0);
-            expect(device.getCapabilityValue('meter_consumption_hour')).to.be.closeTo( 203.333333, 0.00001);
-            expect(device.getCapabilityValue('meter_consumption_maxmonth')).to.be.closeTo( 203.333333, 0.00001);
-
-            const sv3 = await dh.startOfValues('2022-04-01T01:00:00+02:00');
-            const cost3 = dh.getGridCapacityAddedCost(12000, sv3);
-            await dh.calculateMaxConsumptionHour(12000, sv3);
-            expect(cost3).eq(407 - 101);
-            expect(device.getCapabilityValue('meter_consumption_hour')).eq(11800);
-            expect(device.getCapabilityValue('meter_consumption_maxmonth')).eq(11800);
         });
     });
 

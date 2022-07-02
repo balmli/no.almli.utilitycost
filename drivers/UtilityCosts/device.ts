@@ -143,19 +143,6 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             this.clearCheckTime();
             const localTime = moment();
             const settings = this.getSettings();
-            if (settings.gridCompany !== 'not_set' && !settings.gridNewRegime) {
-                const gcSettings = GridCosts[settings.gridCompany];
-                const gridNewRegimeStart = moment(gcSettings.gridNewRegimeStart);
-                if (localTime.isAfter(gridNewRegimeStart)) {
-                    let ds: DeviceSettings = {
-                        ...this.getSettings()
-                    };
-                    ds.gridNewRegime = true;
-                    await this.setSettings(ds);
-                    this._dh.setSettings(ds);
-                    this.logger.info(`Automatically switched to new grid regime.`);
-                }
-            }
             if (settings.priceCalcMethod === 'nordpool_spot') {
                 if (this.shallFetchSpotPrices()) {
                     await this.fetchSpotPrices();
@@ -263,22 +250,6 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             this.scheduleCheckTime(2);
         } catch (err) {
             this.logger.error('onSetUtilityCostsSettings', err);
-        }
-    }
-
-    async onSetGridCostsSettings(args: any) {
-        try {
-            let ds: DeviceSettings = {
-                ...this.getSettings()
-            };
-            if (args.gridFixedAmount !== undefined) ds.gridFixedAmount = args.gridFixedAmount;
-            if (args.gridConsumption !== undefined) ds.gridConsumption = args.gridConsumption;
-            if (args.gridNewRegime !== undefined) ds.gridNewRegime = args.gridNewRegime === 'true';
-            await this.setSettings(ds);
-            this._dh.setSettings(ds);
-            this.scheduleCheckTime(2);
-        } catch (err) {
-            this.logger.error('onSetGridCostsSettings', err);
         }
     }
 

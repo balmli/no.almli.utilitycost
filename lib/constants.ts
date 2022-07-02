@@ -145,6 +145,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: false,
         }
     },
+    "midtnett": {
+        id: "midtnett",
+        description: "Midtnett",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 200,
+            gridCapacity2_5: 200,
+            gridCapacity5_10: 300,
+            gridCapacity10_15: 450,
+            gridCapacity15_20: 675,
+            gridCapacity20_25: 1013,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4551,
+            gridEnergyNight: 0.3551,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
+        }
+    },
     "morenett": {
         id: "morenett",
         description: "Mørenett",

@@ -29,10 +29,6 @@ export class DeviceSettings {
     costFormula!: string;
     costFormulaFixedAmount!: string;
 
-    gridFixedAmount!: number;
-    gridConsumption!: number;
-    gridNewRegime!: boolean;
-
     gridCapacity0_2!: number;
     gridCapacity2_5!: number;
     gridCapacity5_10!: number;
@@ -72,6 +68,7 @@ export class StoreValues {
     consumptionMinute?: boolean;
     lastConsumptionUpdate?: number;
     highest_10_hours?: MaxConsumptionDay[];
+    prevCapacityCost?: number;
 }
 
 export class DeviceHandlerOptions {
