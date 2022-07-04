@@ -1,4 +1,8 @@
 {
+  "1.4.6": {
+    "en": "Prices for more grid companies. ",
+    "no": "Priser for flere nettselskap. "
+  },
   "1.4.5": {
     "en": "Bugfix for calculating grid capacity cost. Prices for more grid companies. ",
     "no": "Rettelse for beregning av kapasitetsledd. Priser for flere nettselskap. "

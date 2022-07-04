@@ -37,6 +37,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: false,
         }
     },
+    "elinett": {
+        id: "elinett",
+        description: "Elinett",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 170,
+            gridCapacity2_5: 212.5,
+            gridCapacity5_10: 255,
+            gridCapacity10_15: 425,
+            gridCapacity15_20: 510,
+            gridCapacity20_25: 595,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4326,
+            gridEnergyNight: 0.3326,
+            gridEnergyLowWeekends: true,
+            gridEnergyLowHoliday: true,
+        }
+    },
     "elvia": {
         id: "elvia",
         description: "Elvia",
