@@ -145,6 +145,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: false,
         }
     },
+    "linja": {
+        id: "linja",
+        description: "Linja",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 193,
+            gridCapacity2_5: 268,
+            gridCapacity5_10: 343,
+            gridCapacity10_15: 493,
+            gridCapacity15_20: 593,
+            gridCapacity20_25: 693,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4426,
+            gridEnergyNight: 0.4051,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
+        }
+    },    
     "mellom": {
         id: "mellom",
         description: "Mellom",
