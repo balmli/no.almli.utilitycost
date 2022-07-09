@@ -162,7 +162,7 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowWeekends: false,
             gridEnergyLowHoliday: false,
         }
-    },    
+    },
     "mellom": {
         id: "mellom",
         description: "Mellom",
@@ -249,6 +249,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacityAverage: "3",
             gridEnergyDay: 0.3626,
             gridEnergyNight: 0.2839,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
+        }
+    },
+    "vonett": {
+        id: "vonett",
+        description: "Vonett",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 209,
+            gridCapacity2_5: 272,
+            gridCapacity5_10: 335,
+            gridCapacity10_15: 460,
+            gridCapacity15_20: 586,
+            gridCapacity20_25: 711,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.499,
+            gridEnergyNight: 0.436,
             gridEnergyLowWeekends: false,
             gridEnergyLowHoliday: false,
         }

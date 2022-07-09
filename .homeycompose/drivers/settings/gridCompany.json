@@ -73,7 +73,7 @@
         "en": "Linja",
         "no": "Linja"
       }
-    },     
+    },
     {
       "id": "lnett",
       "label": {
@@ -114,6 +114,13 @@
       "label": {
         "en": "Tensio",
         "no": "Tensio"
+      }
+    },
+    {
+      "id": "vonett",
+      "label": {
+        "en": "Vonett",
+        "no": "Vonett"
       }
     }
   ]
