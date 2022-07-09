@@ -68,6 +68,13 @@
       }
     },
     {
+      "id": "linja",
+      "label": {
+        "en": "Linja",
+        "no": "Linja"
+      }
+    },     
+    {
       "id": "lnett",
       "label": {
         "en": "Lnett",
