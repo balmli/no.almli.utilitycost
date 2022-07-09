@@ -1,4 +1,8 @@
 {
+  "1.4.7": {
+    "en": "Update grid capacity cost calculation. ",
+    "no": "Oppdatering av beregning av kapasitetsledd. "
+  },
   "1.4.6": {
     "en": "Prices for more grid companies. ",
     "no": "Priser for flere nettselskap. "

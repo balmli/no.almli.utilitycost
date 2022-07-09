@@ -545,10 +545,8 @@ export class DeviceHandler {
             } = this.calculateConsumptionHour(consumption, startValues);
 
             if (newConsumptionMaxMonthWh) {
-                if (startValues.newMonth) {
+                if (startValues.newMonth || this.storeValues.prevCapacityCost === undefined) {
                     this.storeValues.prevCapacityCost = 0;
-                } else if (this.storeValues.prevCapacityCost === undefined) {
-                    this.storeValues.prevCapacityCost = this.getGridCapacity(sumConsumptionMaxHour);
                 }
 
                 const prevCost = this.storeValues.prevCapacityCost;

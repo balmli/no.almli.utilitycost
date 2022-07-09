@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.4.7
+
+- Update grid capacity cost calculation
+
 #### 1.4.6
 
 - Prices for more grid companies
