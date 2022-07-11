@@ -61,10 +61,24 @@
       }
     },
     {
+      "id": "isaltennett",
+      "label": {
+        "en": "ISalten Nett",
+        "no": "ISalten Nett"
+      }
+    },
+    {
       "id": "lede",
       "label": {
         "en": "Lede",
         "no": "Lede"
+      }
+    },
+    {
+      "id": "linea",
+      "label": {
+        "en": "Linea",
+        "no": "Linea"
       }
     },
     {
@@ -100,6 +114,13 @@
       "label": {
         "en": "Mørenett",
         "no": "Mørenett"
+      }
+    },
+    {
+      "id": "nettselskapet",
+      "label": {
+        "en": "Nettselskapet",
+        "no": "Nettselskapet"
       }
     },
     {

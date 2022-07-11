@@ -109,6 +109,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: false,
         }
     },
+    "isaltennett": {
+        id: "isaltennett",
+        description: "ISalten Nett",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 95,
+            gridCapacity2_5: 285,
+            gridCapacity5_10: 380,
+            gridCapacity10_15: 475,
+            gridCapacity15_20: 570,
+            gridCapacity20_25: 665,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.1583,
+            gridEnergyNight: 0.0583,
+            gridEnergyLowWeekends: true,
+            gridEnergyLowHoliday: true,
+        }
+    },
     "lede": {
         id: "lede",
         description: "Lede",
@@ -123,6 +141,42 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacityAverage: "3",
             gridEnergyDay: 0.4176,
             gridEnergyNight: 0.4176,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
+        }
+    },
+    "linea": {
+        id: "linea",
+        description: "Linea",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 137.5,
+            gridCapacity2_5: 225,
+            gridCapacity5_10: 350,
+            gridCapacity10_15: 512.5,
+            gridCapacity15_20: 675,
+            gridCapacity20_25: 925,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4551,
+            gridEnergyNight: 0.3451,
+            gridEnergyLowWeekends: true,
+            gridEnergyLowHoliday: true,
+        }
+    },
+    "linja": {
+        id: "linja",
+        description: "Linja",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 193,
+            gridCapacity2_5: 268,
+            gridCapacity5_10: 343,
+            gridCapacity10_15: 493,
+            gridCapacity15_20: 593,
+            gridCapacity20_25: 693,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4426,
+            gridEnergyNight: 0.4051,
             gridEnergyLowWeekends: false,
             gridEnergyLowHoliday: false,
         }
@@ -142,24 +196,6 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyDay: 0.486,
             gridEnergyNight: 0.406,
             gridEnergyLowWeekends: true,
-            gridEnergyLowHoliday: false,
-        }
-    },
-    "linja": {
-        id: "linja",
-        description: "Linja",
-        gridNewRegimeStart: "2022-07-01",
-        gridSettings: {
-            gridCapacity0_2: 193,
-            gridCapacity2_5: 268,
-            gridCapacity5_10: 343,
-            gridCapacity10_15: 493,
-            gridCapacity15_20: 593,
-            gridCapacity20_25: 693,
-            gridCapacityAverage: "3",
-            gridEnergyDay: 0.4426,
-            gridEnergyNight: 0.4051,
-            gridEnergyLowWeekends: false,
             gridEnergyLowHoliday: false,
         }
     },
@@ -213,6 +249,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacityAverage: "3",
             gridEnergyDay: 0.4051,
             gridEnergyNight: 0.3301,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
+        }
+    },
+    "nettselskapet": {
+        id: "nettselskapet",
+        description: "Nettselskapet",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 100,
+            gridCapacity2_5: 187.5,
+            gridCapacity5_10: 312.5,
+            gridCapacity10_15: 462.5,
+            gridCapacity15_20: 612.5,
+            gridCapacity20_25: 762.5,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.4132,
+            gridEnergyNight: 0.3119,
             gridEnergyLowWeekends: false,
             gridEnergyLowHoliday: false,
         }
