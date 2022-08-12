@@ -2,7 +2,7 @@
   "id": "costFormula",
   "type": "text",
   "label": {
-    "en": "Formula for utility price",
+    "en": "Formula for electricity price",
     "no": "Formel for strømpris"
   },
   "value": "PRICE_NORDPOOL * 1.25 + 0.0299",

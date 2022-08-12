@@ -1,11 +1,11 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility yesterday",
+    "en": "Electricity costs yesterday",
     "no": "Strøm i går"
   },
   "desc": {
-    "en": "Shows utility cost yesterday",
+    "en": "Shows electricity costs yesterday",
     "no": "Viser strømkostnad i går"
   },
   "min": 0,

@@ -5,7 +5,7 @@
     "no": "Gjeldende kostnad"
   },
   "desc": {
-    "en": "Current utility and grid cost per hour.",
+    "en": "Current electricity and grid costs per hour.",
     "no": "Gjeldende strøm- og nettleiekostnad pr. time."
   },
   "decimals": 2,

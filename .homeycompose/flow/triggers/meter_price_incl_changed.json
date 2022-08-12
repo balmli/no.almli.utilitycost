@@ -2,11 +2,11 @@
   "id": "meter_price_incl_changed",
   "highlight": true,
   "title": {
-    "en": "Utility price incl. taxes changed",
+    "en": "Electricity price incl. taxes changed",
     "no": "Strømpris inkl. mva og påslag ble endret"
   },
   "hint": {
-    "en": "Triggers when the utility price incl. taxes and surcharges changes.",
+    "en": "Triggers when the electricity price incl. taxes and surcharges changes.",
     "no": "Dette kortet trigges når strømprisen inkl. mva og påslag endres."
   },
   "tokens": [

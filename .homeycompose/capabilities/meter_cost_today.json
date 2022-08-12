@@ -1,11 +1,11 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility today",
+    "en": "Electricity costs today",
     "no": "Strøm i dag"
   },
   "desc": {
-    "en": "Shows utility cost so far this hour",
+    "en": "Shows electricity costs so far this hour",
     "no": "Viser strømkostnad så langt denne timen"
   },
   "min": 0,

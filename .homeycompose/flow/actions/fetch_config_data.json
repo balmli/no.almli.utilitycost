@@ -1,0 +1,73 @@
+{
+  "id": "fetch_config_data",
+  "title": {
+    "en": "Fetch hours with highest consumption and other data",
+    "no": "Hent timer med høyest forbruk og andre data"
+  },
+  "advanced": true,
+  "titleFormatted": {
+    "en": "Fetch hours with highest consumption and other data",
+    "no": "Hent timer med høyest forbruk og andre data"
+  },
+  "hint": {
+    "en": "Use this card to fetch the three hours with highest consumption and other data such as prices and device settings.",
+    "no": "Bruk dette kortet for å hente de tre timene med høyest forbruk og andre data som priser og innstillinger."
+  },
+  "tokens": [
+    {
+      "name": "highest_1",
+      "type": "number",
+      "title": {
+        "en": "Highest consumption 1",
+        "no": "Høyeste forbruk 1"
+      }
+    },
+    {
+      "name": "highest_2",
+      "type": "number",
+      "title": {
+        "en": "Highest consumption 2",
+        "no": "Høyeste forbruk 2"
+      }
+    },
+    {
+      "name": "highest_3",
+      "type": "number",
+      "title": {
+        "en": "Highest consumption 3",
+        "no": "Høyeste forbruk 3"
+      }
+    },
+    {
+      "name": "highest_10_hours",
+      "type": "string",
+      "title": {
+        "en": "Highest consumption (JSON)",
+        "no": "Høyeste forbruk (JSON)"
+      }
+    },
+    {
+      "name": "prices",
+      "type": "string",
+      "title": {
+        "en": "Prices (JSON)",
+        "no": "Priser (JSON)"
+      }
+    },
+    {
+      "name": "device_settings",
+      "type": "string",
+      "title": {
+        "en": "Settings (JSON)",
+        "no": "Innstillinger (JSON)"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=UtilityCosts"
+    }
+  ]
+}

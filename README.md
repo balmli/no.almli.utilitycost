@@ -1,12 +1,12 @@
-# Norwegian Utility Bill
+# Norwegian Electricity Bill
 
-The 'Norwegian Utility Bill' is a device to calculate utility and grid prices for Norway.
+The 'Norwegian Electricity Bill' is a device to calculate electricity and grid prices for Norway.
 
 ## Install
 
 To install the device:
 
-1. Add the 'Norwegian Utility Bill' device.
+1. Add the 'Norwegian Electricity Bill' device.
 2. Go to 'Advanced settings'.  If you have a spot plan or fixed price plan, edit the price formula.
 3. Adjust the settings for grid capacity and grid energy for your grid provider.
 4. Add a flow to update consumption from a pulse device, eg. Tibber Pulse.  WHEN: Power changed, THEN: Update consumption with <POWER>.
@@ -14,6 +14,11 @@ To install the device:
 
 
 ### Release Notes:
+
+#### 1.4.10 
+
+- Added action card 'Fetch hours with highest consumption and other data'
+- Text changes
 
 #### 1.4.9
 
@@ -51,7 +56,7 @@ To install the device:
 - Added an option to calculate 'Level for grid capacity' as an average of highest consumption hours
 - Added an option to select grid company for grid capacity and energy settings
 - Fixed 'New level for grid capacity' trigger
-- Added action cards to update utility cost settings
+- Added action cards to update electricity cost settings
 
 #### 1.2.2
 
@@ -68,13 +73,13 @@ To install the device:
 
 #### 1.1.1
 
-- Added separate formula for fixed monthly utility costs
+- Added separate formula for fixed monthly electricity costs
 
 #### 1.1.0
 
 - Added support for slave devices
 - Added action cards to update settings
-- Added 'MONTHLY_HOURS' tag that can be used in the utility price formula
+- Added 'MONTHLY_HOURS' tag that can be used in the electricity price formula
 - Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities
 - Added action card to reset the 'Energy' (kWh) capability
 - Added action card to reset all accumulated capabilities
@@ -93,12 +98,12 @@ To install the device:
 
 #### 1.0.5
 
-- Added trigger for 'Sum utility and grid price changed'
+- Added trigger for 'Sum electricity and grid price changed'
 - Added options for number of decimals for prices
 
 #### 1.0.4
 
-- Can add more than one 'Norwegian Utility Bill' device
+- Can add more than one 'Norwegian Electricity Bill' device
 - Added 'Sum daily cost' and 'Sum yearly cost' capabilities
 - Fixed calculation of grid yearly fixed amount
 

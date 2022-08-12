@@ -2,7 +2,7 @@
   {
     "type": "group",
     "label": {
-      "en": "Utility costs",
+      "en": "Electricity costs",
       "no": "Strømkostnader"
     },
     "children": [

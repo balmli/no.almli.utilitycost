@@ -1,11 +1,11 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility price",
+    "en": "Electricity price",
     "no": "Strømpris"
   },
   "desc": {
-    "en": "Utility price current hour incl. taxes and surcharges",
+    "en": "Electricity price current hour incl. taxes and surcharges",
     "no": "Viser gjeldende strømpris inkl. mva og påslag"
   },
   "decimals": 5,

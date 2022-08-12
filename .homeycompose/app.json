@@ -1,6 +1,6 @@
 {
   "id": "no.almli.utilitycost",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -8,11 +8,11 @@
     "local"
   ],
   "name": {
-    "en": "Norwegian Utility Bill",
+    "en": "Norwegian Electricity Bill",
     "no": "Strømregning"
   },
   "description": {
-    "en": "Calculate utility and grid costs",
+    "en": "Calculate electricity and grid costs",
     "no": "Beregn kostnader for strøm og nettleie"
   },
   "category": [
@@ -21,10 +21,12 @@
   "tags": {
     "en": [
       "utility",
+      "electricity",
       "price",
       "prices",
       "spot",
-      "nordpool"
+      "nordpool",
+      "strømregning"
     ],
     "no": [
       "strøm",

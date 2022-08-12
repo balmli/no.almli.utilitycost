@@ -1,11 +1,11 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility price excl. taxes",
+    "en": "Electricity price excl. taxes",
     "no": "Strømpris eksl. mva"
   },
   "desc": {
-    "en": "Utility price current hour excl. taxes",
+    "en": "Electricity price current hour excl. taxes",
     "no": "Viser gjeldende spot strømpris eksl. mva"
   },
   "decimals": 5,

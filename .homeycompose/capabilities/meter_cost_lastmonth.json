@@ -1,11 +1,11 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility last month",
+    "en": "Electricity costs last month",
     "no": "Strøm forrige måned"
   },
   "desc": {
-    "en": "Shows utility cost last month",
+    "en": "Shows electricity costs last month",
     "no": "Viser strømkostnad forrige måned"
   },
   "min": 0,

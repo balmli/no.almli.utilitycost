@@ -309,5 +309,30 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                     return {time, price};
                 });
         }
+        return [];
     }
-};
+
+    async onFetchConfigData(args: any) {
+        try {
+            const storeValues = this._dh.getStoreValues();
+            const highest_hours = storeValues.highest_10_hours ? storeValues.highest_10_hours : [];
+            const highest_1 = highest_hours.length > 0 ? highest_hours[0].consumption : 0;
+            const highest_2 = highest_hours.length > 1 ? highest_hours[1].consumption : 0;
+            const highest_3 = highest_hours.length > 2 ? highest_hours[2].consumption : 0;
+            const prices = JSON.stringify(this.getPrices());
+            const highest_10_hours = JSON.stringify(highest_hours);
+            const device_settings = JSON.stringify(this._dh.getSettings());
+            return {
+                highest_1,
+                highest_2,
+                highest_3,
+                highest_10_hours,
+                prices,
+                device_settings,
+            };
+        } catch (err) {
+            this.logger.error('onFetchConfigData', err);
+        }
+    };
+
+}

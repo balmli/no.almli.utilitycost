@@ -1,11 +1,11 @@
 {
   "type": "number",
   "title": {
-    "en": "Utility this month",
+    "en": "Electricity costs this month",
     "no": "Strøm denne måned"
   },
   "desc": {
-    "en": "Shows utility cost so far this month",
+    "en": "Shows electricity costs so far this month",
     "no": "Viser strømkostnad så langt denne måned"
   },
   "min": 0,

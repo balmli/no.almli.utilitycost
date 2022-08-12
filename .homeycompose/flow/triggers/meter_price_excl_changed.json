@@ -2,11 +2,11 @@
   "id": "meter_price_excl_changed",
   "highlight": true,
   "title": {
-    "en": "Utility price changed",
+    "en": "Electricity price changed",
     "no": "Strømpris eksl. mva ble endret"
   },
   "hint": {
-    "en": "Triggers when the utility price changes.",
+    "en": "Triggers when the electricity price changes.",
     "no": "Dette kortet trigges når strømprisen eksl. mva endres."
   },
   "tokens": [

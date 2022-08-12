@@ -1,4 +1,8 @@
 {
+  "1.4.10": {
+    "en": "Added action card 'Fetch hours with highest consumption and other data'. Text changes. ",
+    "no": "La inn kort 'Hent timer med høyest forbruk og andre data'. Diverse endringer i tekster. "
+  },
   "1.4.9": {
     "en": "Update grid capacity cost calculation. Prices for more grid companies. ",
     "no": "Oppdatering av beregning av kapasitetsledd. Priser for flere nettselskap. "
@@ -40,7 +44,7 @@
     "no": "Støtte for å oppdatere Heating Controller med priser. Priser for flere nettselskap. "
   },
   "1.3.0": {
-    "en": "Added an option to calculate 'Level for grid capacity' as an average of highest consumption hours. Added an option to select grid company for grid capacity and energy settings. Fixed 'New level for grid capacity' trigger. Added action cards to update utility cost settings. ",
+    "en": "Added an option to calculate 'Level for grid capacity' as an average of highest consumption hours. Added an option to select grid company for grid capacity and energy settings. Fixed 'New level for grid capacity' trigger. Added action cards to update electricity costs settings. ",
     "no": "La inn valg for å beregne 'Trinn for kapasitetsledd' som gjennomsnitt av timer med høyeste forbruk. La in valg for å velge nettselskap. Rettelse for 'Nytt trinn for kapasitetsledd for nettleie' trigger. La inn kort for å sette strømkostnader. "
   },
   "1.2.2": {
@@ -56,11 +60,11 @@
     "no": "La inn kort 'Oppdatér energi med X kWh' for å oppdatere med energi (kWh) i stedet for effekt (W). "
   },
   "1.1.1": {
-    "en": "Added support for slave devices. Added action cards to update settings. Added 'MONTHLY_HOURS' tag that can be used in the utility price formula. Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities. Added action card to reset the 'Energy' (kWh) capability. Added action card to reset all accumulated capabilities. Added separate formula for fixed monthly utility costs.",
+    "en": "Added support for slave devices. Added action cards to update settings. Added 'MONTHLY_HOURS' tag that can be used in the electricity price formula. Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities. Added action card to reset the 'Energy' (kWh) capability. Added action card to reset all accumulated capabilities. Added separate formula for fixed monthly electricity costs.",
     "no": "La inn støtte for slave-enheter. Lagt til kort for å oppdatere innstillinger. La til 'MONTHLY_HOURS' tagg som kan brukes i strømpris-formel. La inn felt for 'Energi' (kWh) og 'Energi dette året' (kWh). Lagt til kort for å nullstille energimåler. Lagt til kort for å nullstille alle akkumulerte verdier. La inn egen formel for månedlig fastbeløp for strøm. "
   },
   "1.1.0": {
-    "en": "Added support for slave devices. Added action cards to update settings. Added 'MONTHLY_HOURS' tag that can be used in the utility price formula. Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities. Added action card to reset the 'Energy' (kWh) capability. Added action card to reset all accumulated capabilities. ",
+    "en": "Added support for slave devices. Added action cards to update settings. Added 'MONTHLY_HOURS' tag that can be used in the electricity price formula. Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities. Added action card to reset the 'Energy' (kWh) capability. Added action card to reset all accumulated capabilities. ",
     "no": "La inn støtte for slave-enheter. Lagt til kort for å oppdatere innstillinger. La til 'MONTHLY_HOURS' tagg som kan brukes i strømpris-formel. La inn felt for 'Energi' (kWh) og 'Energi dette året' (kWh). Lagt til kort for å nullstille energimåler. Lagt til kort for å nullstille alle akkumulerte verdier. "
   },
   "1.0.8": {
@@ -68,19 +72,19 @@
     "no": "Kapasitetsledd legges til når maks. forbruk pr. time øker. "
   },
   "1.0.7": {
-    "en": "Added trigger for 'Sum utility and grid price changed'. Added options for number of decimals for prices. Costs will be updated regularly even if consumption is not updated regularly. ",
+    "en": "Added trigger for 'Sum electricity and grid price changed'. Added options for number of decimals for prices. Costs will be updated regularly even if consumption is not updated regularly. ",
     "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. Lagt til valg for antall desimaler for priser. Kostnader oppdateres jevnlig selv om forbruk ikke oppdateres jevnlig. "
   },
   "1.0.6": {
-    "en": "Added trigger for 'Sum utility and grid price changed'. Added options for number of decimals for prices. ",
+    "en": "Added trigger for 'Sum electricity and grid price changed'. Added options for number of decimals for prices. ",
     "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. Lagt til valg for antall desimaler for priser. "
   },
   "1.0.5": {
-    "en": "Added trigger for 'Sum utility and grid price changed'. Added options for number of decimals for prices. ",
+    "en": "Added trigger for 'Sum electricity and grid price changed'. Added options for number of decimals for prices. ",
     "no": "Lagt til trigger for 'Sum strøm- og nettleiepris ble endret'. Lagt til valg for antall desimaler for priser. "
   },
   "1.0.4": {
-    "en": "Can add more than one 'Norwegian Utility Bill' device. Added 'Sum daily cost' and 'Sum yearly cost' capabilities. Fixed calculation of grid yearly fixed amount. ",
+    "en": "Can add more than one 'Norwegian Electricity Bill' device. Added 'Sum daily cost' and 'Sum yearly cost' capabilities. Fixed calculation of grid yearly fixed amount. ",
     "no": "Kan legge inn mer enn 'Strømregning' enhet. Lagt til 'Sum daglig kostnad' og 'Sum årlig kostnad'. Rettet beregning av fastbeløp for nettleie. "
   },
   "1.0.3": {

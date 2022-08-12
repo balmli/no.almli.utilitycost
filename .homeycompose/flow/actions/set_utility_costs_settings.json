@@ -1,15 +1,15 @@
 {
   "id": "set_utility_costs_settings",
   "title": {
-    "en": "Update utility costs settings",
+    "en": "Update electricity costs settings",
     "no": "Oppdatér innstillinger for strømkostnader"
   },
   "titleFormatted": {
-    "en": "Update utility costs settings to [[costFormula]], [[costFormulaFixedAmount]]",
+    "en": "Update electricity costs settings to [[costFormula]], [[costFormulaFixedAmount]]",
     "no": "Oppdatér innstillinger for strømkostnader til [[costFormula]], [[costFormulaFixedAmount]]"
   },
   "hint": {
-    "en": "Update utility costs settings.",
+    "en": "Update electricity costs settings.",
     "no": "Oppdatér innstillinger for strømkostnader."
   },
   "args": [
@@ -23,7 +23,7 @@
       "type": "text",
       "required": false,
       "title": {
-        "en": "Formula for utility price",
+        "en": "Formula for electricity price",
         "no": "Formel for strømpris"
       }
     },
@@ -32,7 +32,7 @@
       "type": "text",
       "required": false,
       "title": {
-        "en": "Fixed monthly utility cost",
+        "en": "Fixed monthly electricity cost",
         "no": "Månedlig fastbeløp for strøm"
       }
     }

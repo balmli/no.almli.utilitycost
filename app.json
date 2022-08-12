@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "no.almli.utilitycost",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -9,11 +9,11 @@
     "local"
   ],
   "name": {
-    "en": "Norwegian Utility Bill",
+    "en": "Norwegian Electricity Bill",
     "no": "Strømregning"
   },
   "description": {
-    "en": "Calculate utility and grid costs",
+    "en": "Calculate electricity and grid costs",
     "no": "Beregn kostnader for strøm og nettleie"
   },
   "category": [
@@ -22,10 +22,12 @@
   "tags": {
     "en": [
       "utility",
+      "electricity",
       "price",
       "prices",
       "spot",
-      "nordpool"
+      "nordpool",
+      "strømregning"
     ],
     "no": [
       "strøm",
@@ -149,11 +151,11 @@
         "id": "meter_price_excl_changed",
         "highlight": true,
         "title": {
-          "en": "Utility price changed",
+          "en": "Electricity price changed",
           "no": "Strømpris eksl. mva ble endret"
         },
         "hint": {
-          "en": "Triggers when the utility price changes.",
+          "en": "Triggers when the electricity price changes.",
           "no": "Dette kortet trigges når strømprisen eksl. mva endres."
         },
         "tokens": [
@@ -178,11 +180,11 @@
         "id": "meter_price_incl_changed",
         "highlight": true,
         "title": {
-          "en": "Utility price incl. taxes changed",
+          "en": "Electricity price incl. taxes changed",
           "no": "Strømpris inkl. mva og påslag ble endret"
         },
         "hint": {
-          "en": "Triggers when the utility price incl. taxes and surcharges changes.",
+          "en": "Triggers when the electricity price incl. taxes and surcharges changes.",
           "no": "Dette kortet trigges når strømprisen inkl. mva og påslag endres."
         },
         "tokens": [
@@ -207,11 +209,11 @@
         "id": "meter_price_sum_changed",
         "highlight": true,
         "title": {
-          "en": "Sum utility and grid price changed",
+          "en": "Sum electricity and grid price changed",
           "no": "Sum strøm- og nettleiepris ble endret"
         },
         "hint": {
-          "en": "Triggers when the sum of utility and grid price changes.",
+          "en": "Triggers when the sum of electricity and grid price changes.",
           "no": "Dette kortet trigges når sum av strøm- og nettleiepris endres."
         },
         "tokens": [
@@ -267,15 +269,15 @@
       {
         "id": "price_incl_below",
         "title": {
-          "en": "Is current utility price incl. taxes !{{below|above}}",
+          "en": "Is current electricity price incl. taxes !{{below|above}}",
           "no": "Er strømpris inkl. mva !{{under|over}}"
         },
         "titleFormatted": {
-          "en": "Is current utility price incl. taxes !{{below|above}} [[price]] NOK/kWh",
+          "en": "Is current electricity price incl. taxes !{{below|above}} [[price]] NOK/kWh",
           "no": "Er strømpris inkl. mva !{{under|over}} [[price]] kr/kWh"
         },
         "hint": {
-          "en": "Condition to check if the current utility price incl. taxes and surcharges is below or above a specific value.",
+          "en": "Condition to check if the current electricity price incl. taxes and surcharges is below or above a specific value.",
           "no": "For å sjekke om strømpris inkl. mva og påslag er under eller over en spesifikk pris."
         },
         "args": [
@@ -326,6 +328,79 @@
       }
     ],
     "actions": [
+      {
+        "id": "fetch_config_data",
+        "title": {
+          "en": "Fetch hours with highest consumption and other data",
+          "no": "Hent timer med høyest forbruk og andre data"
+        },
+        "advanced": true,
+        "titleFormatted": {
+          "en": "Fetch hours with highest consumption and other data",
+          "no": "Hent timer med høyest forbruk og andre data"
+        },
+        "hint": {
+          "en": "Use this card to fetch the three hours with highest consumption and other data such as prices and device settings.",
+          "no": "Bruk dette kortet for å hente de tre timene med høyest forbruk og andre data som priser og innstillinger."
+        },
+        "tokens": [
+          {
+            "name": "highest_1",
+            "type": "number",
+            "title": {
+              "en": "Highest consumption 1",
+              "no": "Høyeste forbruk 1"
+            }
+          },
+          {
+            "name": "highest_2",
+            "type": "number",
+            "title": {
+              "en": "Highest consumption 2",
+              "no": "Høyeste forbruk 2"
+            }
+          },
+          {
+            "name": "highest_3",
+            "type": "number",
+            "title": {
+              "en": "Highest consumption 3",
+              "no": "Høyeste forbruk 3"
+            }
+          },
+          {
+            "name": "highest_10_hours",
+            "type": "string",
+            "title": {
+              "en": "Highest consumption (JSON)",
+              "no": "Høyeste forbruk (JSON)"
+            }
+          },
+          {
+            "name": "prices",
+            "type": "string",
+            "title": {
+              "en": "Prices (JSON)",
+              "no": "Priser (JSON)"
+            }
+          },
+          {
+            "name": "device_settings",
+            "type": "string",
+            "title": {
+              "en": "Settings (JSON)",
+              "no": "Innstillinger (JSON)"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=UtilityCosts"
+          }
+        ]
+      },
       {
         "id": "meter_power_reset",
         "title": {
@@ -554,15 +629,15 @@
       {
         "id": "set_utility_costs_settings",
         "title": {
-          "en": "Update utility costs settings",
+          "en": "Update electricity costs settings",
           "no": "Oppdatér innstillinger for strømkostnader"
         },
         "titleFormatted": {
-          "en": "Update utility costs settings to [[costFormula]], [[costFormulaFixedAmount]]",
+          "en": "Update electricity costs settings to [[costFormula]], [[costFormulaFixedAmount]]",
           "no": "Oppdatér innstillinger for strømkostnader til [[costFormula]], [[costFormulaFixedAmount]]"
         },
         "hint": {
-          "en": "Update utility costs settings.",
+          "en": "Update electricity costs settings.",
           "no": "Oppdatér innstillinger for strømkostnader."
         },
         "args": [
@@ -576,7 +651,7 @@
             "type": "text",
             "required": false,
             "title": {
-              "en": "Formula for utility price",
+              "en": "Formula for electricity price",
               "no": "Formel for strømpris"
             }
           },
@@ -585,7 +660,7 @@
             "type": "text",
             "required": false,
             "title": {
-              "en": "Fixed monthly utility cost",
+              "en": "Fixed monthly electricity cost",
               "no": "Månedlig fastbeløp for strøm"
             }
           }
@@ -772,14 +847,14 @@
       ],
       "id": "UtilityCosts",
       "name": {
-        "en": "Utility Bill",
+        "en": "Electricity Bill",
         "no": "Strømregning"
       },
       "settings": [
         {
           "type": "group",
           "label": {
-            "en": "Utility costs",
+            "en": "Electricity costs",
             "no": "Strømkostnader"
           },
           "children": [
@@ -792,7 +867,7 @@
               },
               "value": "nordpool_spot",
               "hint": {
-                "en": "Method for calculating the utility price.  Select 'Spot' for spot, and edit the 'Formula for utility price' to add taxes and surcharges.  Select 'Fixed price' for fixed price agreements, and edit the 'Formula for utility price' for the price.  Select 'From flow' if the price comes from a price source, eg. Tibber. ",
+                "en": "Method for calculating the electricity price.  Select 'Spot' for spot, and edit the 'Formula for electricity price' to add taxes and surcharges.  Select 'Fixed price' for fixed price agreements, and edit the 'Formula for electricity price' for the price.  Select 'From flow' if the price comes from a price source, eg. Tibber. ",
                 "no": "Metode for å beregne strømprisen.  Velg 'Spotpris' for spotprisavtaler, og editer 'Formel for strømpris' for å legge på mva og påslag.  Velg 'Fastpris' for fastpris, og legg inn prisen i 'Formel for strømpris'.  Velg 'Fra flow' hvis prisen kommer fra en priskilde, f.eks. Tibber. "
               },
               "values": [
@@ -868,7 +943,7 @@
               "id": "costFormula",
               "type": "text",
               "label": {
-                "en": "Formula for utility price",
+                "en": "Formula for electricity price",
                 "no": "Formel for strømpris"
               },
               "value": "PRICE_NORDPOOL * 1.25 + 0.0299",
@@ -881,12 +956,12 @@
               "id": "costFormulaFixedAmount",
               "type": "text",
               "label": {
-                "en": "Fixed monthly utility cost",
+                "en": "Fixed monthly electricity cost",
                 "no": "Månedlig fastbeløp for strøm"
               },
               "value": "0",
               "hint": {
-                "en": "Formula to calculate the fixed monthly utility cost incl. taxes, which is independent of consumption. In NOK/month. ",
+                "en": "Formula to calculate the fixed monthly electricity costs incl. taxes, which is independent of consumption. In NOK/month. ",
                 "no": "Formel for å beregne månedlig fastbeløp for strøm inkl. mva, som uavhengig av forbruk. I kr/mnd. "
               }
             }
@@ -1374,7 +1449,7 @@
       ],
       "id": "UtilityCostsDevice",
       "name": {
-        "en": "Utility Bill Device",
+        "en": "Electricity Bill Component",
         "no": "Strømregning Enhet"
       },
       "settings": [
@@ -1495,11 +1570,11 @@
     "meter_cost_lastmonth": {
       "type": "number",
       "title": {
-        "en": "Utility last month",
+        "en": "Electricity costs last month",
         "no": "Strøm forrige måned"
       },
       "desc": {
-        "en": "Shows utility cost last month",
+        "en": "Shows electricity costs last month",
         "no": "Viser strømkostnad forrige måned"
       },
       "min": 0,
@@ -1517,11 +1592,11 @@
     "meter_cost_month": {
       "type": "number",
       "title": {
-        "en": "Utility this month",
+        "en": "Electricity costs this month",
         "no": "Strøm denne måned"
       },
       "desc": {
-        "en": "Shows utility cost so far this month",
+        "en": "Shows electricity costs so far this month",
         "no": "Viser strømkostnad så langt denne måned"
       },
       "min": 0,
@@ -1539,11 +1614,11 @@
     "meter_cost_today": {
       "type": "number",
       "title": {
-        "en": "Utility today",
+        "en": "Electricity costs today",
         "no": "Strøm i dag"
       },
       "desc": {
-        "en": "Shows utility cost so far this hour",
+        "en": "Shows electricity costs so far this hour",
         "no": "Viser strømkostnad så langt denne timen"
       },
       "min": 0,
@@ -1561,11 +1636,11 @@
     "meter_cost_year": {
       "type": "number",
       "title": {
-        "en": "Utility this year",
+        "en": "Electricity costs this year",
         "no": "Strøm dette året"
       },
       "desc": {
-        "en": "Shows utility cost so far this year",
+        "en": "Shows electricity costs so far this year",
         "no": "Viser strømkostnad så langt dette året"
       },
       "min": 0,
@@ -1583,11 +1658,11 @@
     "meter_cost_yesterday": {
       "type": "number",
       "title": {
-        "en": "Utility yesterday",
+        "en": "Electricity costs yesterday",
         "no": "Strøm i går"
       },
       "desc": {
-        "en": "Shows utility cost yesterday",
+        "en": "Shows electricity costs yesterday",
         "no": "Viser strømkostnad i går"
       },
       "min": 0,
@@ -1751,11 +1826,11 @@
     "meter_price_excl": {
       "type": "number",
       "title": {
-        "en": "Utility price excl. taxes",
+        "en": "Electricity price excl. taxes",
         "no": "Strømpris eksl. mva"
       },
       "desc": {
-        "en": "Utility price current hour excl. taxes",
+        "en": "Electricity price current hour excl. taxes",
         "no": "Viser gjeldende spot strømpris eksl. mva"
       },
       "decimals": 5,
@@ -1772,11 +1847,11 @@
     "meter_price_incl": {
       "type": "number",
       "title": {
-        "en": "Utility price",
+        "en": "Electricity price",
         "no": "Strømpris"
       },
       "desc": {
-        "en": "Utility price current hour incl. taxes and surcharges",
+        "en": "Electricity price current hour incl. taxes and surcharges",
         "no": "Viser gjeldende strømpris inkl. mva og påslag"
       },
       "decimals": 5,
@@ -1793,11 +1868,11 @@
     "meter_price_sum": {
       "type": "number",
       "title": {
-        "en": "Sum utility and grid price",
+        "en": "Sum electricity and grid price",
         "no": "Sum strøm- og nettleiepris"
       },
       "desc": {
-        "en": "Sum utility and grid price",
+        "en": "Sum electricity and grid price",
         "no": "Sum strøm- og nettleiepris"
       },
       "decimals": 5,
@@ -1817,7 +1892,7 @@
         "no": "Gjeldende kostnad"
       },
       "desc": {
-        "en": "Current utility and grid cost per hour.",
+        "en": "Current electricity and grid costs per hour.",
         "no": "Gjeldende strøm- og nettleiekostnad pr. time."
       },
       "decimals": 2,

@@ -1,8 +1,8 @@
-The 'Norwegian Utility Bill' is a device to calculate utility and grid prices for Norway.
+The 'Norwegian Electricity Bill' is a device to calculate electricity and grid prices for Norway.
 
 To install the device:
 
-1. Add the 'Norwegian Utility Bill' device.
+1. Add the 'Norwegian Electricity Bill' device.
 2. Go to 'Advanced settings'.  If you have a spot plan or fixed price plan, edit the price formula.
 3. Adjust the settings for grid capacity and grid energy for your grid provider.
 4. Add a flow to update consumption from a pulse device, eg. Tibber Pulse.  WHEN: Power changed, THEN: Update consumption with <POWER>.
