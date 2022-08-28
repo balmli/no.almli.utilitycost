@@ -6,7 +6,7 @@ The 'Norwegian Electricity Bill' is a device to calculate electricity and grid p
 
 To install the device:
 
-1. Add the 'Norwegian Electricity Bill' device.
+1. Add the 'Electricity Bill' device.
 2. Go to 'Advanced settings'.  If you have a spot plan or fixed price plan, edit the price formula.
 3. Adjust the settings for grid capacity and grid energy for your grid provider.
 4. Add a flow to update consumption from a pulse device, eg. Tibber Pulse.  WHEN: Power changed, THEN: Update consumption with <POWER>.
@@ -14,6 +14,11 @@ To install the device:
 
 
 ### Release Notes:
+
+#### 1.5.0
+
+- Grid capacity cost moved to a separate capability
+- Added API function to export Grid capacity prices (frodeheg)
 
 #### 1.4.10 
 

@@ -29,7 +29,8 @@
     "meter_price_sum",
     "meter_power.acc",
     "meter_power.year",
-    "meter_energy"
+    "meter_energy",
+    "meter_cost_capacity"
   ],
   "capabilitiesOptions": {
     "meter_price_incl": {

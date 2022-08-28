@@ -1,4 +1,8 @@
 {
+  "1.5.0": {
+    "en": "Grid capacity cost moved to a separate capability. Added API function to export grid capacity prices (frodeheg). ",
+    "no": "Kostnad kapasitetsledd flyttet til egen verdi.  La til API for å eksportere pris for kapasitetsledd (frodeheg). "
+  },
   "1.4.10": {
     "en": "Added action card 'Fetch hours with highest consumption and other data'. Text changes. ",
     "no": "La inn kort 'Hent timer med høyest forbruk og andre data'. Diverse endringer i tekster. "

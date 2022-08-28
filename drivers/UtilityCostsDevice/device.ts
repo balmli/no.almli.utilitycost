@@ -43,7 +43,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 this._dh.getStoreValues().highest_10_hours = [];
                 await this._dh.storeStoreValues();
             }
-            await this.setStoreValue('version', 2);
+            await this.setStoreValue('version', 3);
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);

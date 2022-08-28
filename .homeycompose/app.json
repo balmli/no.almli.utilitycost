@@ -1,6 +1,6 @@
 {
   "id": "no.almli.utilitycost",
-  "version": "1.4.10",
+  "version": "1.5.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#167be5",
@@ -71,6 +71,9 @@
       },
       {
         "name": "Victor Pran"
+      },
+      {
+        "name": "Frode Heggelund"
       }
     ]
   },

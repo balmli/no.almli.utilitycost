@@ -88,7 +88,19 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 }
                 await this._dh.storeStoreValues();
             }
-            await this.setStoreValue('version', 2);
+            if (!migVersion || migVersion < 3) {
+                if (!this.hasCapability('meter_cost_capacity')) {
+                    await this.addCapability('meter_cost_capacity');
+                    try {
+                        const consumptionMaxmonth = this.getCapabilityValue('meter_consumption_maxmonth');
+                        const gridCapacityCost = this._dh.getGridCapacity(consumptionMaxmonth);
+                        await this.setCapabilityValue(`meter_cost_capacity`, gridCapacityCost);
+                    } catch (err1) {
+                        this.logger.error(err1);
+                    }
+                }
+            }
+            await this.setStoreValue('version', 3);
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);

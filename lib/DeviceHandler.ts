@@ -372,13 +372,9 @@ export class DeviceHandler {
         try {
             const price = this.device.getCapabilityValue(`meter_gridprice_incl`) || 0;
 
-            const gridCapacityCost = newDay ?
-                this.getGridCapacityAddedCost(consumption, startValues)
-                : this.getGridCapacityAddedCost(consumption, startValues);
-
             const costToday = newDay ?
-                (consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price + gridCapacityCost)
-                : (consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price + gridCapacityCost);
+                (consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price)
+                : (consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price);
 
             const costYesterday = newDay ?
                 consumption * (startOfDay - lastUpdate) / (1000 * 3600000) * price
@@ -396,12 +392,16 @@ export class DeviceHandler {
             const newCostMonth = newMonth ? costToday : costToday + sumCostMonth;
             await this.device.setCapabilityValue(`meter_grid_month`, newCostMonth);
 
+            // Add grid capacity cost from October this year...
+            const dateToday = new Date();
+            const gridCapacityCost = (dateToday.getFullYear() === 2022 && dateToday.getMonth() < 9) ? 0 : this.device.getCapabilityValue(`meter_cost_capacity`) || 0;
+
             if (newMonth) {
-                await this.device.setCapabilityValue(`meter_grid_lastmonth`, sumCostMonth + costYesterday);
+                await this.device.setCapabilityValue(`meter_grid_lastmonth`, sumCostMonth + costYesterday + gridCapacityCost);
             }
 
             const sumCostYear = this.device.getCapabilityValue(`meter_grid_year`) || 0;
-            const newCostYear = newYear ? costToday : costToday + sumCostYear;
+            const newCostYear = newYear ? costToday : costToday + sumCostYear + gridCapacityCost;
             await this.device.setCapabilityValue(`meter_grid_year`, newCostYear);
 
             this.device.logger.debug(`Grid calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday}`);
@@ -483,6 +483,10 @@ export class DeviceHandler {
 
                 const prevLevel = newMonth ? 0 : this.getGridCapacityLevel(sumConsumptionMaxHour);
                 const newLevel = this.getGridCapacityLevel(newConsumptionMaxMonthWh);
+                if (this.device.hasCapability('meter_cost_capacity')) {
+                    const gridCapacityCost = this.getGridCapacity(newConsumptionMaxMonthWh);
+                    await this.device.setCapabilityValue(`meter_cost_capacity`, gridCapacityCost);
+                }
                 if (prevLevel > 0 && newLevel !== prevLevel) {
                     await this.device.homey?.flow?.getDeviceTriggerCard('grid_capacity_level')
                         .trigger(this.device, {
@@ -530,33 +534,6 @@ export class DeviceHandler {
             return monthlyCost / numDaysInMonth;
         } catch (err) {
             this.device.logger.error(`getUtilityFixedAmountPerDay failed: "${costFormulaFixedAmount}"`, err);
-        }
-        return 0;
-    }
-
-    getGridCapacityAddedCost(consumption: number, startValues: StartValues): number {
-        try {
-            if (this.options.addCapabilityCosts !== true) {
-                return 0;
-            }
-            const {
-                sumConsumptionMaxHour,
-                newConsumptionMaxMonthWh
-            } = this.calculateConsumptionHour(consumption, startValues);
-
-            if (newConsumptionMaxMonthWh) {
-                if (startValues.newMonth || this.storeValues.prevCapacityCost === undefined) {
-                    this.storeValues.prevCapacityCost = 0;
-                }
-
-                const prevCost = this.storeValues.prevCapacityCost;
-                const newCost = this.getGridCapacity(newConsumptionMaxMonthWh);
-                this.storeValues.prevCapacityCost = newCost;
-                this.device.logger.debug(`getGridCapacityAddedCost:`, { sumConsumptionMaxHour, prevCost, newConsumptionMaxMonthWh, newCost});
-                return newCost - prevCost;
-            }
-        } catch (err) {
-            this.device.logger.error('getGridCapacityAddedCost failed: ', err);
         }
         return 0;
     }

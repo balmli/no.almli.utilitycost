@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Grid capacity this month",
+    "no": "Kapasitetsledd denne måned"
+  },
+  "desc": {
+    "en": "Grid capacity costs so far this month",
+    "no": "Viser kostnad for kapasitetsledd så langt denne måned"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/grid.svg"
+}

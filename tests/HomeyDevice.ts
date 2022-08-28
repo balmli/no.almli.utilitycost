@@ -45,6 +45,10 @@ export class HomeyDevice {
         return this.capabilities;
     }
 
+    hasCapability(capabilityId: string): any {
+        return true;
+    }
+
     getCapabilityValue(capabilityId: string): any {
         return this.capabilities.get(capabilityId);
     }
