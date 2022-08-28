@@ -312,6 +312,18 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         return [];
     }
 
+    getGridCosts() {
+        const settings = this.getSettings();
+        return [
+          { limit: 2000, price: settings.gridCapacity0_2},
+          { limit: 5000, price: settings.gridCapacity2_5},
+          { limit: 10000, price: settings.gridCapacity5_10},
+          { limit: 15000, price: settings.gridCapacity10_15},
+          { limit: 20000, price: settings.gridCapacity15_20},
+          { limit: 25000, price: settings.gridCapacity20_25},
+        ];
+    }
+
     async onFetchConfigData(args: any) {
         try {
             const storeValues = this._dh.getStoreValues();

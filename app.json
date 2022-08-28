@@ -43,6 +43,10 @@
     "fetchPrices": {
       "method": "GET",
       "path": "/prices"
+    },
+    "fetchGridCosts": {
+      "method": "GET",
+      "path": "/gridcosts"
     }
   },
   "images": {

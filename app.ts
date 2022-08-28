@@ -66,6 +66,15 @@ class UtilityCostsApp extends Homey.App {
         }
     }
 
+    async getGridCosts(): Promise<void> {
+        const driver = this.homey.drivers.getDriver('UtilityCosts');
+        const devices = driver.getDevices();
+        if (devices.length > 0) {
+            // @ts-ignore
+            return devices[0].getGridCosts();
+        }
+    }
+
 }
 
 module.exports = UtilityCostsApp;
