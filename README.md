@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.5.2
+
+- Fixed bug in 'Grid this year' calculation
+
 #### 1.5.1
 
 - Added 'Energy this month' capability

@@ -407,7 +407,7 @@ export class DeviceHandler {
             }
 
             const sumCostYear = this.device.getCapabilityValue(`meter_grid_year`) || 0;
-            const newCostYear = newYear ? costToday : costToday + sumCostYear + gridCapacityCost;
+            const newCostYear = newYear ? costToday : newMonth ? costToday + sumCostYear + gridCapacityCost : costToday + sumCostYear;
             await this.device.setCapabilityValue(`meter_grid_year`, newCostYear);
 
             this.device.logger.debug(`Grid calculation: Price: ${price}, Cost last ${thisUpdate - lastUpdate} ms: ${costToday}`);
