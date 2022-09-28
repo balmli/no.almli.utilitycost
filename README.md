@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.5.1
+
+- Added 'Energy this month' capability
+
 #### 1.5.0
 
 - Grid capacity cost moved to a separate capability

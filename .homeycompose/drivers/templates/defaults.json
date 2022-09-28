@@ -28,6 +28,7 @@
     "meter_consumption",
     "meter_price_sum",
     "meter_power.acc",
+    "meter_power.month",
     "meter_power.year",
     "meter_energy",
     "meter_cost_capacity"
@@ -49,6 +50,12 @@
       "title": {
         "en": "Energy",
         "no": "Energi"
+      }
+    },
+    "meter_power.month": {
+      "title": {
+        "en": "Energy this month",
+        "no": "Energi denne måned"
       }
     },
     "meter_power.year": {

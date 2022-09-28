@@ -100,7 +100,20 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                     }
                 }
             }
-            await this.setStoreValue('version', 3);
+            if (!migVersion || migVersion < 4) {
+                const meter_power_year = this.getCapabilityValue('meter_power.year');
+                const meter_cost_capacity = this.getCapabilityValue('meter_cost_capacity');
+                await this.removeCapability('meter_cost_capacity');
+                await this.removeCapability('meter_power.year');
+                if (!this.hasCapability('meter_power.month')) {
+                    await this.addCapability('meter_power.month');
+                }
+                await this.addCapability('meter_power.year');
+                await this.addCapability('meter_cost_capacity');
+                await this.setCapabilityValue('meter_power.year', meter_power_year);
+                await this.setCapabilityValue('meter_cost_capacity', meter_cost_capacity);
+            }
+            await this.setStoreValue('version', 4);
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);

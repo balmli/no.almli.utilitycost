@@ -284,7 +284,7 @@ export class DeviceHandler {
     }
 
     async calculateEnergy(consumption: number, startValues: StartValues): Promise<void> {
-        const {thisUpdate, lastUpdate, startOfDay, startOfYear, newDay, newYear} = startValues;
+        const {thisUpdate, lastUpdate, startOfDay, startOfMonth, startOfYear, newDay, newMonth, newYear} = startValues;
         if (!lastUpdate) {
             return;
         }
@@ -295,13 +295,19 @@ export class DeviceHandler {
                 : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) + energyAcc;
             await this.device.setCapabilityValue(`meter_power.acc`, newEnergyAcc);
 
+            const energyMonthlyAcc = this.device.getCapabilityValue(`meter_power.month`) || 0;
+            const newEnergyMonthlyAcc = newMonth ?
+                consumption * (thisUpdate - startOfMonth) / (1000 * 3600000)
+                : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) + energyMonthlyAcc;
+            await this.device.setCapabilityValue(`meter_power.month`, newEnergyMonthlyAcc);
+
             const energyYearlyAcc = this.device.getCapabilityValue(`meter_power.year`) || 0;
             const newEnergyYearlyAcc = newYear ?
                 consumption * (thisUpdate - startOfYear) / (1000 * 3600000)
                 : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) + energyYearlyAcc;
             await this.device.setCapabilityValue(`meter_power.year`, newEnergyYearlyAcc);
 
-            this.device.logger.debug(`Energy calculation:`, newEnergyAcc, newEnergyYearlyAcc);
+            this.device.logger.debug(`Energy calculation:`, newEnergyAcc, newEnergyMonthlyAcc, newEnergyYearlyAcc);
         } catch (err) {
             this.device.logger.error('calculateEnergy failed: ', err);
         }
@@ -394,7 +400,7 @@ export class DeviceHandler {
 
             // Add grid capacity cost from October this year...
             const dateToday = new Date();
-            const gridCapacityCost = (dateToday.getFullYear() === 2022 && dateToday.getMonth() < 9) ? 0 : this.device.getCapabilityValue(`meter_cost_capacity`) || 0;
+            const gridCapacityCost = ((dateToday.getFullYear() === 2022 && dateToday.getMonth() < 9) || !this.device.hasCapability('meter_cost_capacity')) ? 0 : this.device.getCapabilityValue(`meter_cost_capacity`) || 0;
 
             if (newMonth) {
                 await this.device.setCapabilityValue(`meter_grid_lastmonth`, sumCostMonth + costYesterday + gridCapacityCost);

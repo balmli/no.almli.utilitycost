@@ -98,10 +98,14 @@ export class BaseDevice extends Homey.Device {
             await this.setCapabilityValue("meter_grid_year", 0);
             await this.setCapabilityValue("meter_grid_yesterday", 0);
             await this.setCapabilityValue("meter_power.acc", 0);
+            await this.setCapabilityValue("meter_power.month", 0);
             await this.setCapabilityValue("meter_power.year", 0);
             await this.setCapabilityValue("meter_sum_day", 0);
             await this.setCapabilityValue("meter_sum_month", 0);
             await this.setCapabilityValue("meter_sum_year", 0);
+            if (this.hasCapability('meter_cost_capacity')) {
+                await this.setCapabilityValue("meter_cost_capacity", 0);
+            }
         } catch (err) {
             this.logger.error('Resetting all values failed: ', err);
         }

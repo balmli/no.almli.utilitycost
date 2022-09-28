@@ -17,6 +17,36 @@
         "en": "Maximum consumption for an hour this month.",
         "no": "Maksimum forbruk for en time i gjeldende måned."
       }
+    },
+    "meter_price_incl": {
+      "decimals": 5
+    },
+    "meter_gridprice_incl": {
+      "decimals": 5
+    },
+    "meter_price_excl": {
+      "decimals": 5
+    },
+    "meter_price_sum": {
+      "decimals": 5
+    },
+    "meter_power.acc": {
+      "title": {
+        "en": "Energy",
+        "no": "Energi"
+      }
+    },
+    "meter_power.month": {
+      "title": {
+        "en": "Energy this month",
+        "no": "Energi denne måned"
+      }
+    },
+    "meter_power.year": {
+      "title": {
+        "en": "Energy this year",
+        "no": "Energi dette året"
+      }
     }
   }
 }
