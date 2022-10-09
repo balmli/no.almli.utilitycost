@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.5.3
+
+- Updated grid costs for Midtnett
+
 #### 1.5.2
 
 - Fixed bug in 'Grid this year' calculation

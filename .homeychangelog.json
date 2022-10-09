@@ -1,4 +1,8 @@
 {
+  "1.5.3": {
+    "en": "Updated grid costs for Midtnett. ",
+    "no": "Oppdaterte priser for nettleie for Midtnett. "
+  },
   "1.5.2": {
     "en": "Added 'Energy this month' capability. Fixed bug in 'Grid this year' calculation. ",
     "no": "La inn felt for 'Energi denne måned'. Rettet beregning av 'Nettleie dette året'. "
