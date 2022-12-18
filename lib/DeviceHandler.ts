@@ -1,4 +1,4 @@
-import moment from "./moment-timezone-with-data";
+import moment from 'moment-timezone';
 import {DEFAULT_DEVICE_HANDLER_OPTIONS, DeviceHandlerOptions, DeviceSettings, StartValues, StoreValues} from "./types";
 
 const Formula = require('fparser');

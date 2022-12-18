@@ -2,6 +2,11 @@
   "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
-    "outDir": "build/"
+    "outDir": "build/",
+    "paths": {
+      "@balmli/homey-utility-prices": [
+        "../node-homey-utility-prices"
+      ]
+    }
   }
 }

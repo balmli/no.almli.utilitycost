@@ -1,10 +1,11 @@
 'use strict';
 
+import moment from 'moment-timezone';
+
+import { Currency, NordpoolApi, PriceApi } from '@balmli/homey-utility-prices'
+
 import {BaseDevice} from '../../lib/BaseDevice';
 
-const moment = require('../../lib/moment-timezone-with-data');
-const pricesLib = require('../../lib/prices');
-const nordpool = require('../../lib/nordpool');
 import {DeviceSettings} from '../../lib/types';
 import {GridCosts} from "../../lib/constants";
 
@@ -13,6 +14,9 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     _lastFetchData: any;
     _lastPrice: any;
     _prices: any;
+
+    priceApi = new PriceApi()
+    nordpool = new NordpoolApi()
 
     async onInit(): Promise<void> {
         super.onInit();
@@ -195,7 +199,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     shallFetchSpotPrices() {
         return !this._prices
             || !this._lastFetchData
-            || pricesLib.toHour(this._lastFetchData) !== pricesLib.toHour(moment());
+            || this.priceApi.toHour(this._lastFetchData) !== this.priceApi.toHour(moment());
     }
 
     async fetchSpotPrices() {
@@ -204,7 +208,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             const priceArea = settings.priceArea || 'Bergen';
             this.logger.verbose('Will fetch prices:', this.getData().id, priceArea);
             const localTime = moment().startOf('day');
-            const prices = await nordpool.fetchPrices(localTime, {priceArea, currency: 'NOK'});
+            const prices = await this.nordpool.fetchPrices(localTime, {priceArea, currency: Currency.NOK});
             if (prices) {
                 this._lastFetchData = moment();
                 this._prices = prices;
@@ -219,11 +223,11 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         try {
             const localTime = moment();
 
-            const currentPrice = pricesLib.currentPrice(this._prices, localTime);
-            const startAtHour = currentPrice ? pricesLib.toHour(currentPrice.startsAt) : undefined;
+            const currentPrice = this.priceApi.currentPrice(this._prices, localTime);
+            const startAtHour = currentPrice ? this.priceApi.toHour(currentPrice.startsAt) : undefined;
             if (currentPrice) {
                 this.logger.verbose('Current price:', startAtHour, currentPrice.price);
-                const priceChanged = !this._lastPrice || startAtHour !== pricesLib.toHour(this._lastPrice.startsAt);
+                const priceChanged = !this._lastPrice || startAtHour !== this.priceApi.toHour(this._lastPrice.startsAt);
                 if (priceChanged) {
                     this._lastPrice = currentPrice;
                     await this._dh.spotPriceCalculation(currentPrice.price);

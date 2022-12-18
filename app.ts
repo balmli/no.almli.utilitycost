@@ -1,5 +1,6 @@
 import Homey from 'homey';
-import moment from "./lib/moment-timezone-with-data";
+import moment from 'moment-timezone';
+
 import {DeviceHandler} from "./lib/DeviceHandler";
 
 class UtilityCostsApp extends Homey.App {

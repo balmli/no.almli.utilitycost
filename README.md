@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.6.0
+
+- 
+
 #### 1.5.3
 
 - Updated grid costs for Midtnett

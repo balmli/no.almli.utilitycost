@@ -1,8 +1,8 @@
 'use strict';
 
-import {BaseDevice} from '../../lib/BaseDevice';
+import moment from 'moment-timezone';
 
-const moment = require('../../lib/moment-timezone-with-data');
+import {BaseDevice} from '../../lib/BaseDevice';
 
 module.exports = class UtilityCostsDevice extends BaseDevice {
 

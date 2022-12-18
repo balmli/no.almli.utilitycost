@@ -11,8 +11,8 @@
   "author": "Bjørnar Almli",
   "license": "ISC",
   "dependencies": {
+    "@balmli/homey-utility-prices": "^1.0.0",
     "fparser": "^2.0.1",
-    "http.min": "2.1.0",
     "p-queue": "6.6.2"
   },
   "devDependencies": {
