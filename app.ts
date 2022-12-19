@@ -22,7 +22,7 @@ class UtilityCostsApp extends Homey.App {
             .registerRunListener(args => args.device.getCapabilityValue(`meter_sum_current`) < args.sum_current);
 
         this.homey.flow.getActionCard('update_consumption')
-            .registerRunListener((args, state) => args.device.onUpdateConsumption(args.consumption));
+            .registerRunListener((args, state) => args.device.onUpdateConsumption(args.unit === 'kW' ? args.consumption * 1000 : args.consumption));
 
         this.homey.flow.getActionCard('update_energy')
             .registerRunListener((args, state) => args.device.onUpdateEnergy(args.energy));

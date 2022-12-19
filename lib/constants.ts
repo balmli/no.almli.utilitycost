@@ -127,6 +127,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: true,
         }
     },
+    "klive": {
+        id: "klive",
+        description: "Klive",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 433.75,
+            gridCapacity2_5: 433.75,
+            gridCapacity5_10: 538.75,
+            gridCapacity10_15: 715,
+            gridCapacity15_20: 953.75,
+            gridCapacity20_25: 1192.50,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.3134,
+            gridEnergyNight: 0.3134,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
+        }
+    },
     "lede": {
         id: "lede",
         description: "Lede",

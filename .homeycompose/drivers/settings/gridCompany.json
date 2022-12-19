@@ -68,6 +68,13 @@
       }
     },
     {
+      "id": "klive",
+      "label": {
+        "en": "Klive",
+        "no": "Klive"
+      }
+    },
+    {
       "id": "lede",
       "label": {
         "en": "Lede",

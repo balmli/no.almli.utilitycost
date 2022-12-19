@@ -1,12 +1,12 @@
 {
   "id": "update_consumption",
   "title": {
-    "en": "Update consumption (W)",
-    "no": "Oppdatér forbruk (W)"
+    "en": "Update consumption",
+    "no": "Oppdatér forbruk"
   },
   "titleFormatted": {
-    "en": "Update consumption with [[consumption]] W",
-    "no": "Oppdatér forbruk med [[consumption]] W"
+    "en": "Update consumption with [[consumption]] [[unit]]",
+    "no": "Oppdatér forbruk med [[consumption]] [[unit]]"
   },
   "hint": {
     "en": "Update with the power (W) from a power meter. Use this flow or the 'Update energy with X kWh' action card, but not both. ",
@@ -23,13 +23,36 @@
       "name": "consumption",
       "type": "number",
       "title": {
-        "en": "Power (W)",
-        "no": "Effekt (W)"
+        "en": "Power",
+        "no": "Effekt"
       },
       "placeholder": {
         "en": "Watt",
         "no": "Watt"
       }
+    },
+    {
+      "name": "unit",
+      "type": "dropdown",
+      "title": {
+        "en": "Unit",
+        "no": "Enhet"
+      },
+      "required": false,
+      "values": [
+        {
+          "id": "W",
+          "label": {
+            "en": "W"
+          }
+        },
+        {
+          "id": "kW",
+          "label": {
+            "en": "kW"
+          }
+        }
+      ]
     }
   ]
 }
