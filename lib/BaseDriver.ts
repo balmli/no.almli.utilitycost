@@ -21,11 +21,15 @@ export class BaseDriver extends Homey.Driver {
     }
 
     async onPairListDevices(): Promise<any[]> {
+        const syncTime = Math.round(Math.random() * 3600);
         return [
             {
-                "name": this.getDriverName(),
-                "data": {
+                name: this.getDriverName(),
+                data: {
                     "id": math.guid()
+                },
+                store: {
+                    syncTime
                 }
             }
         ];

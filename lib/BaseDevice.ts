@@ -9,7 +9,9 @@ export class BaseDevice extends Homey.Device {
     logger: any;
     _dh!: DeviceHandler;
     _deleted?: boolean;
-    curTimeout?: NodeJS.Timeout;
+    fetchTimeout?: NodeJS.Timeout;
+    updatePriceTimeout?: NodeJS.Timeout;
+    checkTimeout?: NodeJS.Timeout;
     commandQueue: any;
 
     async onInit(): Promise<void> {
@@ -23,6 +25,8 @@ export class BaseDevice extends Homey.Device {
 
     onDeleted() {
         this._deleted = true;
+        this.clearFetchData();
+        this.clearUpdatePrice();
         this.clearCheckTime();
         this.logger.verbose(this.getName() + ' -> device deleted');
     }
@@ -31,10 +35,66 @@ export class BaseDevice extends Homey.Device {
         return this._dh;
     }
 
+    clearFetchData() {
+        if (this.fetchTimeout) {
+            this.homey.clearTimeout(this.fetchTimeout);
+            this.fetchTimeout = undefined;
+        }
+    }
+
+    scheduleFetchData(seconds?: number) {
+        if (this._deleted) {
+            return;
+        }
+        this.clearFetchData();
+        if (seconds === undefined) {
+            let syncTime = this.getStoreValue('syncTime');
+            if (syncTime === undefined || syncTime === null) {
+                syncTime = Math.round(Math.random() * 3600);
+                this.setStoreValue('syncTime', syncTime).catch((err: any) => this.logger.error(err));
+            }
+            const now = new Date();
+            seconds = syncTime - (now.getMinutes() * 60 + now.getSeconds());
+            seconds = seconds <= 0 ? seconds + 3600 : seconds;
+            this.logger.verbose(`Sync time: ${syncTime}`);
+        }
+        this.logger.debug(`Fetch data in ${seconds} seconds`);
+        this.fetchTimeout = this.homey.setTimeout(this.doFetchData.bind(this), seconds * 1000);
+    }
+
+    async doFetchData() {
+        throw new Error('Not implemented');
+    }
+
+    clearUpdatePrice() {
+        if (this.updatePriceTimeout) {
+            this.homey.clearTimeout(this.updatePriceTimeout);
+            this.updatePriceTimeout = undefined;
+        }
+    }
+
+    scheduleUpdatePrice(seconds?: number) {
+        if (this._deleted) {
+            return;
+        }
+        this.clearUpdatePrice();
+        if (seconds === undefined) {
+            const now = new Date();
+            seconds = 3 - (now.getMinutes() * 60 + now.getSeconds()); // 3 seconds after top of the hour
+            seconds = seconds <= 0 ? seconds + 3600 : seconds;
+        }
+        this.logger.debug(`Update price in ${seconds} seconds`);
+        this.updatePriceTimeout = this.homey.setTimeout(this.doUpdatePrice.bind(this), seconds * 1000);
+    }
+
+    async doUpdatePrice() {
+        throw new Error('Not implemented');
+    }
+
     clearCheckTime() {
-        if (this.curTimeout) {
-            this.homey.clearTimeout(this.curTimeout);
-            this.curTimeout = undefined;
+        if (this.checkTimeout) {
+            this.homey.clearTimeout(this.checkTimeout);
+            this.checkTimeout = undefined;
         }
     }
 
@@ -44,10 +104,10 @@ export class BaseDevice extends Homey.Device {
         }
         this.clearCheckTime();
         this.logger.debug(`Checking time in ${seconds} seconds`);
-        this.curTimeout = this.homey.setTimeout(this.checkTime.bind(this), seconds * 1000);
+        this.checkTimeout = this.homey.setTimeout(this.doCheckTime.bind(this), seconds * 1000);
     }
 
-    async checkTime() {
+    async doCheckTime() {
         throw new Error('Not implemented');
     }
 

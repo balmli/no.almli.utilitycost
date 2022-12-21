@@ -15,7 +15,7 @@ To install the device:
 
 ### Release Notes:
 
-#### 1.6.0
+#### 1.6.1
 
 - Support for kW as unit for 'Update consumption' action
 - Added prices for grid company Klive

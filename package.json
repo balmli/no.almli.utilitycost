@@ -11,14 +11,14 @@
   "author": "Bjørnar Almli",
   "license": "ISC",
   "dependencies": {
-    "@balmli/homey-utility-prices": "^1.0.5",
+    "@balmli/homey-utility-prices": "^1.1.7",
     "fparser": "^2.0.1",
     "p-queue": "6.6.2"
   },
   "devDependencies": {
     "@tsconfig/node12": "^1.0.9",
     "@types/chai": "^4.3.0",
-    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.2.2",
+    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.2",
     "@types/mocha": "^9.1.0",
     "@types/node": "^16.11.12",
     "chai": "^4.3.6",
