@@ -70,18 +70,6 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         }
     }
 
-    async doFetchData() {
-        if (this._deleted) {
-            return;
-        }
-    }
-
-    async doUpdatePrice() {
-        if (this._deleted) {
-            return;
-        }
-    }
-
     async doCheckTime() {
         if (this._deleted) {
             return;

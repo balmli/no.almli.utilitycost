@@ -7,7 +7,8 @@ import {
     NordpoolOptions,
     NordpoolPrice,
     NordpoolPrices,
-    PriceApi,
+    PriceFetcher,
+    PriceFetcherMethod,
     PricesFetchClient
 } from '@balmli/homey-utility-prices';
 
@@ -18,17 +19,42 @@ import {GridCosts} from "../../lib/constants";
 
 module.exports = class UtilityCostsDevice extends BaseDevice {
 
-    lastPrice: NordpoolPrice | undefined;
-    priceApi = new PriceApi()
     pricesFetchClient = new PricesFetchClient({logger: this.log});
+    priceFetcher!: PriceFetcher;
 
     async onInit(): Promise<void> {
         super.onInit();
-        this.lastPrice = undefined;
         await this.migrate();
-        this.scheduleFetchData(3);
+        this.priceFetcher = new PriceFetcher({
+            logger: this.logger,
+            pricesFetchClient: this.pricesFetchClient,
+            device: this,
+        });
+        this.priceFetcher.on('prices', this.pricesEvent.bind(this));
+        this.priceFetcher.on('priceChanged', this.pricesChangedEvent.bind(this));
+        this.setFetcherOptions(this.getSettings());
+        this.priceFetcher.start();
         this.scheduleCheckTime(5);
         this.logger.verbose(this.getName() + ' -> device initialized');
+    }
+
+    onDeleted() {
+        super.onDeleted();
+        this.priceFetcher.destroy();
+    }
+
+    setFetcherOptions(settings: any) {
+        this.priceFetcher.setNordpoolOptions({currency: 'NOK', priceArea: settings.priceArea});
+        this.priceFetcher.setFetchMethod(settings.priceCalcMethod === 'nordpool_spot' ?
+            PriceFetcherMethod.nordpool :
+            PriceFetcherMethod.disabled);
+
+        let syncTime = this.getStoreValue('syncTime');
+        if (syncTime === undefined || syncTime === null) {
+            syncTime = Math.round(Math.random() * 3600);
+            this.setStoreValue('syncTime', syncTime).catch((err: any) => this.logger.error(err));
+        }
+        this.priceFetcher.setFetchTime(syncTime);
     }
 
     async migrate() {
@@ -153,74 +179,22 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 });
             }, 500);
         }
-        this.lastPrice = undefined;
         const ds: DeviceSettings = {
             ...newSettings
         };
         this.logger.debug(`Settings: DeviceSettings:`, ds);
         this._dh.setSettings(ds);
+        this.setFetcherOptions(newSettings);
         this.pricesFetchClient.clearStorage(this);
-        this.scheduleFetchData(3);
+        this.priceFetcher.start();
         this.scheduleCheckTime(5);
     }
 
-    async doFetchData() {
-        if (this._deleted) {
-            return;
-        }
-        try {
-            this.clearFetchData();
-            this.clearUpdatePrice();
-            const settings = this.getSettings();
-            if (settings.priceCalcMethod === 'nordpool_spot') {
-                const { fromDate, toDate, options } = this.getFetchParameters();
-                await this.pricesFetchClient.fetchSpotPricesInRange(this as Device, fromDate, toDate, options, true);
-            }
-        } catch (err) {
-            this.logger.error(err);
-        } finally {
-            this.scheduleFetchData();
-            this.scheduleUpdatePrice(1);
-        }
+    pricesEvent(prices: NordpoolPrices) {
     }
 
-    async doUpdatePrice() {
-        if (this._deleted) {
-            return;
-        }
-        try {
-            this.clearUpdatePrice();
-            const settings = this.getSettings();
-            if (settings.priceCalcMethod === 'nordpool_spot') {
-                const {fromDate, toDate, options} = this.getFetchParameters();
-                const prices = this.pricesFetchClient.getPrices(this as Device, fromDate, toDate, options);
-                await this.onSpotPrices(prices);
-            }
-        } catch (err) {
-            this.logger.error(err);
-        } finally {
-            this.scheduleUpdatePrice();
-        }
-    }
-
-    async onSpotPrices(prices: NordpoolPrices) {
-        try {
-            if (prices.length > 0) {
-                const localTime = moment();
-                const currentPrice = this.priceApi.currentPrice(prices, localTime);
-                const startAtHour = currentPrice ? this.priceApi.toHour(currentPrice.startsAt) : undefined;
-                if (currentPrice) {
-                    this.logger.verbose('Current price:', startAtHour, currentPrice.price);
-                    const priceChanged = !this.lastPrice || startAtHour !== this.priceApi.toHour(this.lastPrice.startsAt);
-                    if (priceChanged) {
-                        this.lastPrice = currentPrice;
-                        await this._dh.spotPriceCalculation(currentPrice.price);
-                    }
-                }
-            }
-        } catch (err) {
-            this.logger.error(err);
-        }
+    async pricesChangedEvent(currentPrice: NordpoolPrice) {
+        await this._dh.spotPriceCalculation(currentPrice.price);
     }
 
     async doCheckTime() {

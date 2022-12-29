@@ -1,7 +1,8 @@
 import Homey from 'homey';
 
+import Logger from '@balmli/homey-logger';
+
 const math = require('./math');
-const Logger = require('./Logger');
 
 export class BaseDriver extends Homey.Driver {
 
@@ -9,6 +10,8 @@ export class BaseDriver extends Homey.Driver {
 
     async onInit(): Promise<void> {
         this.logger = new Logger({
+            logLevel: 3,
+            prefix: undefined,
             logFunc: this.log,
             errorFunc: this.error,
         });
