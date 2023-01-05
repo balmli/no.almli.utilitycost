@@ -1,12 +1,12 @@
 {
   "type": "number",
   "title": {
-    "en": "Electricity price excl. taxes",
-    "no": "Strømpris ekskl. mva"
+    "en": "Daily cost/consumption",
+    "no": "Daglig kost/forbruk"
   },
   "desc": {
-    "en": "Electricity price current hour excl. taxes",
-    "no": "Viser gjeldende spot strømpris ekskl. mva"
+    "en": "Daily cost (NOK) per cosumption (kWh)",
+    "no": "Daglig kost (NOK) pr. forbruk (kWh)"
   },
   "decimals": 5,
   "units": {
@@ -17,5 +17,5 @@
   "setable": false,
   "greyout": true,
   "insights": true,
-  "uiComponent": null
+  "icon": "/assets/pricetag.svg"
 }

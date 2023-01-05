@@ -15,6 +15,13 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.7.0
+
+- Added 'Energy previous month' capability
+- Added 'Daily avg. spot price' and 'Monthly avg. spot price' capabilities
+- Added 'Daily cost/consumption' (NOK/kWh) capability
+- Added grid costs for Tensio Trøndelag Nord and updated for Agder Energi Nett
+
 #### 1.6.3
 
 - Support for kW as unit for 'Update consumption' action

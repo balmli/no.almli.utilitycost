@@ -1,12 +1,12 @@
 {
   "type": "number",
   "title": {
-    "en": "Electricity price excl. taxes",
-    "no": "Strømpris ekskl. mva"
+    "en": "Daily avg. price",
+    "no": "Daglig gj.snittspris"
   },
   "desc": {
-    "en": "Electricity price current hour excl. taxes",
-    "no": "Viser gjeldende spot strømpris ekskl. mva"
+    "en": "Daily average price",
+    "no": "Daglig gjennomsnittspris"
   },
   "decimals": 5,
   "units": {
@@ -17,5 +17,5 @@
   "setable": false,
   "greyout": true,
   "insights": true,
-  "uiComponent": null
+  "icon": "/assets/pricetag.svg"
 }

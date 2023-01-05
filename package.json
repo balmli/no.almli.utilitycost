@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@balmli/homey-logger": "^1.0.0",
-    "@balmli/homey-utility-prices": "^1.2.8",
+    "@balmli/homey-utility-prices": "^1.4.2",
     "fparser": "^2.0.1",
     "p-queue": "6.6.2"
   },

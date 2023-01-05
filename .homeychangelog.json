@@ -1,4 +1,8 @@
 {
+  "1.7.0": {
+    "en": "Added 'Energy previous month' capability. Added 'Daily avg. spot price' and 'Monthly avg. spot price' capabilities. Added 'Daily cost/consumption' (NOK/kWh) capability. Added grid costs for Tensio Trøndelag Nord and updated for Agder Energi Nett. ",
+    "no": "La inn felt for 'Energi forrige måned'. La inn felt for 'Daglig gj.snitt spotpris' og 'Månedlig gj.snitt spotpris'. La inn felt for 'Daglig kost/forbruk' (NOK/kWh). Oppdaterte priser for nettleie for Tensio Trøndelag Nord og Agder Energi Nett. "
+  },
   "1.6.3": {
     "en": "Support for kW as unit for 'Update consumption' action. Added prices for grid company Klive. ",
     "no": "Støtter kW som enhet for 'Oppdatér forbruk' flow. Priser for nettselskapet Klive. "

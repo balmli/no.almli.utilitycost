@@ -42,6 +42,7 @@ export class DeviceSettings {
     gridEnergyLowWeekends!: boolean;
 
     priceDecimals!: number;
+    dailyConsumptionExclTaxes!: string;
     resetEnergyDaily!: boolean;
 }
 

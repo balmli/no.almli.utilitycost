@@ -29,7 +29,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 await this.addCapability('meter_energy');
             }
             const migVersion = this.getStoreValue('version');
-            if (!migVersion || migVersion < 2) {
+            if (!!migVersion && migVersion < 2) {
                 const consumptionMinute = this.getStoreValue('consumptionMinute');
                 if (consumptionMinute !== undefined && consumptionMinute !== null) {
                     this._dh.getStoreValues().consumptionMinute = consumptionMinute;
@@ -43,7 +43,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 this._dh.getStoreValues().highest_10_hours = [];
                 await this._dh.storeStoreValues();
             }
-            if (!migVersion || migVersion < 4) {
+            if (!!migVersion && migVersion < 4) {
                 const meter_power_year = this.getCapabilityValue('meter_power.year');
                 await this.removeCapability('meter_cost_capacity');
                 await this.removeCapability('meter_power.year');
@@ -53,7 +53,25 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 await this.addCapability('meter_power.year');
                 await this.setCapabilityValue('meter_power.year', meter_power_year);
             }
-            await this.setStoreValue('version', 4);
+            if (!!migVersion && migVersion < 5) {
+                const meter_power_year = this.getCapabilityValue('meter_power.year');
+                await this.removeCapability('meter_power.year');
+                if (!this.hasCapability('meter_power.prevmonth')) {
+                    await this.addCapability('meter_power.prevmonth');
+                    await this.setCapabilityValue('meter_power.prevmonth', 0).catch((err: any) => this.logger.error(err));
+                }
+                await this.addCapability('meter_power.year');
+                await this.setCapabilityValue('meter_power.year', meter_power_year).catch((err: any) => this.logger.error(err));
+                if (!this.hasCapability('meter_avg_daily_consumption')) {
+                    await this.addCapability('meter_avg_daily_consumption');
+                }
+            }
+            if (!!migVersion && migVersion < 6) {
+                if (!this.hasCapability('meter_cost_today_excl')) {
+                    await this.addCapability('meter_cost_today_excl');
+                }
+            }
+            await this.setStoreValue('version', 6);
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);
@@ -130,6 +148,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             this._dh.setSettings({
                 ...globalDeviceHandler.getSettings(),
                 priceDecimals: this.getSetting('priceDecimals'),
+                dailyConsumptionExclTaxes: this.getSetting('dailyConsumptionExclTaxes'),
                 resetEnergyDaily: this.getSetting('resetEnergyDaily')
             });
         }

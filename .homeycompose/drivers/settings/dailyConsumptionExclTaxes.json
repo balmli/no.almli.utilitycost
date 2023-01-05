@@ -1,0 +1,29 @@
+{
+  "id": "dailyConsumptionExclTaxes",
+  "type": "dropdown",
+  "label": {
+    "en": "Calculate daily cost/consumption",
+    "no": "Beregn daglig kost/forbruk"
+  },
+  "value": "EXCL",
+  "hint": {
+    "en": "Select if daily cost/consumption should be calculated excl. or incl. taxes. ",
+    "no": "Velg om daglig kost/forbruk skal beregnes ekskl. eller inkl. mva, nettleie og avgifter. "
+  },
+  "values": [
+    {
+      "id": "EXCL",
+      "label": {
+        "en": "Excl. taxes",
+        "no": "Ekskl. mva, nettleie og avgifter"
+      }
+    },
+    {
+      "id": "INCL",
+      "label": {
+        "en": "Incl. taxes",
+        "no": "Inkl. mva, nettleie og avgifter"
+      }
+    }
+  ]
+}

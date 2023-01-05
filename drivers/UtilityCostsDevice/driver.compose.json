@@ -7,6 +7,36 @@
   "$extends": [
     "defaults"
   ],
+  "capabilities": [
+    "meter_sum_current",
+    "meter_sum_month",
+    "meter_price_excl",
+    "meter_price_incl",
+    "meter_gridprice_incl",
+    "meter_cost_today",
+    "meter_grid_today",
+    "meter_cost_yesterday",
+    "meter_grid_yesterday",
+    "meter_cost_month",
+    "meter_grid_month",
+    "meter_cost_lastmonth",
+    "meter_grid_lastmonth",
+    "meter_consumption_hour",
+    "meter_consumption_maxmonth",
+    "meter_sum_day",
+    "meter_sum_year",
+    "meter_cost_year",
+    "meter_grid_year",
+    "meter_consumption",
+    "meter_price_sum",
+    "meter_power.acc",
+    "meter_power.month",
+    "meter_power.prevmonth",
+    "meter_power.year",
+    "meter_energy",
+    "meter_avg_daily_consumption",
+    "meter_cost_today_excl"
+  ],
   "capabilitiesOptions": {
     "meter_consumption_maxmonth": {
       "title": {
@@ -40,6 +70,12 @@
       "title": {
         "en": "Energy this month",
         "no": "Energi denne måned"
+      }
+    },
+    "meter_power.prevmonth": {
+      "title": {
+        "en": "Energy previous month",
+        "no": "Energi forrige måned"
       }
     },
     "meter_power.year": {

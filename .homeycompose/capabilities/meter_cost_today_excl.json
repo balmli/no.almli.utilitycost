@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Electricity costs today excl. taxes",
+    "no": "Strøm i dag ekskl. mva"
+  },
+  "desc": {
+    "en": "Shows electricity costs so far today excl. taxes",
+    "no": "Viser strømkostnad så langt i dag ekskl. mva"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "insights": false,
+  "uiComponent": null
+}

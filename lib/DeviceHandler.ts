@@ -1,4 +1,6 @@
 import moment from 'moment-timezone';
+
+import { NordpoolPrices } from '@balmli/homey-utility-prices';
 import {DEFAULT_DEVICE_HANDLER_OPTIONS, DeviceHandlerOptions, DeviceSettings, StartValues, StoreValues} from "./types";
 
 const Formula = require('fparser');
@@ -121,6 +123,25 @@ export class DeviceHandler {
 
     roundPrice(price: number) {
         return Math.round(100000 * price) / 100000;
+    }
+
+    async spotPricesCalculation(prices: NordpoolPrices): Promise<void> {
+        try {
+            const dayStart = moment().startOf('day');
+            const dayEnd = moment().startOf('day').add(1, 'day');
+
+            const avg_daily_spot = this.roundPrice(
+                prices
+                    .filter(p => p.startsAt.isSameOrAfter(dayStart) && p.startsAt.isBefore(dayEnd))
+                    .map(p => this.settings.dailyConsumptionExclTaxes === 'EXCL' ? p.price :
+                        this.calcSpotPrice(p.price) + this.calcGridPrice(p.startsAt))
+                    .reduce((a, b) => a + b, 0) / 24
+            );
+
+            await this.device.setCapabilityValue('meter_avg_daily_spot', avg_daily_spot);
+        } catch (err) {
+            this.device.logger.error(`Spot prices calculation failed: `, err);
+        }
     }
 
     async spotPriceCalculation(price: number) {
@@ -296,6 +317,10 @@ export class DeviceHandler {
             await this.device.setCapabilityValue(`meter_power.acc`, newEnergyAcc);
 
             const energyMonthlyAcc = this.device.getCapabilityValue(`meter_power.month`) || 0;
+            if (newMonth) {
+                const energyYesterday = consumption * (startOfDay - lastUpdate) / (1000 * 3600000);
+                await this.device.setCapabilityValue(`meter_power.prevmonth`, energyMonthlyAcc + energyYesterday);
+            }
             const newEnergyMonthlyAcc = newMonth ?
                 consumption * (thisUpdate - startOfMonth) / (1000 * 3600000)
                 : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) + energyMonthlyAcc;
@@ -319,6 +344,16 @@ export class DeviceHandler {
             return;
         }
         try {
+            const price_excl = this.device.getCapabilityValue(`meter_price_excl`) || 0;
+
+            const costTodayExcl = newDay ?
+                consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * price_excl
+                : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * price_excl;
+
+            const sumCostTodayExcl = this.device.getCapabilityValue(`meter_cost_today_excl`) || 0;
+            const newCostTodayExcl = newDay ? costTodayExcl : costTodayExcl + sumCostTodayExcl;
+            await this.device.setCapabilityValue(`meter_cost_today_excl`, newCostTodayExcl);
+
             const price = this.device.getCapabilityValue(`meter_price_incl`) || 0;
 
             const utilityFixedAmount = newDay ? this.getUtilityFixedAmountPerDay(startValues) : 0;
@@ -519,7 +554,16 @@ export class DeviceHandler {
             await this.device.setCapabilityValue(`meter_sum_month`, (this.device.getCapabilityValue(`meter_cost_month`) || 0) + (this.device.getCapabilityValue(`meter_grid_month`) || 0));
             await this.device.setCapabilityValue(`meter_sum_year`, (this.device.getCapabilityValue(`meter_cost_year`) || 0) + (this.device.getCapabilityValue(`meter_grid_year`) || 0));
 
-            this.device.logger.info(`Calculate sum cost: ${this.device.getCapabilityValue(`meter_sum_day`)}`);
+            const meter_cost_today_excl = this.device.getCapabilityValue(`meter_cost_today_excl`);
+            const meter_sum_day = this.device.getCapabilityValue(`meter_sum_day`);
+            const meter_power_acc = this.device.getCapabilityValue(`meter_power.acc`);
+            if (this.settings.dailyConsumptionExclTaxes === 'EXCL') {
+                await this.device.setCapabilityValue(`meter_avg_daily_consumption`, meter_power_acc ? meter_cost_today_excl / meter_power_acc : 0);
+            } else {
+                await this.device.setCapabilityValue(`meter_avg_daily_consumption`, meter_power_acc ? meter_sum_day / meter_power_acc : 0);
+            }
+
+            this.device.logger.info(`Calculate sum cost: ${meter_sum_day}`);
         } catch (err) {
             this.device.logger.error('calculateSumCost failed: ', err);
         }

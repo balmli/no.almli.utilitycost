@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Monthly avg. price excl. taxes",
+    "no": "Månedlig gj.snittspris ekskl. mva"
+  },
+  "desc": {
+    "en": "Monthly average price excl. taxes",
+    "no": "Månedlig gjennomsnittspris ekskl. mva og avgifter"
+  },
+  "decimals": 5,
+  "units": {
+    "en": "NOK/kWh",
+    "no": "kr/kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": true,
+  "icon": "/assets/pricetag.svg"
+}

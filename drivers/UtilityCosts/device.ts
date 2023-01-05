@@ -31,6 +31,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             device: this,
         });
         this.priceFetcher.on('prices', this.pricesEvent.bind(this));
+        this.priceFetcher.on('monthlyAverage', this.monthlyAveragePriceEvent.bind(this));
         this.priceFetcher.on('priceChanged', this.pricesChangedEvent.bind(this));
         this.setFetcherOptions(this.getSettings());
         this.priceFetcher.start();
@@ -98,7 +99,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 await this.addCapability('meter_energy');
             }
             const migVersion = this.getStoreValue('version');
-            if (!migVersion || migVersion < 2) {
+            if (!!migVersion && migVersion < 2) {
                 const consumptionMinute = this.getStoreValue('consumptionMinute');
                 if (consumptionMinute !== undefined && consumptionMinute !== null) {
                     this._dh.getStoreValues().consumptionMinute = consumptionMinute;
@@ -119,7 +120,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 }
                 await this._dh.storeStoreValues();
             }
-            if (!migVersion || migVersion < 3) {
+            if (!!migVersion && migVersion < 3) {
                 if (!this.hasCapability('meter_cost_capacity')) {
                     await this.addCapability('meter_cost_capacity');
                     try {
@@ -131,7 +132,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                     }
                 }
             }
-            if (!migVersion || migVersion < 4) {
+            if (!!migVersion && migVersion < 4) {
                 const meter_power_year = this.getCapabilityValue('meter_power.year');
                 const meter_cost_capacity = this.getCapabilityValue('meter_cost_capacity');
                 await this.removeCapability('meter_cost_capacity');
@@ -141,10 +142,38 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                 }
                 await this.addCapability('meter_power.year');
                 await this.addCapability('meter_cost_capacity');
-                await this.setCapabilityValue('meter_power.year', meter_power_year);
-                await this.setCapabilityValue('meter_cost_capacity', meter_cost_capacity);
+                await this.setCapabilityValue('meter_power.year', meter_power_year).catch((err: any) => this.logger.error(err));
+                await this.setCapabilityValue('meter_cost_capacity', meter_cost_capacity).catch((err: any) => this.logger.error(err));
             }
-            await this.setStoreValue('version', 4);
+            if (!!migVersion && migVersion < 5) {
+                const meter_power_year = this.getCapabilityValue('meter_power.year');
+                const meter_cost_capacity = this.getCapabilityValue('meter_cost_capacity');
+                await this.removeCapability('meter_cost_capacity');
+                await this.removeCapability('meter_power.year');
+                if (!this.hasCapability('meter_power.prevmonth')) {
+                    await this.addCapability('meter_power.prevmonth');
+                    await this.setCapabilityValue('meter_power.prevmonth', 0).catch((err: any) => this.logger.error(err));
+                }
+                await this.addCapability('meter_power.year');
+                await this.addCapability('meter_cost_capacity');
+                await this.setCapabilityValue('meter_power.year', meter_power_year).catch((err: any) => this.logger.error(err));
+                await this.setCapabilityValue('meter_cost_capacity', meter_cost_capacity).catch((err: any) => this.logger.error(err));
+                if (!this.hasCapability('meter_avg_daily_spot')) {
+                    await this.addCapability('meter_avg_daily_spot');
+                }
+                if (!this.hasCapability('meter_avg_monthly_spot')) {
+                    await this.addCapability('meter_avg_monthly_spot');
+                }
+                if (!this.hasCapability('meter_avg_daily_consumption')) {
+                    await this.addCapability('meter_avg_daily_consumption');
+                }
+            }
+            if (!!migVersion && migVersion < 6) {
+                if (!this.hasCapability('meter_cost_today_excl')) {
+                    await this.addCapability('meter_cost_today_excl');
+                }
+            }
+            await this.setStoreValue('version', 6);
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);
@@ -190,7 +219,12 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         this.scheduleCheckTime(5);
     }
 
-    pricesEvent(prices: NordpoolPrices) {
+    async pricesEvent(prices: NordpoolPrices) {
+        await this._dh.spotPricesCalculation(prices);
+    }
+
+    async monthlyAveragePriceEvent(monthlyAverage: number | undefined) {
+        await this.setCapabilityValue(`meter_avg_monthly_spot`, monthlyAverage).catch((err: any) => this.logger.error(err));
     }
 
     async pricesChangedEvent(currentPrice: NordpoolPrice) {
@@ -304,7 +338,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     getPrices() {
         const settings = this.getSettings();
         if (settings.priceCalcMethod === 'nordpool_spot') {
-            const { fromDate, toDate, options } = this.getFetchParameters();
+            const {fromDate, toDate, options} = this.getFetchParameters();
             const prices = this.pricesFetchClient.getPrices(this as Device, fromDate, toDate, options);
             return prices
                 .map((p: { startsAt: any, time: number, price: number }) => {
@@ -332,7 +366,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         const fromDate = moment().add(-1, 'day');
         const toDate = moment().add(1, 'day');
         const options: NordpoolOptions = {currency: 'NOK', priceArea: settings.priceArea};
-        return { fromDate, toDate, options }
+        return {fromDate, toDate, options}
     }
 
     getGridCosts() {

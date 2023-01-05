@@ -107,6 +107,10 @@
         "$extends": "priceDecimals"
       },
       {
+        "id": "dailyConsumptionExclTaxes",
+        "$extends": "dailyConsumptionExclTaxes"
+      },
+      {
         "id": "resetEnergyDaily",
         "$extends": "resetEnergyDaily"
       }

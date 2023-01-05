@@ -3,11 +3,11 @@
   "highlight": true,
   "title": {
     "en": "Electricity price changed",
-    "no": "Strømpris eksl. mva ble endret"
+    "no": "Strømpris ekskl. mva ble endret"
   },
   "hint": {
     "en": "Triggers when the electricity price changes.",
-    "no": "Dette kortet trigges når strømprisen eksl. mva endres."
+    "no": "Dette kortet trigges når strømprisen ekskl. mva endres."
   },
   "tokens": [
     {

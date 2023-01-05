@@ -5,8 +5,8 @@
     "no": "Strøm i dag"
   },
   "desc": {
-    "en": "Shows electricity costs so far this hour",
-    "no": "Viser strømkostnad så langt denne timen"
+    "en": "Shows electricity costs so far today",
+    "no": "Viser strømkostnad så langt i dag"
   },
   "min": 0,
   "decimals": 2,
