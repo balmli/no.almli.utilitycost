@@ -19,12 +19,13 @@ import {GridCosts} from "../../lib/constants";
 
 module.exports = class UtilityCostsDevice extends BaseDevice {
 
-    pricesFetchClient = new PricesFetchClient({logger: this.log});
+    pricesFetchClient!: PricesFetchClient;
     priceFetcher!: PriceFetcher;
 
     async onInit(): Promise<void> {
         super.onInit();
         await this.migrate();
+        this.pricesFetchClient = new PricesFetchClient({logger: this.logger});
         this.priceFetcher = new PriceFetcher({
             logger: this.logger,
             pricesFetchClient: this.pricesFetchClient,
@@ -176,7 +177,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             }
             if (!!migVersion && migVersion < 7) {
                 const priceDecimals = this.getSetting('priceDecimals');
-                this.updatePriceDecimals(priceDecimals);
+                await this.updatePriceDecimals(priceDecimals);
             }
             await this.setStoreValue('version', 7).catch((err: any) => this.logger.error(err));
             this.logger.info(this.getName() + ' -> migrated OK');

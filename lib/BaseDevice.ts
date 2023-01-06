@@ -74,13 +74,17 @@ export class BaseDevice extends Homey.Device {
             capOps4.decimals = decimals;
             await this.setCapabilityOptions('meter_price_sum', capOps4);
 
-            const capOps5 = this.getCapabilityOptions('meter_avg_daily_spot');
-            capOps5.decimals = decimals;
-            await this.setCapabilityOptions('meter_avg_daily_spot', capOps5);
+            if (this.hasCapability('meter_avg_daily_spot')) {
+                const capOps5 = this.getCapabilityOptions('meter_avg_daily_spot');
+                capOps5.decimals = decimals;
+                await this.setCapabilityOptions('meter_avg_daily_spot', capOps5);
+            }
 
-            const capOps6 = this.getCapabilityOptions('meter_avg_monthly_spot');
-            capOps6.decimals = decimals;
-            await this.setCapabilityOptions('meter_avg_monthly_spot', capOps6);
+            if (this.hasCapability('meter_avg_monthly_spot')) {
+                const capOps6 = this.getCapabilityOptions('meter_avg_monthly_spot');
+                capOps6.decimals = decimals;
+                await this.setCapabilityOptions('meter_avg_monthly_spot', capOps6);
+            }
 
             const capOps7 = this.getCapabilityOptions('meter_avg_daily_consumption');
             capOps7.decimals = decimals;
