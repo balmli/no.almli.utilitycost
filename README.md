@@ -15,7 +15,7 @@ To install the device:
 
 ### Release Notes:
 
-#### 1.7.0
+#### 1.7.1
 
 - Added 'Energy previous month' capability
 - Added 'Daily avg. spot price' and 'Monthly avg. spot price' capabilities

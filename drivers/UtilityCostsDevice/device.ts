@@ -71,7 +71,11 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
                     await this.addCapability('meter_cost_today_excl');
                 }
             }
-            await this.setStoreValue('version', 6);
+            if (!!migVersion && migVersion < 7) {
+                const priceDecimals = this.getSetting('priceDecimals');
+                this.updatePriceDecimals(priceDecimals);
+            }
+            await this.setStoreValue('version', 7).catch((err: any) => this.logger.error(err));
             this.logger.info(this.getName() + ' -> migrated OK');
         } catch (err) {
             this.logger.error(err);
