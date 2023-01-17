@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.7.2
+
+- Updated prices for Elvia
+
 #### 1.7.1
 
 - Added 'Energy previous month' capability

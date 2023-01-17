@@ -1,4 +1,8 @@
 {
+  "1.7.2": {
+    "en": "Updated prices for Elvia. ",
+    "no": "Oppdaterte priser for Elvia. "
+  },
   "1.7.1": {
     "en": "Added 'Energy previous month' capability. Added 'Daily avg. spot price' and 'Monthly avg. spot price' capabilities. Added 'Daily cost/consumption' (NOK/kWh) capability. Added grid costs for Tensio Trøndelag Nord and updated for Agder Energi Nett. ",
     "no": "La inn felt for 'Energi forrige måned'. La inn felt for 'Daglig gj.snitt spotpris' og 'Månedlig gj.snitt spotpris'. La inn felt for 'Daglig kost/forbruk' (NOK/kWh). Oppdaterte priser for nettleie for Tensio Trøndelag Nord og Agder Energi Nett. "

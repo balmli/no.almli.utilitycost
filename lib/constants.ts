@@ -67,8 +67,8 @@ export const GridCosts: GridSettingsConfigMap = {
             gridCapacity15_20: 575,
             gridCapacity20_25: 700,
             gridCapacityAverage: "3",
-            gridEnergyDay: 0.431,
-            gridEnergyNight: 0.3685,
+            gridEnergyDay: 0.3529,
+            gridEnergyNight: 0.2904,
             gridEnergyLowWeekends: true,
             gridEnergyLowHoliday: true,
         }
