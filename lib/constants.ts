@@ -91,6 +91,24 @@ export const GridCosts: GridSettingsConfigMap = {
             gridEnergyLowHoliday: false,
         }
     },
+    "foie": {
+        id: "foie",
+        description: "Føie",
+        gridNewRegimeStart: "2022-07-01",
+        gridSettings: {
+            gridCapacity0_2: 185,
+            gridCapacity2_5: 200,
+            gridCapacity5_10: 495,
+            gridCapacity10_15: 820,
+            gridCapacity15_20: 1025,
+            gridCapacity20_25: 1230,
+            gridCapacityAverage: "3",
+            gridEnergyDay: 0.5688,
+            gridEnergyNight: 0.4341,
+            gridEnergyLowWeekends: false,
+            gridEnergyLowHoliday: false,
+        }
+    },
     "glitre": {
         id: "glitre",
         description: "Glitre Energi",
