@@ -54,6 +54,13 @@
       }
     },
     {
+      "id": "foie",
+      "label": {
+        "en": "Føie",
+        "no": "Føie"
+      }
+    },
+    {
       "id": "glitre",
       "label": {
         "en": "Glitre Energi",

@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.8.0 
+
+- Updated prices for BKK, Elvia and Føie
+
 #### 1.7.2
 
 - Updated prices for Elvia
