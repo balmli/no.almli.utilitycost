@@ -21,6 +21,10 @@
       {
         "id": "costFormulaFixedAmount",
         "$extends": "costFormulaFixedAmount"
+      },
+      {
+        "id": "adjustFinancialSupport",
+        "$extends": "adjustFinancialSupport"
       }
     ]
   },

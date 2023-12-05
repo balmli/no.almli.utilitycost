@@ -15,12 +15,14 @@ import {
 import {BaseDevice} from '../../lib/BaseDevice';
 
 import {DeviceSettings} from '../../lib/types';
-import {GridCosts} from "../../lib/constants";
+import {GridPriceFetcher, GridPricesFetchClient, GridSettings, GridSettingsConfig} from "@balmli/homey-grid-prices";
 
 module.exports = class UtilityCostsDevice extends BaseDevice {
 
     pricesFetchClient!: PricesFetchClient;
     priceFetcher!: PriceFetcher;
+    gridPricesFetchClient!: GridPricesFetchClient;
+    gridPriceFetcher!: GridPriceFetcher;
 
     async onInit(): Promise<void> {
         super.onInit();
@@ -31,11 +33,19 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             pricesFetchClient: this.pricesFetchClient,
             device: this,
         });
+        this.gridPricesFetchClient = new GridPricesFetchClient({logger: this.logger});
+        this.gridPriceFetcher = new GridPriceFetcher({
+            logger: this.logger,
+            pricesFetchClient: this.gridPricesFetchClient,
+            device: this,
+        });
         this.priceFetcher.on('prices', this.pricesEvent.bind(this));
         this.priceFetcher.on('monthlyAverage', this.monthlyAveragePriceEvent.bind(this));
         this.priceFetcher.on('priceChanged', this.pricesChangedEvent.bind(this));
+        this.gridPriceFetcher.on('gridPrices', this.gridPricesEvent.bind(this));
         this.setFetcherOptions(this.getSettings());
         this.priceFetcher.start();
+        this.gridPriceFetcher.start();
         this.scheduleCheckTime(5);
         this.logger.verbose(this.getName() + ' -> device initialized');
     }
@@ -43,6 +53,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     onDeleted() {
         super.onDeleted();
         this.priceFetcher.destroy();
+        this.gridPriceFetcher.destroy();
     }
 
     setFetcherOptions(settings: any) {
@@ -50,7 +61,10 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         this.priceFetcher.setFetchMethod(settings.priceCalcMethod === 'nordpool_spot' ?
             PriceFetcherMethod.nordpool :
             PriceFetcherMethod.disabled);
+        this.priceFetcher.setAdjustFinancialSupport(settings.adjustFinancialSupport);
         this.priceFetcher.setFetchMonthlyAverage(true);
+
+        this.gridPriceFetcher.setGridOptions({gridCompany: settings.gridCompany});
 
         let syncTime = this.getStoreValue('syncTime');
         if (syncTime === undefined || syncTime === null) {
@@ -58,6 +72,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             this.setStoreValue('syncTime', syncTime).catch((err: any) => this.logger.error(err));
         }
         this.priceFetcher.setFetchTime(syncTime);
+        this.gridPriceFetcher.setFetchTime((syncTime + 1) % 3600);
     }
 
     async migrate() {
@@ -200,20 +215,6 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         if (changedKeys.includes('priceDecimals')) {
             await this.updatePriceDecimals(newSettings.priceDecimals);
         }
-        if (changedKeys.includes('gridCompany') && newSettings.gridCompany !== 'not_set') {
-            const gc = newSettings.gridCompany;
-            const gcSettings = GridCosts[gc];
-            this.logger.info(`Settings: Grid company: ${newSettings.gridCompany}`, gcSettings);
-            newSettings = {
-                ...newSettings,
-                ...gcSettings.gridSettings
-            }
-            this.homey.setTimeout(() => {
-                this.setSettings({
-                    ...gcSettings.gridSettings
-                });
-            }, 500);
-        }
         const ds: DeviceSettings = {
             ...newSettings
         };
@@ -221,7 +222,9 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         this._dh.setSettings(ds);
         this.setFetcherOptions(newSettings);
         this.pricesFetchClient.clearStorage(this);
+        this.gridPricesFetchClient.clearStorage(this);
         this.priceFetcher.start();
+        this.gridPriceFetcher.start();
         this.scheduleCheckTime(5);
     }
 
@@ -235,6 +238,37 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
 
     async pricesChangedEvent(currentPrice: NordpoolPrice) {
         await this._dh.spotPriceCalculation(currentPrice.price);
+    }
+
+    async gridPricesEvent(prices: GridSettingsConfig) {
+        this.logger.debug(`Received Grid prices: ${JSON.stringify(prices)}`);
+        const settings = this.getCurrentGridSettings(prices);
+        if (settings) {
+            this.logger.info(`Got current Grid prices: ${JSON.stringify(settings)}`);
+            this.setSettings({
+                ...settings
+            });
+        }
+    }
+
+    private getCurrentGridSettings = (prices: GridSettingsConfig): GridSettings => {
+        if (!Array.isArray(prices.settings)) {
+            return prices.settings;
+        }
+
+        const currentDate = new Date();
+        let currentSettings: GridSettings | undefined = undefined;
+        let currentSettingsDate = new Date(1970, 1, 1);
+
+        for (const setting of prices.settings) {
+            const validFromDate = setting.validFrom ? new Date(setting.validFrom) : new Date(1970, 1, 1);
+            if (currentDate >= validFromDate && (!currentSettings || validFromDate > currentSettingsDate)) {
+                currentSettings = setting;
+                currentSettingsDate = validFromDate;
+            }
+        }
+
+        return currentSettings ?? prices.settings[0];
     }
 
     async doCheckTime() {

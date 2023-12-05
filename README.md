@@ -17,6 +17,7 @@ To install the device:
 
 #### 1.8.0 
 
+- Added support for 'financial support' ('strømstøtte')
 - Updated prices for BKK, Elvia and Føie
 
 #### 1.7.2

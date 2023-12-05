@@ -1,0 +1,13 @@
+{
+  "id": "adjustFinancialSupport",
+  "type": "checkbox",
+  "label": {
+    "en": "Adjust for financial support",
+    "no": "Korrigér for strømstøtte"
+  },
+  "hint": {
+    "en": "Check if prices should be adjusted, ref. 'strømstøtte'.",
+    "no": "Velges hvis priser skal korrigeres for strømstøtte."
+  },
+  "value": false
+}

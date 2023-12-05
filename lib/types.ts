@@ -1,28 +1,3 @@
-
-export class GridSettings {
-    gridCapacity0_2!: number;
-    gridCapacity2_5!: number;
-    gridCapacity5_10!: number;
-    gridCapacity10_15!: number;
-    gridCapacity15_20!: number;
-    gridCapacity20_25!: number;
-    gridCapacityAverage!: string;
-
-    gridEnergyDay!: number;
-    gridEnergyNight!: number;
-    gridEnergyLowWeekends!: boolean;
-    gridEnergyLowHoliday?: boolean;
-}
-
-export class GridSettingsConfig {
-    id!: string;
-    description!: string;
-    gridNewRegimeStart!: string;
-    gridSettings!: GridSettings;
-}
-
-export type GridSettingsConfigMap = { [key: string]: GridSettingsConfig };
-
 export class DeviceSettings {
     priceCalcMethod!: string;
     priceArea!: string;

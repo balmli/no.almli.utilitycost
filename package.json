@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@balmli/homey-logger": "^1.0.0",
-    "@balmli/homey-utility-prices": "^1.4.3",
+    "@balmli/homey-utility-prices": "^1.5.0",
+    "@balmli/homey-grid-prices": "^1.0.3",
     "fparser": "^2.0.1",
     "p-queue": "6.6.2"
   },
