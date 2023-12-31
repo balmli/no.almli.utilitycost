@@ -27,6 +27,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     async onInit(): Promise<void> {
         super.onInit();
         await this.migrate();
+        await this.addRemoveCapabilities(this.getSettings());
         this.pricesFetchClient = new PricesFetchClient({logger: this.logger});
         this.priceFetcher = new PriceFetcher({
             logger: this.logger,
@@ -54,6 +55,18 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         super.onDeleted();
         this.priceFetcher.destroy();
         this.gridPriceFetcher.destroy();
+    }
+
+    async addRemoveCapabilities(settings: any) {
+      if (settings.adjustFinancialSupport) {
+        if (!this.hasCapability('meter_financial_support')) {
+          await this.addCapability('meter_financial_support');
+        }
+      } else {
+        if (this.hasCapability('meter_financial_support')) {
+          await this.removeCapability('meter_financial_support');
+        }
+      }
     }
 
     setFetcherOptions(settings: any) {
@@ -219,6 +232,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             ...newSettings
         };
         this.logger.debug(`Settings: DeviceSettings:`, ds);
+        await this.addRemoveCapabilities(newSettings);
         this._dh.setSettings(ds);
         this.setFetcherOptions(newSettings);
         this.pricesFetchClient.clearStorage(this);

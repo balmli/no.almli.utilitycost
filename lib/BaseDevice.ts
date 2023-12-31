@@ -125,6 +125,9 @@ export class BaseDevice extends Homey.Device {
             if (this.hasCapability('meter_cost_capacity')) {
                 await this.setCapabilityValue("meter_cost_capacity", 0);
             }
+            if (this.hasCapability('meter_financial_support')) {
+              await this.setCapabilityValue("meter_financial_support", 0);
+            }
         } catch (err) {
             this.logger.error('Resetting all values failed: ', err);
         }

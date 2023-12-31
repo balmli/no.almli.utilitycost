@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Financial support",
+    "no": "Strømstøtte"
+  },
+  "desc": {
+    "en": "Shows financial support so far this month",
+    "no": "Viser strømstøtte så langt denne måned"
+  },
+  "min": 0,
+  "decimals": 2,
+  "units": {
+    "en": "kr",
+    "no": "kr"
+  },
+  "getable": true,
+  "setable": false,
+  "greyout": true,
+  "insights": false,
+  "icon": "/assets/utility.svg"
+}

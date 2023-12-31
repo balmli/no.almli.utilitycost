@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.9.0
+
+- Added 'Financial support' capability
+
 #### 1.8.0 
 
 - Added support for 'financial support' ('strømstøtte')

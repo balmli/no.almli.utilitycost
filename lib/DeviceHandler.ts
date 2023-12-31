@@ -382,6 +382,18 @@ export class DeviceHandler {
                 await this.device.setCapabilityValue(`meter_cost_lastmonth`, sumCostMonth + costYesterday);
             }
 
+            if (this.device.hasCapability('meter_financial_support')) {
+              const priceSupport = Math.max(0.9 * (price_excl - 0.73), 0);
+
+              const financialSupportToday = newDay ?
+                consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * priceSupport
+                : consumption * (thisUpdate - lastUpdate) / (1000 * 3600000) * priceSupport;
+
+              const sumFinancialSupport = this.device.getCapabilityValue(`meter_financial_support`) || 0;
+              const newFinancialSupport = newMonth ? financialSupportToday : financialSupportToday + sumFinancialSupport;
+              await this.device.setCapabilityValue(`meter_financial_support`, newFinancialSupport);
+            }
+
             const sumCostYear = this.device.getCapabilityValue(`meter_cost_year`) || 0;
             const newCostYear = newYear ? costToday : costToday + sumCostYear;
             await this.device.setCapabilityValue(`meter_cost_year`, newCostYear);
