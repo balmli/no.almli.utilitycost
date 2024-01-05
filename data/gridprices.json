@@ -24,20 +24,6 @@
     "description": "BKK Nett AS",
     "settings": [
       {
-        "validFrom": "2023-07-01",
-        "gridCapacity0_2": 145,
-        "gridCapacity2_5": 240,
-        "gridCapacity5_10": 400,
-        "gridCapacity10_15": 570,
-        "gridCapacity15_20": 735,
-        "gridCapacity20_25": 900,
-        "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.5573,
-        "gridEnergyNight": 0.4393,
-        "gridEnergyLowWeekends": true,
-        "gridEnergyLowHoliday": false
-      },
-      {
         "validFrom": "2024-01-01",
         "gridCapacity0_2": 145,
         "gridCapacity2_5": 240,
@@ -118,7 +104,7 @@
     "description": "Føie",
     "settings": [
       {
-        "validFrom": "2023-10-01",
+        "validFrom": "2024-01-01",
         "gridCapacity0_2": 185,
         "gridCapacity2_5": 200,
         "gridCapacity5_10": 495,
@@ -126,8 +112,8 @@
         "gridCapacity15_20": 1025,
         "gridCapacity20_25": 1230,
         "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.5688,
-        "gridEnergyNight": 0.4341,
+        "gridEnergyDay": 0.495,
+        "gridEnergyNight": 0.3604,
         "gridEnergyLowWeekends": false,
         "gridEnergyLowHoliday": false
       }
@@ -197,20 +183,6 @@
     "id": "lede",
     "description": "Lede",
     "settings": [
-      {
-        "validFrom": "2023-10-01",
-        "gridCapacity0_2": 205,
-        "gridCapacity2_5": 205,
-        "gridCapacity5_10": 350,
-        "gridCapacity10_15": 493.75,
-        "gridCapacity15_20": 638.75,
-        "gridCapacity20_25": 783.75,
-        "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.4230,
-        "gridEnergyNight": 0.4230,
-        "gridEnergyLowWeekends": false,
-        "gridEnergyLowHoliday": false
-      },
       {
         "validFrom": "2024-01-01",
         "gridCapacity0_2": 262.5,
@@ -286,20 +258,6 @@
     "description": "Lnett",
     "settings": [
       {
-        "validFrom": "2023-10-01",
-        "gridCapacity0_2": 250,
-        "gridCapacity2_5": 250,
-        "gridCapacity5_10": 350,
-        "gridCapacity10_15": 475,
-        "gridCapacity15_20": 625,
-        "gridCapacity20_25": 750,
-        "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.486,
-        "gridEnergyNight": 0.406,
-        "gridEnergyLowWeekends": true,
-        "gridEnergyLowHoliday": false
-      },
-      {
         "validFrom": "2024-01-01",
         "gridCapacity0_2": 285,
         "gridCapacity2_5": 285,
@@ -319,20 +277,6 @@
     "id": "mellom",
     "description": "Mellom",
     "settings": [
-      {
-        "validFrom": "2023-10-01",
-        "gridCapacity0_2": 186,
-        "gridCapacity2_5": 279,
-        "gridCapacity5_10": 419,
-        "gridCapacity10_15": 559,
-        "gridCapacity15_20": 708,
-        "gridCapacity20_25": 885,
-        "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.4465,
-        "gridEnergyNight": 0.3715,
-        "gridEnergyLowWeekends": false,
-        "gridEnergyLowHoliday": false
-      },
       {
         "validFrom": "2024-01-01",
         "gridCapacity0_2": 243,
