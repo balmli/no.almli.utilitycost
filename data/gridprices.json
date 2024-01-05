@@ -64,18 +64,18 @@
     "description": "Elvia",
     "settings": [
       {
-        "validFrom": "2023-10-01",
+        "validFrom": "2024-01-01",
         "gridCapacity0_2": 120,
         "gridCapacity2_5": 190,
         "gridCapacity5_10": 305,
         "gridCapacity10_15": 420,
         "gridCapacity15_20": 535,
-        "gridCapacity20_25": 650,
+        "gridCapacity20_25": 659,
         "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.475,
-        "gridEnergyNight": 0.4,
-        "gridEnergyLowWeekends": true,
-        "gridEnergyLowHoliday": true
+        "gridEnergyDay": 0.3959,
+        "gridEnergyNight": 0.3209,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
       }
     ]
   },
