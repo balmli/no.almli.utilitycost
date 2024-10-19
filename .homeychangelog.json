@@ -1,4 +1,8 @@
 {
+  "1.10.0": {
+    "en": "Fixed fetching prices.",
+    "no": "Rettet henting av priser. "
+  },
   "1.9.0": {
     "en": "Added 'Financial support' capability. ",
     "no": "La inn felt for strømstøtte så langt denne måned. "

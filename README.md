@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.10.0
+
+- Fixed fetching prices
+
 #### 1.9.0
 
 - Added 'Financial support' capability
