@@ -272,16 +272,16 @@
     "description": "Lnett",
     "settings": [
       {
-        "validFrom": "2024-01-01",
-        "gridCapacity0_2": 285,
-        "gridCapacity2_5": 285,
-        "gridCapacity5_10": 435,
-        "gridCapacity10_15": 585,
-        "gridCapacity15_20": 735,
-        "gridCapacity20_25": 885,
+        "validFrom": "2025-01-01",
+        "gridCapacity0_2": 170,
+        "gridCapacity2_5": 290,
+        "gridCapacity5_10": 465,
+        "gridCapacity10_15": 715,
+        "gridCapacity15_20": 965,
+        "gridCapacity20_25": 1215,
         "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.5164,
-        "gridEnergyNight": 0.4364,
+        "gridEnergyDay": 0.6051,
+        "gridEnergyNight": 0.5251,
         "gridEnergyLowWeekends": true,
         "gridEnergyLowHoliday": false
       }
