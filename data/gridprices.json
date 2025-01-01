@@ -24,7 +24,7 @@
     "description": "BKK Nett AS",
     "settings": [
       {
-        "validFrom": "2024-04-01",
+        "validFrom": "2025-01-01",
         "gridCapacity0_2": 160,
         "gridCapacity2_5": 260,
         "gridCapacity5_10": 430,
@@ -32,8 +32,8 @@
         "gridCapacity15_20": 800,
         "gridCapacity20_25": 975,
         "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.5925,
-        "gridEnergyNight": 0.4652,
+        "gridEnergyDay": 0.5025,
+        "gridEnergyNight": 0.3786,
         "gridEnergyLowWeekends": true,
         "gridEnergyLowHoliday": false
       }
