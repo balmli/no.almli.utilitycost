@@ -383,7 +383,7 @@ export class DeviceHandler {
             }
 
             if (this.device.hasCapability('meter_financial_support')) {
-              const priceSupport = Math.max(0.9 * (price_excl - 0.73), 0);
+              const priceSupport = Math.max(0.9 * (price_excl - 0.75), 0);
 
               const financialSupportToday = newDay ?
                 consumption * (thisUpdate - startOfDay) / (1000 * 3600000) * priceSupport
