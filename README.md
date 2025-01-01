@@ -15,6 +15,10 @@ To install the device:
 
 ### Release Notes:
 
+#### 1.11.0
+
+- Updated dependencies
+
 #### 1.10.0
 
 - Fixed fetching prices
