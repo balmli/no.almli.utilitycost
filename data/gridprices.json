@@ -358,7 +358,7 @@
         "gridEnergyNight": 0.4730,
         "gridEnergyLowWeekends": false,
         "gridEnergyLowHoliday": false
-      }
+      },
       {
         "validFrom": "2025-01-01",
         "gridCapacity0_2": 275,
