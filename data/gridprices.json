@@ -184,6 +184,34 @@
         "gridEnergyNight": 0.3800,
         "gridEnergyLowWeekends": false,
         "gridEnergyLowHoliday": false
+      },
+      {
+        "validFrom": "2024-10-01",
+        "gridCapacity0_2": 170,
+        "gridCapacity2_5": 215,
+        "gridCapacity5_10": 370,
+        "gridCapacity10_15": 760,
+        "gridCapacity15_20": 990,
+        "gridCapacity20_25": 1240,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.5300,
+        "gridEnergyNight": 0.4100,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
+      },
+      {
+        "validFrom": "2025-01-01",
+        "gridCapacity0_2": 170,
+        "gridCapacity2_5": 215,
+        "gridCapacity5_10": 370,
+        "gridCapacity10_15": 760,
+        "gridCapacity15_20": 990,
+        "gridCapacity20_25": 1240,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.4469,
+        "gridEnergyNight": 0.3269,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
       }
     ]
   },
