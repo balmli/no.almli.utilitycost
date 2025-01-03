@@ -59,6 +59,40 @@
       }
     ]
   },
+  "elvenett": {
+    "id": "elvenett",
+    "description": "Elvenett",
+    "settings": [
+      {
+        "validFrom": "2025-04-01",
+        "gridCapacity0_2": 305,
+        "gridCapacity2_5": 366,
+        "gridCapacity5_10": 397,
+        "gridCapacity10_15": 427,
+        "gridCapacity15_20": 458,
+        "gridCapacity20_25": 534,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.4376,
+        "gridEnergyNight": 0.3751,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
+      },
+      {
+        "validFrom": "2025-01-01",
+        "gridCapacity0_2": 305,
+        "gridCapacity2_5": 366,
+        "gridCapacity5_10": 397,
+        "gridCapacity10_15": 427,
+        "gridCapacity15_20": 458,
+        "gridCapacity20_25": 534,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.4376,
+        "gridEnergyNight": 0.3751,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
+      }
+    ]
+  },
   "elvia": {
     "id": "elvia",
     "description": "Elvia",
@@ -148,6 +182,34 @@
         "gridCapacityAverage": "3",
         "gridEnergyDay": 0.5000,
         "gridEnergyNight": 0.3800,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
+      },
+      {
+        "validFrom": "2024-10-01",
+        "gridCapacity0_2": 170,
+        "gridCapacity2_5": 215,
+        "gridCapacity5_10": 370,
+        "gridCapacity10_15": 760,
+        "gridCapacity15_20": 990,
+        "gridCapacity20_25": 1240,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.5300,
+        "gridEnergyNight": 0.4100,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
+      },
+      {
+        "validFrom": "2025-01-01",
+        "gridCapacity0_2": 170,
+        "gridCapacity2_5": 215,
+        "gridCapacity5_10": 370,
+        "gridCapacity10_15": 760,
+        "gridCapacity15_20": 990,
+        "gridCapacity20_25": 1240,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.4469,
+        "gridEnergyNight": 0.3269,
         "gridEnergyLowWeekends": false,
         "gridEnergyLowHoliday": false
       }
@@ -322,6 +384,20 @@
         "gridCapacityAverage": "3",
         "gridEnergyDay": 0.5980,
         "gridEnergyNight": 0.4730,
+        "gridEnergyLowWeekends": false,
+        "gridEnergyLowHoliday": false
+      },
+      {
+        "validFrom": "2025-01-01",
+        "gridCapacity0_2": 275,
+        "gridCapacity2_5": 275,
+        "gridCapacity5_10": 413,
+        "gridCapacity10_15": 625,
+        "gridCapacity15_20": 938,
+        "gridCapacity20_25": 1250,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.5224,
+        "gridEnergyNight": 0.4599,
         "gridEnergyLowWeekends": false,
         "gridEnergyLowHoliday": false
       }
