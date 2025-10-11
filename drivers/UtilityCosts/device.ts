@@ -76,15 +76,25 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             PriceFetcherMethod.disabled);
         this.priceFetcher.setAdjustFinancialSupport(settings.adjustFinancialSupport);
         this.priceFetcher.setFetchMonthlyAverage(true);
+        const fetchIntervalMinutes = 15;
+        const fetchIntervalSeconds = fetchIntervalMinutes * 60;
+        this.priceFetcher.setFetchIntervalMinutes(fetchIntervalMinutes);
 
         this.gridPriceFetcher.setGridOptions({gridCompany: settings.gridCompany});
 
         let syncTime = this.getStoreValue('syncTime');
-        if (syncTime === undefined || syncTime === null) {
-            syncTime = Math.round(Math.random() * 3600);
+        if (typeof syncTime !== 'number') {
+            syncTime = Number(syncTime);
+        }
+        if (!Number.isFinite(syncTime) || syncTime < 0) {
+            syncTime = undefined;
+        }
+        if (syncTime === undefined || syncTime >= fetchIntervalSeconds) {
+            syncTime = Math.floor(Math.random() * fetchIntervalSeconds);
             this.setStoreValue('syncTime', syncTime).catch((err: any) => this.logger.error(err));
         }
         this.priceFetcher.setFetchTime(syncTime);
+        // Grid prices remain hourly; offset by one second to avoid simultaneous requests.
         this.gridPriceFetcher.setFetchTime((syncTime + 1) % 3600);
     }
 
@@ -251,7 +261,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
     }
 
     async pricesChangedEvent(currentPrice: NordpoolPrice) {
-        await this._dh.spotPriceCalculation(currentPrice.price);
+        await this._dh.spotPriceCalculation(currentPrice);
     }
 
     async gridPricesEvent(prices: GridSettingsConfig) {
@@ -395,22 +405,38 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
             const {fromDate, toDate, options} = this.getFetchParameters();
             const prices = this.pricesFetchClient.getPrices(this as Device, fromDate, toDate, options);
             return prices
-                .map((p: { startsAt: any, time: number, price: number }) => {
+                .map((p: NordpoolPrice) => {
+                    const durationMinutes = p.durationMinutes ?? 60;
+                    const startsAt = p.startsAt;
+                    const priceInclTaxes = this._dh.calcSpotPrice(p.price) + this._dh.calcGridPrice(startsAt);
                     return {
                         time: p.time,
-                        price: this._dh.calcSpotPrice(p.price) + this._dh.calcGridPrice(p.startsAt)
+                        startsAt,
+                        endsAt: p.endsAt,
+                        durationMinutes,
+                        price: priceInclTaxes,
+                        spotPriceExcl: p.price,
                     };
                 });
         } else if (settings.priceCalcMethod === 'fixed') {
             const utilityPrice = this.getCapabilityValue(`meter_price_incl`) || 0;
             const dayStart = moment().startOf('day');
-            return [...Array(24).keys()]
-                .map((_, i) => {
-                    const time = dayStart.unix() + i * 3600;
-                    const startsAt = moment(time * 1000);
-                    const price = utilityPrice + this._dh.calcGridPrice(startsAt);
-                    return {time, price};
-                });
+            const durationMinutes = 15;
+            const slotCount = (24 * 60) / durationMinutes;
+            return Array.from({length: slotCount}, (_, i) => {
+                const startsAt = dayStart.clone().add(i * durationMinutes, 'minutes');
+                const endsAt = startsAt.clone().add(durationMinutes, 'minutes');
+                const time = startsAt.unix();
+                const price = utilityPrice + this._dh.calcGridPrice(startsAt);
+                return {
+                    time,
+                    startsAt,
+                    endsAt,
+                    durationMinutes,
+                    price,
+                    spotPriceExcl: utilityPrice,
+                };
+            });
         }
         return [];
     }

@@ -1,10 +1,11 @@
 # Norwegian Electricity Bill
 
-Homey app for calculating electricity and grid costs in Norway. The app tracks consumption, pulls hourly spot prices, and keeps grid tariffs in sync so automations can react to real-time costs.
+Homey app for calculating electricity and grid costs in Norway. The app tracks consumption, pulls Nord Pool spot prices (now quarter-hour aware), and keeps grid tariffs in sync so automations can react to real-time costs.
 
 ## Overview
 - Built with the Homey Apps SDK v3 and TypeScript.
 - Provides flow cards for updating consumption, spot price, and grid configuration.
+- Handles 15-minute Nord Pool slots, exposing slot metadata (`startsAt`, `endsAt`, `durationMinutes`) to downstream consumers.
 - Calculates derived metrics such as total cost, grid capacity levels, and financial support.
 - Ships with grid company tariff data and utilities in `data/` and `lib/`.
 

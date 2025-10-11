@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 
-import { NordpoolPrices } from '@balmli/homey-utility-prices';
+import { NordpoolPrice, NordpoolPrices } from '@balmli/homey-utility-prices';
 import {DEFAULT_DEVICE_HANDLER_OPTIONS, DeviceHandlerOptions, DeviceSettings, StartValues, StoreValues} from "./types";
 
 const Formula = require('fparser');
@@ -130,20 +130,27 @@ export class DeviceHandler {
             const dayStart = moment().startOf('day');
             const dayEnd = moment().startOf('day').add(1, 'day');
 
-            const hourlyPrices = prices
+            const slotValues = prices
                 .filter(p => p.startsAt.isSameOrAfter(dayStart) && p.startsAt.isBefore(dayEnd))
-                .map(p => this.settings.dailyConsumptionExclTaxes === 'EXCL'
-                    ? p.price
-                    : this.calcSpotPrice(p.price) + this.calcGridPrice(p.startsAt)
-                );
+                .map(p => {
+                    const durationMinutes = p.durationMinutes ?? 60;
+                    const slotPrice = this.settings.dailyConsumptionExclTaxes === 'EXCL'
+                        ? p.price
+                        : this.calcSpotPrice(p.price) + this.calcGridPrice(p.startsAt);
+                    return {
+                        durationMinutes,
+                        price: slotPrice,
+                    };
+                });
 
-            if (hourlyPrices.length === 0) {
+            const totalDurationMinutes = slotValues.reduce((sum, slot) => sum + slot.durationMinutes, 0);
+            if (totalDurationMinutes === 0) {
                 this.device.logger.debug('Spot prices calculation skipped: no prices available for the current day');
                 return;
             }
 
             const avg_daily_spot = this.roundPrice(
-                hourlyPrices.reduce((a, b) => a + b, 0) / hourlyPrices.length
+                slotValues.reduce((acc, slot) => acc + slot.price * slot.durationMinutes, 0) / totalDurationMinutes
             );
 
             await this.device.setCapabilityValue('meter_avg_daily_spot', avg_daily_spot);
@@ -152,13 +159,21 @@ export class DeviceHandler {
         }
     }
 
-    async spotPriceCalculation(price: number) {
+    async spotPriceCalculation(priceOrSlot: number | NordpoolPrice) {
         const costFormula = this.settings.costFormula;
         try {
+            let price: number;
+            let gridPrice: number;
+            if (typeof priceOrSlot === 'number') {
+                price = priceOrSlot;
+                gridPrice = this.device.getCapabilityValue(`meter_gridprice_incl`) || 0;
+            } else {
+                price = priceOrSlot.price;
+                gridPrice = this.calcGridPrice(priceOrSlot.startsAt);
+            }
             const priceCalculated = this.roundPrice(this.evaluatePrice(costFormula, price));
             await this.device.setCapabilityValue('meter_price_excl', price);
             await this.device.setCapabilityValue('meter_price_incl', priceCalculated);
-            const gridPrice = this.device.getCapabilityValue(`meter_gridprice_incl`) || 0;
             await this.device.setCapabilityValue('meter_price_sum', priceCalculated + gridPrice);
             this.device.logger.verbose(`Spot price calculation: ${costFormula} => ${priceCalculated}`);
         } catch (err) {
