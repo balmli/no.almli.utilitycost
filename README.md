@@ -1,179 +1,50 @@
 # Norwegian Electricity Bill
 
-The 'Norwegian Electricity Bill' is a device to calculate electricity and grid prices for Norway.
-
-## Install
-
-To install the device:
-
-1. Add the 'Electricity Bill' device.
-2. Go to 'Advanced settings'.  If you have a spot plan or fixed price plan, edit the price formula.
-3. Adjust the settings for grid capacity and grid energy for your grid provider.
-4. Add a flow to update consumption from a pulse device, eg. Tibber Pulse.  WHEN: Power changed, THEN: Update consumption with <POWER>.
-5. If the price comes from a price source, eg. Tibber, select 'From flow', and create the flow: WHEN: Price changed, THEN: Update price with <PRICE>.
-
-
-### Release Notes:
-
-#### 1.11.0
-
-- Updated dependencies
-
-#### 1.10.0
-
-- Fixed fetching prices
-
-#### 1.9.0
-
-- Added 'Financial support' capability
-
-#### 1.8.0 
-
-- Added support for 'financial support' ('strømstøtte')
-- Updated prices for BKK, Elvia and Føie
-
-#### 1.7.2
-
-- Updated prices for Elvia
-
-#### 1.7.1
-
-- Added 'Energy previous month' capability
-- Added 'Daily avg. spot price' and 'Monthly avg. spot price' capabilities
-- Added 'Daily cost/consumption' (NOK/kWh) capability
-- Added grid costs for Tensio Trøndelag Nord and updated for Agder Energi Nett
-
-#### 1.6.3
-
-- Support for kW as unit for 'Update consumption' action
-- Added prices for grid company Klive
-
-#### 1.5.3
-
-- Updated grid costs for Midtnett
-
-#### 1.5.2
-
-- Fixed bug in 'Grid this year' calculation
-
-#### 1.5.1
-
-- Added 'Energy this month' capability
-
-#### 1.5.0
-
-- Grid capacity cost moved to a separate capability
-- Added API function to export Grid capacity prices (frodeheg)
-
-#### 1.4.10 
-
-- Added action card 'Fetch hours with highest consumption and other data'
-- Text changes
-
-#### 1.4.9
-
-- Update grid capacity cost calculation
-- Prices for more grid companies
-
-#### 1.4.6
-
-- Prices for more grid companies
-
-#### 1.4.5
-
-- Bugfix for calculating grid capacity cost
-- Prices for more grid companies
-
-#### 1.4.4
-
-- Prices for more grid companies
-
-#### 1.4.3
-
-- Prices for more grid companies
-
-#### 1.4.2
-
-- Prices for more grid companies
-
-#### 1.4.1
-
-- Function to update other apps with prices
-- Prices for more grid companies
-
-#### 1.3.0
-
-- Added an option to calculate 'Level for grid capacity' as an average of highest consumption hours
-- Added an option to select grid company for grid capacity and energy settings
-- Fixed 'New level for grid capacity' trigger
-- Added action cards to update electricity cost settings
-
-#### 1.2.2
-
-- Avoid concurrency issues
-- Ignore extreme power values
-
-#### 1.2.1
-
-- Small fix for action card 'Update energy with X kWh'
-
-#### 1.2.0
-
-- Added action card 'Update energy with X kWh' to update with energy (kWh) instead of power (W)
-
-#### 1.1.1
-
-- Added separate formula for fixed monthly electricity costs
-
-#### 1.1.0
-
-- Added support for slave devices
-- Added action cards to update settings
-- Added 'MONTHLY_HOURS' tag that can be used in the electricity price formula
-- Added 'Energy' (kWh) and 'Energy this year' (kWh) capabilities
-- Added action card to reset the 'Energy' (kWh) capability
-- Added action card to reset all accumulated capabilities
-
-#### 1.0.8
-
-- Grid capacity cost is added as max. hourly consumption increases
-
-#### 1.0.7
-
-- Costs will be updated regularly even if consumption is not updated regularly
-
-#### 1.0.6
-
-- Fixed typo
-
-#### 1.0.5
-
-- Added trigger for 'Sum electricity and grid price changed'
-- Added options for number of decimals for prices
-
-#### 1.0.4
-
-- Can add more than one 'Norwegian Electricity Bill' device
-- Added 'Sum daily cost' and 'Sum yearly cost' capabilities
-- Fixed calculation of grid yearly fixed amount
-
-#### 1.0.3
-
-- Fixed calculation of grid yearly fixed amount
-
-#### 1.0.2
-
-- Can now see the grid price
-- Added trigger for 'New level for grid capacity'
-- Added condition to check if current cost is below / above a specific value
-
-#### 1.0.1
-
-- Support existing grid costs regime
-- Validation for the spot & fixed price cost formula
-- Separate grid energy prices for winter and summer 
-- Option for low price for weekends
-
-#### 1.0.0
-
-- Initial release
+Homey app for calculating electricity and grid costs in Norway. The app tracks consumption, pulls hourly spot prices, and keeps grid tariffs in sync so automations can react to real-time costs.
+
+## Overview
+- Built with the Homey Apps SDK v3 and TypeScript.
+- Provides flow cards for updating consumption, spot price, and grid configuration.
+- Calculates derived metrics such as total cost, grid capacity levels, and financial support.
+- Ships with grid company tariff data and utilities in `data/` and `lib/`.
+
+## Prerequisites
+- Node.js 18.20.8 (matches the current Homey CLI baseline).
+- Homey CLI (`npm install -g homey`) for validation and deployment.
+- Access to a Homey Pro/Cloud environment if you plan to run or debug the app.
+
+## Setup
+1. Clone the repository and install dependencies with `npm install` (reinstall even if `node_modules/` is tracked to ensure a clean tree).
+2. Run `npm run build` to compile TypeScript into `build/`.
+3. Execute `npm test` to run the mocha suite; the `posttest` hook triggers `homey app validate`.
+4. Use `homey app install --local` to side-load the build onto a development Homey when needed.
+
+## Development Workflow
+- Keep flow card logic inside `app.ts` and `drivers/UtilityCostsDevice/`.
+- Add shared utilities to `lib/` and ensure corresponding tests live in `tests/`.
+- Update tariff datasets under `data/` and document changes in `CHANGELOG.md`.
+- Run `npm run lint` before raising pull requests; fix issues or disable rules sparingly.
+- Localized strings reside in `locales/`; update all languages when modifying text.
+
+## Project Structure
+- `app.ts`: App bootstrap and flow card registration.
+- `api.ts`: HTTP endpoints exposed to other Homey apps.
+- `drivers/`: Device driver and capability handlers.
+- `lib/`: Pricing logic, calculation utilities, and data loaders.
+- `data/`: JSON datasets for grid and electricity tariffs.
+- `tests/`: Mocha/Chai test suites executed via `ts-node`.
+- `assets/`: Icons and imagery used by the app.
+
+## Releasing
+1. Bump the version in both `package.json` and `app.json`.
+2. Document notable changes in `CHANGELOG.md`.
+3. Run `npm run build`, `npm test`, and `homey app validate`.
+4. Package and publish through the Homey developer portal, then tag the repository (`v<major.minor.patch>`).
+
+## Additional Documentation
+- `AGENT.md`: Guidance for AI assistants contributing to this codebase.
+- `CHANGELOG.md`: Historical release notes.
+- `CONTRIBUTING.md`: Contribution guidelines and code of conduct.
+
+## License
+Distributed under the ISC license. See `LICENSE` for details.

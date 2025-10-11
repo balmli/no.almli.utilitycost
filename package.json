@@ -9,6 +9,9 @@
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
   },
   "author": "Bjørnar Almli",
+  "engines": {
+    "node": "18.20.8"
+  },
   "license": "ISC",
   "dependencies": {
     "@balmli/homey-logger": "^1.0.0",
@@ -18,11 +21,11 @@
     "p-queue": "6.6.2"
   },
   "devDependencies": {
-    "@tsconfig/node12": "^1.0.9",
+    "@tsconfig/node18": "^1.0.2",
     "@types/chai": "^4.3.0",
     "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.2",
     "@types/mocha": "^9.1.0",
-    "@types/node": "^16.11.12",
+    "@types/node": "^18.19.0",
     "chai": "^4.3.6",
     "eslint": "^7.32.0",
     "eslint-config-athom": "^3.0.1",
