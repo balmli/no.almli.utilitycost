@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import moment from 'moment-timezone';
 
 import {DeviceHandler} from '../lib/DeviceHandler';
 import {HomeyDevice} from './HomeyDevice';
@@ -9,6 +10,20 @@ const getSettings = () => {
         gridEnergyNight: 0.2489,
         gridEnergyLowWeekends: true
     };
+};
+
+const createDeviceHandler = async (overrides: Record<string, any> = {}) => {
+    const device = new HomeyDevice();
+    await device.setSettings({
+        costFormula: 'PRICE_NORDPOOL',
+        dailyConsumptionExclTaxes: 'EXCL',
+        gridEnergyDay: 0,
+        gridEnergyNight: 0,
+        gridEnergyLowWeekends: false,
+        ...overrides
+    });
+    const dh = new DeviceHandler(device);
+    return {device, dh};
 };
 
 describe('Devices', function () {
@@ -173,6 +188,53 @@ describe('Devices', function () {
             expect(device.getCapabilityValue('meter_price_excl')).eq(1.23);
             expect(device.getCapabilityValue('meter_price_incl')).eq(0.9199);
             expect(device.getCapabilityValue('meter_price_sum')).eq(0.9199);
+        });
+    });
+
+    describe('Check spotPricesCalculation', function () {
+        it('uses hourly count when averaging daily spot price', async function () {
+            const {device, dh} = await createDeviceHandler();
+            const dayStart = moment().startOf('day');
+            const prices = Array.from({length: 23}, (_, hour) => {
+                const startsAt = dayStart.clone().add(hour, 'hour');
+                return {
+                    startsAt,
+                    time: startsAt.valueOf(),
+                    price: 1
+                };
+            });
+
+            await dh.spotPricesCalculation(prices as any);
+            expect(device.getCapabilityValue('meter_avg_daily_spot')).eq(1);
+        });
+
+        it('keeps previous value when no spot prices are available', async function () {
+            const {device, dh} = await createDeviceHandler();
+            await device.setCapabilityValue('meter_avg_daily_spot', 3.14);
+
+            await dh.spotPricesCalculation([] as any);
+            expect(device.getCapabilityValue('meter_avg_daily_spot')).eq(3.14);
+        });
+
+        it('handles days with additional hourly entries', async function () {
+            const {device, dh} = await createDeviceHandler({
+                dailyConsumptionExclTaxes: 'INCL',
+                gridEnergyDay: 0.2,
+                gridEnergyNight: 0.2
+            });
+            const dayStart = moment().startOf('day');
+            const hours = [...Array.from({length: 24}, (_, hour) => hour), 23];
+            const prices = hours.map(hour => {
+                const startsAt = dayStart.clone().add(hour, 'hour');
+                return {
+                    startsAt,
+                    time: startsAt.valueOf(),
+                    price: 1
+                };
+            });
+
+            await dh.spotPricesCalculation(prices as any);
+            expect(device.getCapabilityValue('meter_avg_daily_spot')).to.be.closeTo(1.2, 0.00001);
         });
     });
 
