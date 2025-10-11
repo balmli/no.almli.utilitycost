@@ -130,12 +130,20 @@ export class DeviceHandler {
             const dayStart = moment().startOf('day');
             const dayEnd = moment().startOf('day').add(1, 'day');
 
+            const hourlyPrices = prices
+                .filter(p => p.startsAt.isSameOrAfter(dayStart) && p.startsAt.isBefore(dayEnd))
+                .map(p => this.settings.dailyConsumptionExclTaxes === 'EXCL'
+                    ? p.price
+                    : this.calcSpotPrice(p.price) + this.calcGridPrice(p.startsAt)
+                );
+
+            if (hourlyPrices.length === 0) {
+                this.device.logger.debug('Spot prices calculation skipped: no prices available for the current day');
+                return;
+            }
+
             const avg_daily_spot = this.roundPrice(
-                prices
-                    .filter(p => p.startsAt.isSameOrAfter(dayStart) && p.startsAt.isBefore(dayEnd))
-                    .map(p => this.settings.dailyConsumptionExclTaxes === 'EXCL' ? p.price :
-                        this.calcSpotPrice(p.price) + this.calcGridPrice(p.startsAt))
-                    .reduce((a, b) => a + b, 0) / 24
+                hourlyPrices.reduce((a, b) => a + b, 0) / hourlyPrices.length
             );
 
             await this.device.setCapabilityValue('meter_avg_daily_spot', avg_daily_spot);
