@@ -74,6 +74,9 @@
       },
       {
         "name": "Frode Heggelund"
+      },
+      {
+        "name": "Philip Østli"
       }
     ]
   },
@@ -84,5 +87,6 @@
       }
     }
   },
-  "homeyCommunityTopicId": 56678
+  "homeyCommunityTopicId": 56678,
+  "source": "https://github.com/balmli/no.almli.utilitycost"
 }

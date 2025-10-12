@@ -110,6 +110,20 @@
         "gridEnergyNight": 0.3250,
         "gridEnergyLowWeekends": true,
         "gridEnergyLowHoliday": true
+      },
+      {
+        "validFrom": "2025-04-01",
+        "gridCapacity0_2": 125,
+        "gridCapacity2_5": 190,
+        "gridCapacity5_10": 300,
+        "gridCapacity10_15": 410,
+        "gridCapacity15_20": 520,
+        "gridCapacity20_25": 630,
+        "gridCapacityAverage": "3",
+        "gridEnergyDay": 0.4865,
+        "gridEnergyNight": 0.3865,
+        "gridEnergyLowWeekends": true,
+        "gridEnergyLowHoliday": true
       }
     ]
   },
