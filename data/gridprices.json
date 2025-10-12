@@ -65,15 +65,15 @@
     "settings": [
       {
         "validFrom": "2025-04-01",
-        "gridCapacity0_2": 305,
-        "gridCapacity2_5": 366,
-        "gridCapacity5_10": 397,
-        "gridCapacity10_15": 427,
-        "gridCapacity15_20": 458,
-        "gridCapacity20_25": 534,
+        "gridCapacity0_2": 194,
+        "gridCapacity2_5": 275,
+        "gridCapacity5_10": 380,
+        "gridCapacity10_15": 496,
+        "gridCapacity15_20": 638,
+        "gridCapacity20_25": 803,
         "gridCapacityAverage": "3",
-        "gridEnergyDay": 0.4376,
-        "gridEnergyNight": 0.3751,
+        "gridEnergyDay": 0.4741,
+        "gridEnergyNight": 0.3616,
         "gridEnergyLowWeekends": false,
         "gridEnergyLowHoliday": false
       },
