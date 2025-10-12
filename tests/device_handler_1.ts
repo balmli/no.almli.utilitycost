@@ -26,6 +26,17 @@ const createDeviceHandler = async (overrides: Record<string, any> = {}) => {
     return {device, dh};
 };
 
+const createNordpoolSlot = (startsAt: moment.Moment, price: number, durationMinutes = 60) => {
+    const slotStartsAt = startsAt.clone();
+    return {
+        startsAt: slotStartsAt,
+        endsAt: slotStartsAt.clone().add(durationMinutes, 'minutes'),
+        time: slotStartsAt.unix(),
+        durationMinutes,
+        price,
+    };
+};
+
 describe('Devices', function () {
 
     describe('Check constructor', function () {
@@ -197,11 +208,7 @@ describe('Devices', function () {
             const dayStart = moment().startOf('day');
             const prices = Array.from({length: 23}, (_, hour) => {
                 const startsAt = dayStart.clone().add(hour, 'hour');
-                return {
-                    startsAt,
-                    time: startsAt.valueOf(),
-                    price: 1
-                };
+                return createNordpoolSlot(startsAt, 1, 60);
             });
 
             await dh.spotPricesCalculation(prices as any);
@@ -226,15 +233,24 @@ describe('Devices', function () {
             const hours = [...Array.from({length: 24}, (_, hour) => hour), 23];
             const prices = hours.map(hour => {
                 const startsAt = dayStart.clone().add(hour, 'hour');
-                return {
-                    startsAt,
-                    time: startsAt.valueOf(),
-                    price: 1
-                };
+                return createNordpoolSlot(startsAt, 1, 60);
             });
 
             await dh.spotPricesCalculation(prices as any);
             expect(device.getCapabilityValue('meter_avg_daily_spot')).to.be.closeTo(1.2, 0.00001);
+        });
+
+        it('weights quarter-hour slots when averaging daily spot price', async function () {
+            const {device, dh} = await createDeviceHandler();
+            const dayStart = moment().startOf('day');
+            const prices = Array.from({length: 96}, (_, index) => {
+                const startsAt = dayStart.clone().add(index * 15, 'minutes');
+                const price = index < 48 ? 1 : 3;
+                return createNordpoolSlot(startsAt, price, 15);
+            });
+
+            await dh.spotPricesCalculation(prices as any);
+            expect(device.getCapabilityValue('meter_avg_daily_spot')).to.be.closeTo(2, 0.00001);
         });
     });
 

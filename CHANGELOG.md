@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here. Entries were migrated from the historical release notes in `README.md`. Dates were not recorded in the original source.
 
+## 1.12.0
+- Adopt `@balmli/homey-utility-prices` 2.x quarter-hour slots: fetch Nord Pool prices every 15 minutes and persist slot metadata.
+- Weight daily average spot price calculations by slot duration so mixed datasets (hourly vs quarter-hour) remain accurate.
+- Return 96 quarter-hour entries (with `durationMinutes`, `startsAt`, `endsAt`) from `getPrices()` when using either Nord Pool or fixed-price modes.
+
 ## 1.11.0
 - Updated dependencies
 
@@ -130,4 +135,3 @@ All notable changes to this project are documented here. Entries were migrated f
 
 ## 1.0.0
 - Initial release
-
