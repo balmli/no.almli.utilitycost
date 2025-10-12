@@ -78,8 +78,7 @@ module.exports = class UtilityCostsDevice extends BaseDevice {
         this.priceFetcher.setFetchMonthlyAverage(true);
         const fetchIntervalMinutes = 15;
         const fetchIntervalSeconds = fetchIntervalMinutes * 60;
-        this.priceFetcher.setFetchIntervalMinutes(fetchIntervalMinutes);
-
+        
         this.gridPriceFetcher.setGridOptions({gridCompany: settings.gridCompany});
 
         let syncTime = this.getStoreValue('syncTime');
